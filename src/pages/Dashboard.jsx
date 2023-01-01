@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import { formatAddress } from "../utils/functions";
+import { checkInvestorship, fund, registerAsInvestor } from "../utils/interact";
+import useAccount from "../hooks/useAccount";
+import useProvider from "../hooks/useProvider";
 
 const Dashboard = () => {
   const dt = useLoaderData();
+  const provider = useProvider();
+  const [fundAmt, setFundAmt] = useState(0);
+  const { address } = useAccount(provider);
+
+  
+
   return (
     <div>
       <h1>Dashboard</h1>
@@ -17,7 +26,9 @@ const Dashboard = () => {
             <th scope="col">Stage Period</th>
             <th scope="col">Total Duration</th>
             <th scope="col">Current Stage</th>
-            <th scope="col">Progress (Amount Recieved / Amount needed) (in ETH)</th>
+            <th scope="col">
+              Progress (Amount Recieved / Amount needed) (in ETH)
+            </th>
             <th scope="col">Deadline</th>
             <th scope="col">Action</th>
           </tr>
@@ -31,13 +42,26 @@ const Dashboard = () => {
               <td>{dt.desc}</td>
               <td>{dt.stagePeriod / 60 / 60 / 24} days</td>
               <td>{dt.totalProjectTime / 60 / 60 / 24} days</td>
-              <td>{dt.currentStage} / {dt.totalProjectTime / dt.stagePeriod}</td>
-              <td>{dt.currentProgress} / {dt.totalAmountNeeded} ETH ({(dt.currentProgress / dt.totalAmountNeeded)*100} %)</td>
+              <td>
+                {dt.currentStage} / {dt.totalProjectTime / dt.stagePeriod}
+              </td>
+              <td>
+                {dt.currentProgress} / {dt.totalAmountNeeded} ETH (
+                {(dt.currentProgress / dt.totalAmountNeeded) * 100} %)
+              </td>
               <td>{dt.projectDeadline}</td>
               <td>
-                <button>Fund Campaign</button>
+                <button onClick={() => registerAsInvestor(dt.address)}>Register as Investor</button>
+                <button onClick={() => fund(dt.address, address, fundAmt)}>
+                  Fund Campaign
+                </button>
+                <input
+                  type="number"
+                  placeholder="Enter Amount to Fund (in ETH)"
+                  value={fundAmt}
+                  onChange={(e) => setFundAmt(e.target.value)}
+                />
                 <button>Vote to withdraw</button>
-                
               </td>
             </tr>
           ))}
