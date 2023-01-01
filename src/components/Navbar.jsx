@@ -4,6 +4,7 @@ import React from 'react'
 const Navbar = () => {
 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -20,7 +21,7 @@ const Navbar = () => {
           <a href="#home" className='nav-head-link'>crowdfundr</a>
         </div>
         
-        <div className={`${isMobile ? "shown" : "hidden"}`}>
+        <div onClick={() => setOpen((open) => !open)} className={`${isMobile ? "shown" : "hidden"}`}>
           <div className="nav-toggler">
             <div className="nav-toggler-icon">
               <span></span>
@@ -28,7 +29,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className={`${isMobile ? "hidden" : "shown"}`}>
+        <div className={`${!open ? "hidden" : "shown"}`}>
 
           <div className='nav-body'>
             <div className='nav-body-list'>

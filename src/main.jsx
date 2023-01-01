@@ -4,7 +4,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import App from "./App";
+import HomePage from "./pages/HomePage";
 import "./index.css";
 import Dashboard from "./pages/Dashboard";
 import { getAllCampaigns } from "./utils/loaders";
@@ -12,7 +12,7 @@ import { getAllCampaigns } from "./utils/loaders";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <HomePage />,
   },
   {
     path: "/dashboard",
