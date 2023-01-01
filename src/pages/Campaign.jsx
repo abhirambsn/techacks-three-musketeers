@@ -12,7 +12,7 @@ const Campaign = () => {
     <section className='section campaign' id='campaign'>
         <div className='campaign-grid'>
           <div className="grid-40">
-            <a href="/"><button className="btn-inverse"> <FaArrowLeft className="campaign-btn" /> Home</button></a>
+            <a href="/"><button className="btn-theme"> <FaArrowLeft className="campaign-btn" /> Home</button></a>
           </div>
           <div className="grid-60 campaign-head">
             <p>Campaign AI Smart Robo Project</p>

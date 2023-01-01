@@ -563,9 +563,9 @@ html{
 .campaign-head
 {
     color: var(--text-color-900);
-    font-size: 50px;
+    font-size: 40px;
     padding-bottom: 3%;
-    font-family: 'Caveat', cursive;
+    font-family: 'Roboto Slab', serif;
 }
 
 
@@ -801,11 +801,9 @@ html{
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    max-height: 50vh;
     margin: 5%;
     padding: 0 5%;
     border-radius: 10px;
-    background-color: var(--text-color-100);
     color: var(--text-color-900);
     font-size: 18px;
 }
@@ -998,6 +996,11 @@ html{
     .campaign-img-lower, .campaign-img-upper
     {
         display: none;
+    }
+
+    .campaign-desc
+    {
+        border: none;
     }
 
 }
