@@ -13,12 +13,14 @@ contract CFunding {
     }
     mapping(address => CampaignData) userRegister;
     address[] public campaignLUT;
+    uint public userCount; // Count of users registered
     uint public campaignCount; // Total Campaigns raised by all the users
     address payable owner;
 
     constructor(string memory _name) {
         name = _name;
         campaignCount = 0;
+        userCount = 0;
         owner = payable(msg.sender);
     }
 
@@ -29,6 +31,7 @@ contract CFunding {
             userRegister[msg.sender].timestamp = block.timestamp;
             userRegister[msg.sender].userCampaignCount = 0;
             campaignLUT.push(msg.sender);
+            userCount++;
         }
         userRegister[msg.sender].campaigns.push(
             new Campaign(
