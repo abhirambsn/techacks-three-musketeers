@@ -36,7 +36,7 @@ const Navbar = () => {
               <div><a href="/" className='nav-active'>Home</a></div>
               <div><a href="#mission">Mission</a></div>
               <div><a href="#working">How it works</a></div>
-              <div><a href="#">Contact us</a></div>
+              <div><a href="#contact">Contact us</a></div>
             </div>
           </div>
 

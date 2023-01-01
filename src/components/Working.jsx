@@ -5,7 +5,7 @@ const Working = () => {
   return (
     <section className='section working' id='working' >
         <div className='working-grid'>
-            <div className='grid-40'>
+            <div className='grid-40 padd-5'>
                 <div className='working-decor'>
                     <div className='working-decor-square-1'></div>
                     <div className='working-decor-square-2'></div>
