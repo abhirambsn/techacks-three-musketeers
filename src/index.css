@@ -78,6 +78,26 @@ html{
     color: var(--bg-color-500);
 }
 
+.btn-theme
+{
+    padding: 10px 15px;
+    border-radius: 5px;
+    background:var(--bg-color-300);
+    color: var(--text-color-100);
+    font-size: 15px;
+    font-weight: 600;
+    border: 1px solid var(--bg-color-300);
+    transition: all 0.3s ease;
+    font-family: 'Roboto Slab', serif;
+}
+
+.btn-theme:hover
+{
+    border: 1px solid var(--bg-color-500);
+    background-color: var(--text-color-100);
+    color: var(--bg-color-500);
+}
+
 .btn-inverse
 {
     padding: 10px 15px;
@@ -364,15 +384,106 @@ html{
     color: var(--text-color-700);
 }
 
+.working
+{
+    padding: 5% 7%;
+}
+
+.working-grid
+{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    background-color: var(--text-color-300);
+    min-height: 80vh;
+}
+
+.working-decor
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 65vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.working-decor-square-1
+{
+    width: 200px;
+    height: 200px;
+    background-color: var(--bg-color-300);
+    transform: rotate(45deg);
+    position: absolute;
+}
+
+.working-decor-square-2
+{
+    width: 200px;
+    height: 200px;
+    padding: 100px;
+    background-color: var(--bg-color-700);
+    transform: rotate(75deg);
+    position: absolute;
+    opacity: 0.5;
+}
+
+.working-decor-square-3
+{
+    padding: 100px;
+    position: absolute;
+    opacity: 1;
+}
+
+.working-decor-square-3 img
+{
+    width: 200px;
+    height: 200px;
+}
+
+.working-data
+{
+    padding: 10% 7%;
+}
+
+.working-data .working-head
+{
+    padding: 10px;
+    font-size: 35px;
+    font-weight: 600;
+    color: var(--text-color-900);
+}
+
+.working-data .working-subhead
+{
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--text-color-700);
+}
+
+.working-data .working-btn
+{
+    padding: 5% 2%;
+}
+
 @media (max-width:1200px)
 {
     .section{
         min-height: 80vh;
     }
-    .nav .nav-head
+    .nav .nav-head, .nav .nav-body, .nav .nav-end-btn
     {
+        text-align: center;
         flex: 0 0 90%;
         width: 90%;
+    }
+
+    .nav .nav-end-btn
+    {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
     }
 
     .nav .nav-toggler
@@ -387,7 +498,7 @@ html{
         height: 40px;
         border: 1px solid var(--bg-color-900);
         cursor: pointer;
-        position: fixed;
+        position: absolute;
         left: 80%;
         top: 35px;
         border-radius: 5px;
@@ -466,5 +577,9 @@ html{
     {
         padding: 0;
         text-align: center;
+    }
+    .working-decor
+    {
+        height: auto;
     }
 }

@@ -4,7 +4,7 @@ import React from 'react'
 const Navbar = () => {
 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(window.innerWidth > 1200);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -18,7 +18,7 @@ const Navbar = () => {
       <div className='nav'>
 
         <div className='nav-head'>
-          <a href="#home" className='nav-head-link'>crowdfundr</a>
+          <a href="/" className='nav-head-link'>crowdfundr</a>
         </div>
         
         <div onClick={() => setOpen((open) => !open)} className={`${isMobile ? "shown" : "hidden"}`}>
@@ -33,9 +33,9 @@ const Navbar = () => {
 
           <div className='nav-body'>
             <div className='nav-body-list'>
-              <div><a href="#home" className='nav-active'>Home</a></div>
+              <div><a href="/" className='nav-active'>Home</a></div>
               <div><a href="#mission">Mission</a></div>
-              <div><a href="#">How it works</a></div>
+              <div><a href="#working">How it works</a></div>
               <div><a href="#">Contact us</a></div>
             </div>
           </div>
