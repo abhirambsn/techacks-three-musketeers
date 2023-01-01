@@ -28,6 +28,7 @@ contract CFunding {
             userRegister[msg.sender].isValid = true;
             userRegister[msg.sender].timestamp = block.timestamp;
             userRegister[msg.sender].userCampaignCount = 0;
+            campaignLUT.push(msg.sender);
         }
         userRegister[msg.sender].campaigns.push(
             new Campaign(

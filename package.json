@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "alchemy-sdk": "^2.2.5",
+    "ethers": "^5.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1"
