@@ -5,7 +5,7 @@ const Mission = () => {
   return (
     <section className='section mission' id='mission' >
         <div className='mission-grid'>
-            <div className='grid-40'>
+            <div className='grid-40 padd-5'>
                 <div className='mission-head-icon'>
                     <span>-- <FaCrown /> ---</span>
                 </div>

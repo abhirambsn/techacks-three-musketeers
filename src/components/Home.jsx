@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from './Navbar'
-import crowdfunding from '../crowdfunding.png'
+import crowdfunding from '../img/crowdfunding.png'
 import { FaSpaceShuttle, FaTwitter, FaLinkedin } from 'react-icons/fa';
 
 const Home = () => {
