@@ -495,7 +495,7 @@ html{
     padding: 0 5%;
 }
 
-.footer-logo:hover
+.footer-logo span a:hover
 {
     color: var(--text-color-700);
 }
@@ -521,7 +521,7 @@ html{
     color: var(--text-color-700);
 }
 
-.footer-body-links a:hover
+.footer-body-links a:hover, .footer-social a span:hover 
 {
     color: var(--text-color-100);
 }
@@ -533,9 +533,322 @@ html{
     font-size: 20px;
 }
 
-.footer-social span
+.footer-social a span
 {
     padding: 0 10px;
+    color: var(--text-color-700);
+}
+
+.listing
+{
+    padding: 5%;
+    background-color: var(--text-color-300);
+}
+
+.listing-grid
+{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.listing-head
+{
+    color: var(--text-color-900);
+    font-size: 40px;
+    padding-bottom: 3%;
+    font-family: 'Caveat', cursive;
+}
+
+.campaign-head
+{
+    color: var(--text-color-900);
+    font-size: 50px;
+    padding-bottom: 3%;
+    font-family: 'Caveat', cursive;
+}
+
+
+.campaignCard
+{
+    background-color: var(--text-color-100);
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    border-radius: 10px;
+    border: 1px solid var(--text-color-300);
+    margin: 5%;
+}
+
+.campaignCardImg
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.campaignCardImg img
+{
+    border-radius: 20px;
+}
+
+.grid-50
+{
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.grid-100
+{
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.campaignCardData
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.campaignCardHead
+{
+    text-align: center;
+    color: var(--text-color-900);
+    font-size: 20px;
+}
+
+.campaignCardDesc
+{
+    font-size: 15px;
+    color: var(--text-color-700);
+    text-align: center;
+}
+
+.campaignCardStats
+{
+    padding: 5% 10%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    color: var(--text-color-700);
+}
+
+.campaignCardProgressBar
+{
+    margin: 10px 0;
+    background-color: var(--text-color-700);
+    height: 4px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.campaignCardProgress
+{
+    background-color: var(--bg-color-300);
+    height: 4px;
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.campaignCardCurrent, .campaignCardPercent
+{
+    display: flex;
+    justify-content: flex-start;
+    font-size: 12px;
+}
+
+.campaignCardTarget, .campaignCardTimeLeft
+{
+    display: flex;
+    justify-content: flex-end;
+    font-size: 12px;   
+}
+
+.campaignCardPercent
+{
+    color: var(--bg-color-300);
+    font-weight: 400;
+}
+
+.campaignCardBtn
+{
+    display: flex;
+    justify-content: flex-end;
+    padding: 5% 0;
+}
+
+.grid-10
+{
+    flex: 0 0 10%;
+    max-width: 10%;
+}
+
+.grid-80
+{
+    flex: 0 0 80%;
+    max-width: 80%;
+}
+
+.grid-90
+{
+    flex: 0 0 90%;
+    max-width: 90%;
+}
+
+.listing-btn, .campaign-btn
+{
+    padding-top: 5px;
+}
+
+.campaign-grid
+{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    padding: 4% 5%;
+}
+
+.campaign-img
+{
+    position: relative;
+}
+
+.campaign-img img
+{
+    width: 400px;
+    height: 300px;
+    border-radius: 10px;
+}
+
+.campaign-img-upper
+{
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    width: 100px;
+    height: 5px;
+    background-color: var(--bg-color-300);
+}
+
+.campaign-img-upper::before
+{
+    content: '';
+    width: 5px;
+    height: 100px;
+    background-color: var(--bg-color-300);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.campaign-img-lower
+{
+    position: absolute;
+    top: 315px;
+    left: 320px;
+    width: 100px;
+    height: 5px;
+    background-color: var(--bg-color-300);
+}
+
+.campaign-img-lower::before
+{
+    content: '';
+    width: 5px;
+    height: 100px;
+    background-color: var(--bg-color-300);
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+
+.campaign-desc
+{
+    border: 1px solid var(--bg-color-900);
+    padding: 5%;
+    border-radius: 10px;
+}
+
+.campaign-desc-head
+{
+    padding: 15px 0;
+}
+
+.campaign-desc-head span
+{
+    font-size: 30px;
+    color: var(--text-color-900);
+    font-weight: 600;
+}
+
+.campaign-desc-text
+{
+    padding: 10px;
+}
+
+.campaign-desc-text p
+{
+    font-size: 17px;
+    color: var(--text-color-900);
+}
+
+.campaign-desc-stats
+{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    max-height: 50vh;
+    margin: 5%;
+    padding: 0 5%;
+    border-radius: 10px;
+    background-color: var(--text-color-100);
+    color: var(--text-color-900);
+    font-size: 18px;
+}
+
+.campaign-desc-stats div
+{
+    margin: 3% 0;
+    color: var(--text-color-900);
+    text-align: center;
+}
+
+.campaign-progress-bar-holder
+{
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.campaign-progress-bar
+{
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    border-radius: 20px;
+    background-color: var(--text-color-700);
+    top: 0;
+    left: 0;
+}
+
+.campaign-progress
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--bg-color-700);
+    height: 5px;
+    border-radius: 20px;
+}
+
+.campaign-progress-percent
+{
+    color: var(--text-color-700) !important;
+    font-size: 25px !important;
+    font-weight: 600;
 }
 
 /* media query begins */
@@ -619,7 +932,7 @@ html{
         flex-direction: column;
     }
 
-    .grid-30, .grid-40, .grid-60, .grid-70, .grid-20{
+    .grid-30, .grid-40, .grid-60, .grid-70, .grid-20, .grid-50, .grid-100, .grid-10, .grid-90, .grid-80{
         flex: 0 0 100% !important;
         min-width: 100% !important;
     }
@@ -663,4 +976,28 @@ html{
     {
         flex-direction: column;
     }
+    .listing-head, .campaign-head
+    {
+        text-align: center;
+    }
+
+    .campaign-img
+    {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .campaign-img img
+    {
+        width: 300px;
+        height: 200px;
+        border-radius: 20px;
+    }
+
+    .campaign-img-lower, .campaign-img-upper
+    {
+        display: none;
+    }
+
 }

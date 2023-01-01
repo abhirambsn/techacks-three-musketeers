@@ -29,7 +29,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className={`${!open ? "hidden" : "shown"}`}>
+        <div className={`${!open ? "hidden" : "shown"}`} >
 
           <div className='nav-body'>
             <div className='nav-body-list'>
@@ -41,7 +41,7 @@ const Navbar = () => {
           </div>
 
           <div className='nav-end-btn'>
-            <button className='btn nav-btn'>Get Started</button>
+            <a href="#"><button className='btn nav-btn'>Get Started</button></a>
           </div>
 
         </div>
