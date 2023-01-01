@@ -5,7 +5,7 @@ import { checkInvestorship, fund, registerAsInvestor } from "../utils/interact";
 import useAccount from "../hooks/useAccount";
 import useProvider from "../hooks/useProvider";
 
-const Dashboard = () => {
+const Testing = () => {
   const dt = useLoaderData();
   const provider = useProvider();
   const [fundAmt, setFundAmt] = useState(0);
@@ -15,7 +15,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h1>Dashboard</h1>
+      <h1>Testing Page</h1>
       <table>
         <thead>
           <tr>
@@ -71,4 +71,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Testing;

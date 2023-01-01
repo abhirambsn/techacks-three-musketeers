@@ -6,8 +6,9 @@ import {
 } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import "./index.css";
-import Dashboard from "./pages/Dashboard";
+import Listing from "./pages/Listing";
 import { getAllCampaigns } from "./utils/loaders";
+import Testing from "./pages/Testing";
 
 const router = createBrowserRouter([
   {
@@ -15,10 +16,14 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
-    path: "/dashboard",
-    element: <Dashboard />,
-    loader: getAllCampaigns
+    path: "/list",
+    element: <Listing />,
   },
+  {
+    path: "/testing",
+    element: <Testing />,
+    loader: getAllCampaigns
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
