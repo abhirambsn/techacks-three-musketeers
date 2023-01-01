@@ -9,6 +9,7 @@ import "./index.css";
 import Listing from "./pages/Listing";
 import { getAllCampaigns } from "./utils/loaders";
 import Testing from "./pages/Testing";
+import Campaign from "./pages/Campaign";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/list",
     element: <Listing />,
+  },
+  {
+    path: '/campaign',
+    element: <Campaign />,
   },
   {
     path: "/testing",
