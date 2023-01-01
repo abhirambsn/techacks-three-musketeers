@@ -18,6 +18,7 @@ const Dashboard = () => {
             <th scope="col">Total Duration</th>
             <th scope="col">Current Stage</th>
             <th scope="col">Progress (Amount Recieved / Amount needed) (in ETH)</th>
+            <th scope="col">Deadline</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -28,10 +29,11 @@ const Dashboard = () => {
               <td>{formatAddress(dt.address)}</td>
               <td>{dt.name}</td>
               <td>{dt.desc}</td>
-              <td>{dt.stagePeriod}</td>
-              <td>{dt.totalProjectTime}</td>
+              <td>{dt.stagePeriod / 60 / 60 / 24} days</td>
+              <td>{dt.totalProjectTime / 60 / 60 / 24} days</td>
               <td>{dt.currentStage} / {dt.totalProjectTime / dt.stagePeriod}</td>
-              <td>{dt.currentProgress} / {dt.totalAmountNeeded} ETH</td>
+              <td>{dt.currentProgress} / {dt.totalAmountNeeded} ETH ({(dt.currentProgress / dt.totalAmountNeeded)*100} %)</td>
+              <td>{dt.projectDeadline}</td>
               <td>
                 <button>Fund Campaign</button>
                 <button>Vote to withdraw</button>

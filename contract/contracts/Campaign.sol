@@ -13,6 +13,8 @@ contract Campaign {
     uint public totalProjectTime; // Total Project Time in Days
     uint256 public totalAmountNeeded;
     bool isValid; // Is the campaign valid
+    bool goalReached;
+    uint public projectDeadlineStartTime;
 
     address payable _owner;
     
@@ -29,6 +31,7 @@ contract Campaign {
 
     mapping(address => Investor) public investors;
     address[] public investorLUT; // Array which acts as a lookup table of investors
+    uint investorCount;
 
     Stage[] stages;
     uint public currentStage = 1;
@@ -50,12 +53,15 @@ contract Campaign {
         escrow = new Escrow(payable(_author));
         uint nStages = totalProjectTime / stagePeriod;
         require(nStages > 0, "Invalid Period");
-        uint curTime = block.timestamp;
+        // uint curTime = block.timestamp;
         for (uint i = 0; i < nStages; i++) {
-            stages.push(Stage(_stages[i], curTime + stagePeriod));
-            curTime += stagePeriod;
+            stages.push(Stage(_stages[i], stagePeriod));
+            // curTime += stagePeriod;
         }
         isValid = true;
+        goalReached = false;
+        investorCount = 0;
+        projectDeadlineStartTime = 0;
     }
 
     function registerInvestor(string memory _name) external {
@@ -64,11 +70,22 @@ contract Campaign {
         investors[msg.sender].name = _name;
         investors[msg.sender].isValid = true;
         investorLUT.push(msg.sender);
+        investorCount++;
     }
 
     function pledgeFunds() external payable {
         require(investors[msg.sender].isValid, "Please Register as investor before pledging funds");
         escrow.deposit{value:msg.value}(msg.sender);
+        projectDeadlineStartTime = block.timestamp;
+        if (address(escrow).balance*100/totalAmountNeeded >= 100) {
+            goalReached = true;
+            uint curTime = block.timestamp;
+            uint nStages = totalProjectTime / stagePeriod;
+            for (uint i = 0; i < nStages; i++) {
+                stages[i].deadline = curTime + stagePeriod;
+                curTime += stagePeriod;
+            }
+        }
         emit FundsPledged(investors[msg.sender], msg.value);
     }
 
@@ -91,6 +108,13 @@ contract Campaign {
 
     function getInvestorRatio() external view returns(uint) {
         return escrow.getInvestmentRatio(msg.sender);
+    }
+
+    function cancelCampaign() external {
+        require(msg.sender == author, "Only Campaign author can cancel a campaign.");
+        for(uint i = 0; i < investorCount; i++) {
+            escrow.refund(investorLUT[i]);
+        }
     }
 
     function refund() external {

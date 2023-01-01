@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { BigNumber } from "ethers";
 import cfundingAbi from "../abi/CFunding.json";
 import campaignAbi from "../abi/Campaign.json";
 import escrowAbi from "../abi/Escrow.json";
@@ -6,7 +7,7 @@ import escrowAbi from "../abi/Escrow.json";
 const getEscrowBalance = async (provider, escrowAddr) => {
   const balance = await provider.getBalance(escrowAddr);
   return ethers.utils.formatEther(balance);
-}
+};
 
 const getCampaignDetail = async (provider, signer, campaignAddr) => {
   const campaignContract = new ethers.Contract(
@@ -18,13 +19,23 @@ const getCampaignDetail = async (provider, signer, campaignAddr) => {
   const desc = await campaignContract.description();
   const escrowAddr = await campaignContract.escrow();
   let stagePeriod = await campaignContract.stagePeriod();
-  stagePeriod = ethers.utils.formatEther(stagePeriod);
+  stagePeriod = stagePeriod.toNumber();
   let totalProjectTime = await campaignContract.totalProjectTime();
-  totalProjectTime = ethers.utils.formatEther(totalProjectTime);
+  totalProjectTime = totalProjectTime.toNumber();
   let totalAmountNeeded = await campaignContract.totalAmountNeeded();
-  totalAmountNeeded = parseFloat(ethers.utils.formatEther(totalAmountNeeded))*1e18;
+  totalAmountNeeded =
+    parseFloat(ethers.utils.formatEther(totalAmountNeeded)) * 1e18;
   let currentStage = await campaignContract.currentStage();
-  currentStage = parseFloat(ethers.utils.formatEther(currentStage))*1e18;
+  currentStage = parseFloat(ethers.utils.formatEther(currentStage)) * 1e18;
+  let projectDeadlineStartTime =
+    await campaignContract.projectDeadlineStartTime();
+  projectDeadlineStartTime = projectDeadlineStartTime.toNumber();
+  let projectDeadline = "Not Started";
+  if (projectDeadlineStartTime > 0) {
+    projectDeadline = new Date(
+      projectDeadlineStartTime * 1000 + totalProjectTime * 100
+    ).toLocaleDateString("en-US", { dateStyle: "medium" });
+  }
 
   return {
     name,
@@ -35,7 +46,8 @@ const getCampaignDetail = async (provider, signer, campaignAddr) => {
     totalAmountNeeded,
     address: campaignAddr,
     currentStage,
-    currentProgress: await getEscrowBalance(provider, escrowAddr)
+    currentProgress: await getEscrowBalance(provider, escrowAddr),
+    projectDeadline,
   };
 };
 
@@ -56,7 +68,7 @@ export const getAllCampaigns = async () => {
     let uData = await cfundingContract.getAllCampaignsOfUser(userAddr);
     uData = uData.map((uD) => getCampaignDetail(provider, signer, uD));
     uData = await Promise.all(uData);
-    allCampaigns = [...allCampaigns,...uData];
+    allCampaigns = [...allCampaigns, ...uData];
     console.log({
       userAddr,
       uData,
