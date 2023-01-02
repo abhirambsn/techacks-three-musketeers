@@ -7,37 +7,37 @@ window.addEventListener('load', ()=>{
     })
 });
 
-const CampaignCard = (props) => {
+const CampaignCard = ({image, title, description, raised, target, deadline, linkTo}) => {
   return (
     <div className='campaignCard'>
         <div className='campaignCardImg'>
-            <img src={props.image} alt="#" />
+            <img src={image} alt="#" />
         </div>
         <div className='campaignCardData'>
             <div className='campaignCardHead grid-100'>
-                <p>{props.title}</p>
+                <p>{title}</p>
             </div>
             <div className='campaignCardDesc grid-100'>
-                <p>{props.description}</p>
+                <p>{description}</p>
             </div>
             <div className='campaignCardStats'>
                 <div className='campaignCardCurrent grid-50'>
-                    <p>Raised : {props.raised}</p>
+                    <p>Raised : {raised}</p>
                 </div>
                 <div className='campaignCardTarget grid-50'>
-                    <p>Target : {props.target}</p>
+                    <p>Target : {target}</p>
                 </div>
                 <div className='campaignCardProgressBar grid-100'>
-                    <div className='campaignCardProgress' data-progress={props.progress}></div>
+                    <div className='campaignCardProgress' data-progress={(raised/target)*100}></div>
                 </div>
                 <div className='campaignCardPercent grid-70'>
-                    <p>{props.reached}% target reached</p>
+                    <p>{raised*100/target}% target reached</p>
                 </div>
                 <div className='campaignCardTimeLeft grid-30'>
-                    <p>{props.days} days left</p>
+                    <p>{deadline}</p>
                 </div>
                 <div className='campaignCardBtn grid-100'>
-                    <a href={props.linkTo}><button className='btn-theme'>View More</button></a>
+                    <a href={linkTo}><button className='btn-theme'>View More</button></a>
                 </div>
             </div>
         </div>

@@ -89,6 +89,7 @@ html{
     border: 1px solid var(--bg-color-300);
     transition: all 0.3s ease;
     font-family: 'Roboto Slab', serif;
+    cursor: pointer;
 }
 
 .btn-theme:hover

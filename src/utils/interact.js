@@ -9,6 +9,10 @@ export const getBalance = async (walletAddress) => {
 };
 
 export const checkInvestorship = async (contractAddress, walletAddress) => {
+  if (!window.ethereum) {
+    console.error("Ethereum Not Available");
+    return false;
+  }
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const contract = new ethers.Contract(
@@ -18,9 +22,9 @@ export const checkInvestorship = async (contractAddress, walletAddress) => {
   );
   try {
     const isInvestor = await contract.investors(walletAddress);
-    console.log(isInvestor);
-    return await isInvestor.isValid();
+    return await isInvestor.isValid;
   } catch (e) {
+    console.error(e);
     return false;
   }
 };

@@ -51,6 +51,12 @@ const getCampaignDetail = async (provider, signer, campaignAddr) => {
   };
 };
 
+export const getCampaignDetails = async ({params}) => {
+  const allCampaings = await getAllCampaigns();
+  console.log(allCampaings.find((c) => c.address == params.campaignAddress));
+  return allCampaings.find((c) => c.address == params.campaignAddress);
+}
+
 export const getAllCampaigns = async () => {
   let allCampaigns = [];
   console.log(import.meta.env.VITE_CONTRACT_ADDRESS);

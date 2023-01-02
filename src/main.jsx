@@ -7,7 +7,7 @@ import {
 import HomePage from "./pages/HomePage";
 import "./index.css";
 import Listing from "./pages/Listing";
-import { getAllCampaigns } from "./utils/loaders";
+import { getAllCampaigns, getCampaignDetails } from "./utils/loaders";
 import Testing from "./pages/Testing";
 import Campaign from "./pages/Campaign";
 
@@ -19,10 +19,12 @@ const router = createBrowserRouter([
   {
     path: "/list",
     element: <Listing />,
+    loader: getAllCampaigns
   },
   {
-    path: '/campaign',
+    path: '/campaign/:campaignAddress',
     element: <Campaign />,
+    loader: getCampaignDetails
   },
   {
     path: "/testing",
