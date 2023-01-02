@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import CampaignCard from "../components/CampaignCard";
 import { FaArrowLeft } from "react-icons/fa";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useLocation } from "react-router-dom";
+import { truncateDescription } from "../utils/functions";
 
 const Listing = () => {
   const campaignData = useLoaderData();
+
   return (
     <section className="section listing" id="listing">
       <div className="listing-grid">
@@ -25,7 +27,7 @@ const Listing = () => {
             <CampaignCard
               title={cD.name}
               image="https://picsum.photos/300/200"
-              description={cD.desc}
+              description={truncateDescription(cD.desc)}
               raised={cD.currentProgress}
               target={cD.totalAmountNeeded}
               deadline={cD.projectDeadline}

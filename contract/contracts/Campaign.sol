@@ -7,13 +7,14 @@ contract Campaign {
     // Variables
     string public name; // Campaign Name
     string public description; // Idea Description
-    address payable author; // Wallet Address of the author
+    address payable public author; // Wallet Address of the author
     Escrow public escrow; // Escrow Linked with the campaign
     uint public stagePeriod; // Each Stage Period of the campaign
     uint public totalProjectTime; // Total Project Time in Days
     uint256 public totalAmountNeeded;
     bool isValid; // Is the campaign valid
     bool goalReached;
+    bool public cancelled;
     uint public projectDeadlineStartTime;
 
     address payable _owner;
@@ -62,6 +63,7 @@ contract Campaign {
         goalReached = false;
         investorCount = 0;
         projectDeadlineStartTime = 0;
+        cancelled = false;
     }
 
     function registerInvestor(string memory _name) external {
@@ -76,9 +78,9 @@ contract Campaign {
     function pledgeFunds() external payable {
         require(investors[msg.sender].isValid, "Please Register as investor before pledging funds");
         escrow.deposit{value:msg.value}(msg.sender);
-        projectDeadlineStartTime = block.timestamp;
         if (address(escrow).balance*100/totalAmountNeeded >= 100) {
             goalReached = true;
+            projectDeadlineStartTime = block.timestamp;
             uint curTime = block.timestamp;
             uint nStages = totalProjectTime / stagePeriod;
             for (uint i = 0; i < nStages; i++) {
@@ -115,6 +117,8 @@ contract Campaign {
         for(uint i = 0; i < investorCount; i++) {
             escrow.refund(investorLUT[i]);
         }
+        isValid = false;
+        cancelled = true;
     }
 
     function refund() external {

@@ -22,3 +22,7 @@ export const getMaticToINRPrice = async () => {
     console.log(66.2130);
     return new Promise((resolve, reject) => resolve(66.2130));
 }
+
+export const truncateDescription = (text, words = 10) => {
+    return String(text).split(' ').slice(0, words).join(' ') + "...";
+}

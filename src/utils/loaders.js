@@ -24,7 +24,7 @@ const getCampaignDetail = async (provider, signer, campaignAddr) => {
   totalProjectTime = totalProjectTime.toNumber();
   let totalAmountNeeded = await campaignContract.totalAmountNeeded();
   totalAmountNeeded =
-    parseFloat(ethers.utils.formatEther(totalAmountNeeded)) * 1e18;
+    parseFloat(ethers.utils.formatEther(totalAmountNeeded));
   let currentStage = await campaignContract.currentStage();
   currentStage = parseFloat(ethers.utils.formatEther(currentStage)) * 1e18;
   let projectDeadlineStartTime =
@@ -33,11 +33,13 @@ const getCampaignDetail = async (provider, signer, campaignAddr) => {
   let projectDeadline = "Not Started";
   if (projectDeadlineStartTime > 0) {
     projectDeadline = new Date(
-      projectDeadlineStartTime * 1000 + totalProjectTime * 100
+      projectDeadlineStartTime * 1000 + totalProjectTime * 1000
     ).toLocaleDateString("en-US", { dateStyle: "medium" });
   }
+  let author = await campaignContract.author();
 
   return {
+    author,
     name,
     desc,
     escrowAddr,
@@ -51,10 +53,9 @@ const getCampaignDetail = async (provider, signer, campaignAddr) => {
   };
 };
 
-export const getCampaignDetails = async ({params}) => {
+export const getCampaignDetails = async (campaignAddress) => {
   const allCampaings = await getAllCampaigns();
-  console.log(allCampaings.find((c) => c.address == params.campaignAddress));
-  return allCampaings.find((c) => c.address == params.campaignAddress);
+  return allCampaings.find((c) => c.address == campaignAddress);
 }
 
 export const getAllCampaigns = async () => {

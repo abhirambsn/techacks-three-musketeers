@@ -1,12 +1,18 @@
 import React, { useLayoutEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useLoaderData, useLocation } from "react-router-dom";
-import { checkInvestorship, fund, registerAsInvestor } from "../utils/interact";
+import {
+  cancelCampaign,
+  checkInvestorship,
+  fund,
+  registerAsInvestor,
+  withdraw,
+} from "../utils/interact";
 import useAccount from "../hooks/useAccount";
 import useProvider from "../hooks/useProvider";
 import { getDaysFromDeadline, getMaticToINRPrice } from "../utils/functions";
 
-const Campaign = () => {
+const TestingCampaign = () => {
   const campaignData = useLoaderData();
   const provider = useProvider();
   const { address } = useAccount(provider);
@@ -14,6 +20,8 @@ const Campaign = () => {
   const [registered, setRegistered] = useState(false);
   const [maticPrice, setMaticPrice] = useState(0);
   const location = useLocation();
+
+  console.log(campaignData);
 
   useLayoutEffect(() => {
     if (!window.ethereum) {
@@ -94,6 +102,57 @@ const Campaign = () => {
                   </button>
                 </div>
               )}
+              {registered && (
+                <div className="grid-100">
+                  <button
+                    onClick={async () =>
+                      await withdraw(campaignData.address, address)
+                    }
+                  >
+                    Withdraw Funds
+                  </button>
+                </div>
+              )}
+
+              {campaignData.author == address && (
+                <div className="grid-100">
+                  <button
+                    onClick={async () => {
+                      const confirmation = confirm(
+                        "Are you sure? This will refund the funds to all your investors and create a negative impact on your profile!"
+                      );
+                      if (confirmation) {
+                        await cancelCampaign(campaignData.address);
+                        alert("Campaign now stands cancelled");
+                      } else {
+                        alert("Request Cancelled");
+                      }
+                    }}
+                  >
+                    Cancel Campaign
+                  </button>
+                </div>
+              )}
+
+              {campaignData.author == address && (
+                <div className="grid-100">
+                  <button
+                    onClick={async () => {
+                      const confirmation = confirm(
+                        "Confirm Release of the funds"
+                      );
+                      if (confirmation) {
+                        await cancelCampaign(campaignData.address);
+                        alert("Campaign now stands cancelled");
+                      } else {
+                        alert("Request Cancelled");
+                      }
+                    }}
+                  >
+                    Get Funds for the Stage
+                  </button>
+                </div>
+              )}
 
               <div className="grid-100 campaign-progress-bar-holder">
                 <div className="campaign-progress-bar"></div>
@@ -108,9 +167,11 @@ const Campaign = () => {
               </div>
               <div className="grid-100 campaign-progress-percent">
                 Progress:{" "}
-                {((campaignData.currentProgress /
-                  campaignData.totalAmountNeeded) *
-                  100).toFixed(2)}
+                {(
+                  (campaignData.currentProgress /
+                    campaignData.totalAmountNeeded) *
+                  100
+                ).toFixed(2)}
                 % Funded
               </div>
               <div className="grid-100">
@@ -123,6 +184,46 @@ const Campaign = () => {
               <div className="grid-50">
                 Collected: {campaignData.currentProgress} MATIC
               </div>
+              <div className="grid-50">
+                Stage Period: {campaignData.stagePeriod / 60 / 60 / 24} days
+              </div>
+              <div className="grid-50">
+                No of Stages:{" "}
+                {Math.round(
+                  campaignData.totalProjectTime / campaignData.stagePeriod
+                )}
+              </div>
+              <div>
+                <h2>Stage Details</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>S. No</th>
+                      <th>Amount Needed</th>
+                      <th>Deadline</th>
+                      <th>Remarks</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {campaignData?.stages.map((stageData, i) => (
+                      <tr key={i}>
+                        <td>{i + 1}</td>
+                        <td>{stageData.amount}</td>
+                        <td>
+                          {stageData.deadline.toLocaleDateString("en-IN", {
+                            dateStyle: "medium",
+                          })}
+                        </td>
+                        <td>
+                          {campaignData.currentStage == i + 1
+                            ? "In Progress"
+                            : "Not Started"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -131,4 +232,4 @@ const Campaign = () => {
   );
 };
 
-export default Campaign;
+export default TestingCampaign;

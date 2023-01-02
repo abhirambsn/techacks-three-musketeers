@@ -10,7 +10,7 @@ import Footer from "../components/Footer";
 
 const HomePage = () => {
   const provider = useProvider();
-  const { address, signer } = useAccount(provider);
+  const { address } = useAccount(provider);
 
   useEffect(() => {
     console.log(`Address is ${address}`);

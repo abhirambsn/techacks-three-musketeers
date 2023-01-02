@@ -3,19 +3,16 @@ import { ethers } from "ethers";
 
 const useAccount = (provider) => {
   const [address, setAddress] = useState(null);
-  const [signer, setSigner] = useState(null);
 
   useEffect(() => {
-    const ethSigner = provider.getSigner();
-    setSigner(ethSigner);
-    (async () => {
+    provider.send("eth_requestAccounts", []).then(async () => {
+      const ethSigner = provider.getSigner();
       setAddress(await ethSigner.getAddress());
-    })();
+    });
   }, []);
 
   return {
     address,
-    signer,
   };
 };
 
