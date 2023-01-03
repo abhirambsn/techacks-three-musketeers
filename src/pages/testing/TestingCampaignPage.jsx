@@ -7,10 +7,10 @@ import {
   fund,
   registerAsInvestor,
   withdraw,
-} from "../utils/interact";
-import useAccount from "../hooks/useAccount";
-import useProvider from "../hooks/useProvider";
-import { getDaysFromDeadline, getMaticToINRPrice } from "../utils/functions";
+} from "../../utils/interact";
+import useAccount from "../../hooks/useAccount";
+import useProvider from "../../hooks/useProvider";
+import { getDaysFromDeadline, getMaticToINRPrice } from "../../utils/functions";
 
 const TestingCampaign = () => {
   const campaignData = useLoaderData();
@@ -175,8 +175,13 @@ const TestingCampaign = () => {
                 % Funded
               </div>
               <div className="grid-100">
-                Deadline: {campaignData.projectDeadline} (
-                {getDaysFromDeadline(campaignData.projectDeadline)} days left)
+                Deadline: {campaignData.projectDeadline}{" "}
+                {getDaysFromDeadline(campaignData.projectDeadline) !== -1 && (
+                  <>
+                    ({getDaysFromDeadline(campaignData.projectDeadline)} days
+                    left)
+                  </>
+                )}
               </div>
               <div className="grid-50">
                 Target: {campaignData.totalAmountNeeded} MATIC

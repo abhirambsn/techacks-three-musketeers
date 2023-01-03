@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import campaignAbi from "../abi/Campaign.json";
+import cfundingAbi from "../abi/CFunding.json";
 
 export const getBalance = async (walletAddress) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -39,7 +40,14 @@ export const registerAsInvestor = async (contractAddress) => {
     campaignAbi.abi,
     signer
   );
-  await contract.registerInvestor(name);
+  try {
+    const txn = await contract.registerInvestor(name);
+    await txn.wait(2);
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 };
 
 export const fund = async (contractAddress, walletAddress, amount) => {
@@ -58,12 +66,15 @@ export const fund = async (contractAddress, walletAddress, amount) => {
     signer
   );
   try {
-    await contract.pledgeFunds({ value: ethers.utils.parseEther(amount) });
+    const txn = await contract.pledgeFunds({
+      value: ethers.utils.parseEther(amount),
+    });
+    await txn.wait(2);
+    return true;
   } catch (e) {
     console.error(e);
     return false;
   }
-  return true;
 };
 
 export const withdraw = async (contractAddress, walletAddress) => {
@@ -79,7 +90,8 @@ export const withdraw = async (contractAddress, walletAddress) => {
     signer
   );
   try {
-    await contract.refund();
+    const txn = await contract.refund();
+    await txn.wait(2);
     return true;
   } catch (e) {
     console.error(e);
@@ -96,7 +108,8 @@ export const cancelCampaign = async (contractAddress) => {
     signer
   );
   try {
-    await contract.cancelCampaign();
+    const txn = await contract.cancelCampaign();
+    await txn.wait(2);
     return true;
   } catch (e) {
     console.error(e);
@@ -119,7 +132,7 @@ export const getStages = async (contractAddress, nStages) => {
       console.log(i, stageDetail);
       stages.push({
         amount: ethers.utils.formatEther(stageDetail.amountNeeded),
-        deadline: new Date(stageDetail.deadline.toNumber() * 1000)
+        deadline: new Date(stageDetail.deadline.toNumber() * 1000),
       });
     }
     return stages;
@@ -138,10 +151,43 @@ export const releaseFundsToCampaigner = async (contractAddress) => {
     signer
   );
   try {
-    await contract.releaseFunds();
+    const txn = await contract.releaseFunds();
+    await txn.wait(2);
     return true;
   } catch (e) {
     console.error(e);
     return false;
   }
-}
+};
+
+export const createNewCampaign = async (
+  name,
+  desc,
+  stagePeriod,
+  projectPeriod,
+  totalAmt,
+  stages
+) => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(
+    import.meta.env.VITE_CONTRACT_ADDRESS,
+    cfundingAbi.abi,
+    signer
+  );
+  try {
+    const txn = await contract.createCampaign(
+      name,
+      desc,
+      stagePeriod,
+      projectPeriod,
+      ethers.utils.parseEther(totalAmt),
+      stages.map((stage) => ethers.utils.parseEther(stage))
+    );
+    await txn.wait(2);
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+};
