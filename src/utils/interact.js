@@ -281,3 +281,21 @@ export const checkVote = async (contractAddress, stage) => {
     return false;
   }
 }
+
+export const completeStageVoting = async (contractAddress) => {
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      contractAddress,
+      campaignAbi.abi,
+      signer
+    )
+    const txn = await contract.voted();
+    await txn.wait(1);
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+}

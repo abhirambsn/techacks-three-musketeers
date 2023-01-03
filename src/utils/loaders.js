@@ -3,6 +3,8 @@ import { BigNumber } from "ethers";
 import cfundingAbi from "../abi/CFunding.json";
 import campaignAbi from "../abi/Campaign.json";
 import escrowAbi from "../abi/Escrow.json";
+import axios from "axios";
+import { completeStageVoting } from "./interact";
 
 const getEscrowBalance = async (provider, escrowAddr) => {
   const balance = await provider.getBalance(escrowAddr);
@@ -81,4 +83,14 @@ export const getAllCampaigns = async () => {
     });
   }
   return allCampaigns;
+};
+
+export const getVotingResults = async (contractAddress, stage) => {
+  const resp = await axios.get(
+    `http://localhost:5000/api/results/${contractAddress}/${stage}`
+  );
+  if (resp.data.over) {
+    await completeStageVoting(contractAddress);
+  }
+  return { ...resp.data, address: contractAddress, stage };
 };
