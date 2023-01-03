@@ -69,6 +69,7 @@ html{
     border: 1px solid var(--text-color-100);
     transition: all 0.3s ease;
     font-family: 'Roboto Slab', serif;
+    cursor: pointer;
 }
 
 .btn:hover
@@ -110,6 +111,7 @@ html{
     border: 1px solid var(--bg-color-500);
     transition: all 0.3s ease;
     font-family: 'Roboto Slab', serif;
+    cursor: pointer;
 }
 
 .btn-inverse:hover
@@ -653,7 +655,7 @@ html{
     height: 4px;
     border-radius: 10px;
     position: absolute;
-    top: 0;
+    top: 30px;
     left: 0;
 }
 
@@ -825,6 +827,7 @@ html{
     flex-direction: row;
     flex-wrap: wrap;
     min-height: 100vh;
+    font-family: 'Roboto Slab', serif;
 }
 
 .campaign-right
@@ -834,6 +837,7 @@ html{
     flex-direction: row;
     flex-wrap: wrap;
     min-height: 100vh;
+    font-family: 'Roboto Slab', serif;
 }
 
 .campaign-funds
@@ -892,6 +896,11 @@ html{
     padding: 2% 0;
     font-weight: 400;
     font-family: 'Roboto Slab', serif;
+}
+
+.stats-grid
+{
+
 }
 
 /* media query begins */
