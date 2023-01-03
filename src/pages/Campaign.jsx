@@ -38,10 +38,10 @@ return (
   <div className="campaign-grid">
     <div className="grid-40 campaign-left">
       <div className="grid-50 padd-5">
-        <a href="/">
+        <a href="/list">
           <button className="btn-inverse">
             {" "}
-            <FaArrowLeft className="campaign-btn" /> Home
+            <FaArrowLeft className="campaign-btn" />
           </button>
         </a>
       </div>
@@ -100,7 +100,7 @@ return (
         </div>
       </div>
       <div className="grid-50 campaign-funds grid">
-        <div className="grid-100">
+        <div className="grid-100 campaign-funds">
         {!registered && (
         <button className="btn-theme" onClick={async ()=>
           await registerAsInvestor(campaignData.address)
@@ -111,7 +111,9 @@ return (
       )}
         </div>
         <div className="grid-100 campaign-funds">
+          <a href="/stats">
           <button className="btn-theme">View Stages</button>
+          </a>
         </div>
       </div>
       <div className="grid-50 campaign-form">
