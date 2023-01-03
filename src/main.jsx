@@ -48,8 +48,19 @@ const router = createBrowserRouter([
     loader: getAllCampaigns,
   },
   {
-    path: "/stats",
+    path: "/campaign/:campaignAddress/stats",
     element: <Stats />,
+    loader: async ({ params }) => {
+      const cDetail = await getCampaignDetails(params.campaignAddress);
+      const stageDetail = await getStages(
+        cDetail.address,
+        Math.round(cDetail.totalProjectTime / cDetail.stagePeriod)
+      );
+      return {
+        ...cDetail,
+        stages: stageDetail,
+      };
+    },
   },
   {
     path: "/testing/:campaignAddress",

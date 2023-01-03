@@ -139,7 +139,7 @@ const Campaign = () => {
               )}
             </div>
             <div className="grid-100 campaign-funds">
-              <a href="/stats">
+              <a href={`/campaign/${campaignData.address}/stats`}>
                 <button className="btn-theme">View Stages</button>
               </a>
             </div>
