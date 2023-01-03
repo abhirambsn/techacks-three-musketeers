@@ -115,6 +115,16 @@ return (
           <button className="btn-theme">View Stages</button>
           </a>
         </div>
+        <div className="grid-100 campaign-funds">
+          <a href="/">
+          <button className="btn-theme">Release funds</button>
+          </a>
+        </div>
+        <div className="grid-100 campaign-funds">
+          <a href="/">
+          <button className="btn-theme">Complete campaign</button>
+          </a>
+        </div>
       </div>
       <div className="grid-50 campaign-form">
         <div className="grid-100 campaign-funds">

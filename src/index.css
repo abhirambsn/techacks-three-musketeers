@@ -804,9 +804,9 @@ html{
 .campaign-progress
 {
     position: absolute;
-    top: 0;
+    top: 30px;
     left: 0;
-    background-color: var(--bg-color-700);
+    background-color: var(--bg-color-900);
     height: 5px;
     border-radius: 20px;
 }
@@ -898,9 +898,77 @@ html{
     font-family: 'Roboto Slab', serif;
 }
 
+.stats
+{
+    background-color: var(--bg-color-300);
+}
+
 .stats-grid
 {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    font-family: 'Roboto Slab', serif;
+}
 
+.stats-head
+{
+    position: absolute;
+    left: 95vh;
+    top: 12vh;
+    font-size: 35px;
+    font-family: 'Caveat', cursive;
+}
+
+.stats-box
+{
+    background-color: var(--text-color-300);
+    width: 100%;
+}
+
+.stats-table
+{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    text-align: justify;
+    justify-content: center;
+    align-items: center;
+}
+
+.stats-table-head
+{
+    background-color: var(--bg-color-800);
+    color: var(--text-color-300);
+    padding: 10% 2%;
+    height: 100%;
+    font-weight: 600;
+}
+
+.stats-table-head div, .stats-table-body div
+{
+    font-size: 20px;
+    line-height: 60px;
+}
+
+.stats-table-body
+{
+    color: var(--text-color-900);
+    padding: 2%;
+    height: 100%;
+    padding: 10% 2%;
+}
+
+.stats-table-body div button
+{
+    margin-right: 5px;
+}
+
+.stats-btn
+{
+    position: absolute;
+    top: 12vh;
+    left: 13vh;
 }
 
 /* media query begins */
