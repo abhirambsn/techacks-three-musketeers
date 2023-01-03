@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useLoaderData } from "react-router-dom";
-import { formatAddress } from "../utils/functions";
-import { checkInvestorship, fund, registerAsInvestor } from "../utils/interact";
-import useAccount from "../hooks/useAccount";
-import useProvider from "../hooks/useProvider";
+import { formatAddress } from "../../utils/functions";
+import { checkInvestorship, fund, registerAsInvestor } from "../../utils/interact";
+import useAccount from "../../hooks/useAccount";
+import useProvider from "../../hooks/useProvider";
 
 const Testing = () => {
   const dt = useLoaderData();

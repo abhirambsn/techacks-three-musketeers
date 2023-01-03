@@ -6,6 +6,7 @@ export const getDaysFromDeadline = (date) => {
   const deadline = new Date(date);
   const diffTime = Math.abs(now - deadline);
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  if (isNaN(diffDays)) return -1;
   return diffDays;
 };
 

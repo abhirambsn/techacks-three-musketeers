@@ -8,10 +8,11 @@ import HomePage from "./pages/HomePage";
 import "./index.css";
 import Listing from "./pages/Listing";
 import { getAllCampaigns, getCampaignDetails } from "./utils/loaders";
-import Testing from "./pages/Testing";
+import Testing from "./pages/testing/Testing";
 import Campaign from "./pages/Campaign";
-import TestingCampaign from "./pages/TestingCampaignPage";
+import TestingCampaign from "./pages/testing/TestingCampaignPage";
 import { getStages } from "./utils/interact";
+import TestingNewCampaign from "./pages/testing/TestingNewCampaign";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
         stages: stageDetail
       }
     }
+  },
+  {
+    path: "/testing/new",
+    element: <TestingNewCampaign />
   }
 ]);
 

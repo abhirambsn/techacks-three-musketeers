@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import campaignAbi from "../abi/Campaign.json";
+import cfundingAbi from "../abi/CFunding.json";
 
 export const getBalance = async (walletAddress) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -119,7 +120,7 @@ export const getStages = async (contractAddress, nStages) => {
       console.log(i, stageDetail);
       stages.push({
         amount: ethers.utils.formatEther(stageDetail.amountNeeded),
-        deadline: new Date(stageDetail.deadline.toNumber() * 1000)
+        deadline: new Date(stageDetail.deadline.toNumber() * 1000),
       });
     }
     return stages;
@@ -144,4 +145,35 @@ export const releaseFundsToCampaigner = async (contractAddress) => {
     console.error(e);
     return false;
   }
-}
+};
+
+export const createNewCampaign = async (
+  name,
+  desc,
+  stagePeriod,
+  projectPeriod,
+  totalAmt,
+  stages
+) => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(
+    import.meta.env.VITE_CONTRACT_ADDRESS,
+    cfundingAbi.abi,
+    signer
+  );
+  try {
+    await contract.createCampaign(
+      name,
+      desc,
+      stagePeriod,
+      projectPeriod,
+      ethers.utils.parseEther(totalAmt),
+      stages.map((stage) => ethers.utils.parseEther(stage))
+    );
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+};
