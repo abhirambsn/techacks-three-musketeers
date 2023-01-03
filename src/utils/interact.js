@@ -1,3 +1,4 @@
+import axios from "axios";
 import { ethers } from "ethers";
 import campaignAbi from "../abi/Campaign.json";
 import cfundingAbi from "../abi/CFunding.json";
@@ -30,9 +31,9 @@ export const checkInvestorship = async (contractAddress, walletAddress) => {
   }
 };
 
-export const registerAsInvestor = async (contractAddress) => {
+export const registerAsInvestor = async (contractAddress, walletAddress) => {
   const name = prompt("Enter Name");
-  if (name.length <= 0) return;
+  if (name.length <= 0) return false;
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const contract = new ethers.Contract(
@@ -41,8 +42,18 @@ export const registerAsInvestor = async (contractAddress) => {
     signer
   );
   try {
+    const resp = await axios.post(
+      `http://localhost:5000/api/${contractAddress}/registerInvestor`,
+      {
+        investorAddress: walletAddress,
+        name,
+      }
+    );
+    if (resp.status !== 200) {
+      return false;
+    }
     const txn = await contract.registerInvestor(name);
-    await txn.wait(2);
+    await txn.wait(1);
     return true;
   } catch (e) {
     console.error(e);
@@ -69,7 +80,7 @@ export const fund = async (contractAddress, walletAddress, amount) => {
     const txn = await contract.pledgeFunds({
       value: ethers.utils.parseEther(amount),
     });
-    await txn.wait(2);
+    await txn.wait(1);
     return true;
   } catch (e) {
     console.error(e);
@@ -91,7 +102,7 @@ export const withdraw = async (contractAddress, walletAddress) => {
   );
   try {
     const txn = await contract.refund();
-    await txn.wait(2);
+    await txn.wait(1);
     return true;
   } catch (e) {
     console.error(e);
@@ -109,7 +120,7 @@ export const cancelCampaign = async (contractAddress) => {
   );
   try {
     const txn = await contract.cancelCampaign();
-    await txn.wait(2);
+    await txn.wait(1);
     return true;
   } catch (e) {
     console.error(e);
@@ -129,10 +140,12 @@ export const getStages = async (contractAddress, nStages) => {
     let stages = [];
     for (let i = 1; i <= nStages; i++) {
       const stageDetail = await contract.getStageDetail(i);
-      console.log(i, stageDetail);
+      const resp = await axios.get(`http://localhost:5000/api/${contractAddress}/${i}/check`)
       stages.push({
         amount: ethers.utils.formatEther(stageDetail.amountNeeded),
         deadline: new Date(stageDetail.deadline.toNumber() * 1000),
+        voted: stageDetail.voted,
+        created: resp.data.isValid
       });
     }
     return stages;
@@ -152,7 +165,7 @@ export const releaseFundsToCampaigner = async (contractAddress) => {
   );
   try {
     const txn = await contract.releaseFunds();
-    await txn.wait(2);
+    await txn.wait(1);
     return true;
   } catch (e) {
     console.error(e);
@@ -184,10 +197,87 @@ export const createNewCampaign = async (
       ethers.utils.parseEther(totalAmt),
       stages.map((stage) => ethers.utils.parseEther(stage))
     );
-    await txn.wait(2);
+    await txn.wait(1);
     return true;
   } catch (e) {
     console.error(e);
     return false;
   }
 };
+
+export const completeCampaign = async (contractAddress) => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  try {
+    const campaginContract = new ethers.Contract(
+      contractAddress,
+      campaignAbi.abi,
+      signer
+    );
+
+    const txn = await campaginContract.completeCampaign();
+    await txn.wait(1);
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+};
+
+export const voteForNextStage = async (
+  contractAddress,
+  stage,
+  walletAddress,
+  yes
+) => {
+  try {
+    const req = await axios.post(
+      `http://localhost:5000/api/${contractAddress}/${stage}/vote`,
+      {
+        yes,
+        investorAddress: walletAddress,
+      }
+    );
+
+    if (req.status === 201) {
+      alert(req.data.message);
+      return req.data.success;
+    }
+    return req.data.success;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+};
+
+export const createVote = async (contractAddress, stage, powText) => {
+  try {
+    let resp = await axios.get(`http://localhost:5000/api/${contractAddress}/${stage}/check`);
+    const isValid = resp.data.isValid;
+    if (isValid) return true;
+    resp = await axios.post(`http://localhost:5000/api/${contractAddress}/`, {
+      stage,
+      powText
+    })
+    if (resp.status === 201) {
+      return true;
+    } else {
+      alert("Failed")
+      return false;
+    }
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+};
+
+export const checkVote = async (contractAddress, stage) => {
+  try {
+    const resp = await axios.get(`http://localhost:5000/api/${contractAddress}/${stage}/check`);
+    const isValid = resp.data.isValid;
+    return isValid;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+}

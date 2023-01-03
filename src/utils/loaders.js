@@ -23,8 +23,7 @@ const getCampaignDetail = async (provider, signer, campaignAddr) => {
   let totalProjectTime = await campaignContract.totalProjectTime();
   totalProjectTime = totalProjectTime.toNumber();
   let totalAmountNeeded = await campaignContract.totalAmountNeeded();
-  totalAmountNeeded =
-    parseFloat(ethers.utils.formatEther(totalAmountNeeded));
+  totalAmountNeeded = parseFloat(ethers.utils.formatEther(totalAmountNeeded));
   let currentStage = await campaignContract.currentStage();
   currentStage = parseFloat(ethers.utils.formatEther(currentStage)) * 1e18;
   let projectDeadlineStartTime =
@@ -56,7 +55,7 @@ const getCampaignDetail = async (provider, signer, campaignAddr) => {
 export const getCampaignDetails = async (campaignAddress) => {
   const allCampaings = await getAllCampaigns();
   return allCampaings.find((c) => c.address == campaignAddress);
-}
+};
 
 export const getAllCampaigns = async () => {
   let allCampaigns = [];

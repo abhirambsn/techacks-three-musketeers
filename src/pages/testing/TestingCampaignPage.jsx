@@ -4,13 +4,18 @@ import { useLoaderData, useLocation } from "react-router-dom";
 import {
   cancelCampaign,
   checkInvestorship,
+  checkVote,
+  createVote,
   fund,
   registerAsInvestor,
+  releaseFundsToCampaigner,
+  voteForNextStage,
   withdraw,
 } from "../../utils/interact";
 import useAccount from "../../hooks/useAccount";
 import useProvider from "../../hooks/useProvider";
 import { getDaysFromDeadline, getMaticToINRPrice } from "../../utils/functions";
+import { completeCampaign } from "../../utils/interact";
 
 const TestingCampaign = () => {
   const campaignData = useLoaderData();
@@ -19,9 +24,8 @@ const TestingCampaign = () => {
   const [fundAmount, setFundAmount] = useState(0);
   const [registered, setRegistered] = useState(false);
   const [maticPrice, setMaticPrice] = useState(0);
+  const [powText, setPowText] = useState("");
   const location = useLocation();
-
-  console.log(campaignData);
 
   useLayoutEffect(() => {
     if (!window.ethereum) {
@@ -80,22 +84,24 @@ const TestingCampaign = () => {
                 {/* TODO: Style this :) */}
                 <p>INR: {(maticPrice * fundAmount).toFixed(2)} INR</p>
               </div>
-              <div className={registered ? "grid-100" : "grid-50"}>
-                <button
-                  className="btn-theme"
-                  onClick={async () =>
-                    await fund(campaignData.address, address, fundAmount)
-                  }
-                >
-                  Fund this campaign
-                </button>
-              </div>
-              {!registered && (
-                <div className="grid-50">
+              {registered && (
+                <div className="grid-100">
                   <button
                     className="btn-theme"
                     onClick={async () =>
-                      await registerAsInvestor(campaignData.address)
+                      await fund(campaignData.address, address, fundAmount)
+                    }
+                  >
+                    Fund this campaign
+                  </button>
+                </div>
+              )}
+              {!registered && (
+                <div className="grid-100">
+                  <button
+                    className="btn-theme"
+                    onClick={async () =>
+                      await registerAsInvestor(campaignData.address, address)
                     }
                   >
                     Register as Investor
@@ -114,7 +120,7 @@ const TestingCampaign = () => {
                 </div>
               )}
 
-              {campaignData.author == address && (
+              {campaignData.author === address && (
                 <div className="grid-100">
                   <button
                     onClick={async () => {
@@ -133,8 +139,23 @@ const TestingCampaign = () => {
                   </button>
                 </div>
               )}
+              {campaignData.author === address &&
+                campaignData.currentStage ==
+                  Math.round(
+                    campaignData.totalProjectTime / campaignData.stagePeriod
+                  ) && (
+                  <div className="grid-100">
+                    <button
+                      onClick={async () =>
+                        await completeCampaign(campaignData.address)
+                      }
+                    >
+                      Mark campaign as complete
+                    </button>
+                  </div>
+                )}
 
-              {campaignData.author == address && (
+              {campaignData.author === address && (
                 <div className="grid-100">
                   <button
                     onClick={async () => {
@@ -142,8 +163,10 @@ const TestingCampaign = () => {
                         "Confirm Release of the funds"
                       );
                       if (confirmation) {
-                        await cancelCampaign(campaignData.address);
-                        alert("Campaign now stands cancelled");
+                        await releaseFundsToCampaigner(campaignData.address);
+                        alert(
+                          `Funds for Stage ${campaignData.currentStage} have been released`
+                        );
                       } else {
                         alert("Request Cancelled");
                       }
@@ -183,6 +206,15 @@ const TestingCampaign = () => {
                   </>
                 )}
               </div>
+              {campaignData.author === address &&
+                getDaysFromDeadline(
+                  campaignData.stages[campaignData.currentStage - 1]?.deadline
+                ) <= 1 && (
+                  <div className="grid-100">
+                    <textarea placeholder="Proof of work"></textarea>
+                    <input type="file" />
+                  </div>
+                )}
               <div className="grid-50">
                 Target: {campaignData.totalAmountNeeded} MATIC
               </div>
@@ -207,6 +239,7 @@ const TestingCampaign = () => {
                       <th>Amount Needed</th>
                       <th>Deadline</th>
                       <th>Remarks</th>
+                      <th>Vote</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -223,6 +256,67 @@ const TestingCampaign = () => {
                           {campaignData.currentStage == i + 1
                             ? "In Progress"
                             : "Not Started"}
+                        </td>
+                        <td>
+                          <button
+                            onClick={async () =>
+                              await voteForNextStage(
+                                campaignData.address,
+                                i + 1,
+                                address,
+                                true
+                              )
+                            }
+                            disabled={
+                              campaignData.author === address ||
+                              i + 1 !== campaignData.currentStage ||
+                              stageData.voted
+                            }
+                          >
+                            Yes
+                          </button>
+                          <button
+                            onClick={async () =>
+                              await voteForNextStage(
+                                campaignData.address,
+                                i + 1,
+                                address,
+                                false
+                              )
+                            }
+                            disabled={
+                              campaignData.author === address ||
+                              i + 1 !== campaignData.currentStage ||
+                              stageData.voted
+                            }
+                          >
+                            No
+                          </button>
+                          {campaignData.author === address &&
+                            !stageData.created && (
+                              <>
+                                <button
+                                  onClick={async () => {
+                                    await createVote(
+                                      campaignData.address,
+                                      i + 1,
+                                      powText
+                                    );
+                                    setPowText("");
+                                  }}
+                                  disabled={i + 1 !== campaignData.currentStage}
+                                >
+                                  Create Vote
+                                </button>
+                                {i + 1 === campaignData.currentStage && (
+                                  <textarea
+                                    value={powText}
+                                    onChange={(e) => setPowText(e.target.value)}
+                                    placeholder="Proof of work"
+                                  ></textarea>
+                                )}
+                              </>
+                            )}
                         </td>
                       </tr>
                     ))}

@@ -2,15 +2,14 @@ const mongoose = require("mongoose");
 
 const voteSchema = new mongoose.Schema({
   campaign: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "campaign",
+    type: String,
     required: true,
   },
   stage: { type: Number, required: true },
   votes: [
     {
       investorAddress: { type: String },
-      vote: { type: Boolean, default: true },
+      vote: { type: Boolean, default: true }, // true if yes, false if no
     },
   ],
   proofOfWork: {text: {type: String, required: true}, files: [{type: String}]},

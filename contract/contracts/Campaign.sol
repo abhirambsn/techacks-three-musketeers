@@ -28,6 +28,7 @@ contract Campaign {
     struct Stage {
         uint amountNeeded;
         uint deadline;
+        bool voted;
     }
 
     mapping(address => Investor) public investors;
@@ -56,7 +57,7 @@ contract Campaign {
         require(nStages > 0, "Invalid Period");
         // uint curTime = block.timestamp;
         for (uint i = 0; i < nStages; i++) {
-            stages.push(Stage(_stages[i], stagePeriod));
+            stages.push(Stage(_stages[i], stagePeriod, false));
             // curTime += stagePeriod;
         }
         isValid = true;
@@ -119,6 +120,15 @@ contract Campaign {
         }
         isValid = false;
         cancelled = true;
+    }
+
+    function voted(uint stageNo) external {
+        stages[stageNo - 1].voted = true;
+    }
+
+    function completeCampaign() external {
+        require(msg.sender == author, "Only Campaign author can complete a campaign.");
+        escrow.markAsComplete();
     }
 
     function refund() external {
