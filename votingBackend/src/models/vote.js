@@ -13,6 +13,7 @@ const voteSchema = new mongoose.Schema({
       vote: { type: Boolean, default: true },
     },
   ],
+  proofOfWork: {text: {type: String, required: true}, files: [{type: String}]},
   createdAt: { type: Date, default: Date.now },
   deadline: { type: Date },
   ended: { type: Boolean, default: false },

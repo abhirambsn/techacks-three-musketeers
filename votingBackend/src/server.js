@@ -21,3 +21,10 @@ mongoose.connect(process.env.MONGO_URI, {}, () => {
         console.log('Server running on port 5000');
     })
 })
+
+process.on('SIGINT', () => {
+    mongoose.connection.close(() => {
+        console.log('Disconnected from MongoDB');
+        process.exit(0);
+    })
+})

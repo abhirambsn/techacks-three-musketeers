@@ -21,12 +21,16 @@ router.post("/:campaignId/vote", async (req, res) => {
   // TODO: Vote for a campaign with the given stage
 });
 
+router.put("/:campaignId/vote", async (req, res) => {
+    // TODO: Change the vote of an investor
+});
+
+router.get("/:campaignId/:stage/vote", async (req, res) => {
+    // TODO: Get the vote of an investor
+})
+
 router.get("/:campaignId/:stage/stats", async (req, res) => {
   // TODO: Get Stats for the voting of a stage
 });
-
-router.put("/:campaignId/vote", async (req, res) => {
-    // TODO: Change the vote of an investor
-})
 
 module.exports = router;
