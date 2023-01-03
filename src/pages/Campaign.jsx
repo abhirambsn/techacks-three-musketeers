@@ -76,11 +76,14 @@ return (
           {getDaysFromDeadline(campaignData.projectDeadline)} days left)
         </div>
         <div className="campaign-target">
-          Target: {campaignData.totalAmountNeeded} MATIC
+          Target: {campaignData.currentProgress}/{campaignData.totalAmountNeeded} MATIC
         </div>
-        <div className="campaign-collected">
-          Collected: {campaignData.currentProgress} MATIC
-        </div>
+        <div className="campaign-no-of-stages">
+            No. of stages: 4
+        </div> 
+        <div className="campaign-stage-period">
+            Stage period: 100 days
+        </div> 
       </div>
       <div className="grid-20"></div>
     </div>
@@ -96,8 +99,9 @@ return (
           <p>{campaignData.desc}</p>
         </div>
       </div>
-      <div className="grid-50 campaign-funds">
-      {!registered && (
+      <div className="grid-50 campaign-funds grid">
+        <div className="grid-100">
+        {!registered && (
         <button className="btn-theme" onClick={async ()=>
           await registerAsInvestor(campaignData.address)
           }
@@ -105,6 +109,10 @@ return (
           Register as Investor
         </button>
       )}
+        </div>
+        <div className="grid-100 campaign-funds">
+          <button className="btn-theme">View Stages</button>
+        </div>
       </div>
       <div className="grid-50 campaign-form">
         <div className="grid-100 campaign-funds">

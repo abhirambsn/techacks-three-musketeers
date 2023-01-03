@@ -12,6 +12,7 @@ import Testing from "./pages/Testing";
 import Campaign from "./pages/Campaign";
 import TestingCampaign from "./pages/TestingCampaignPage";
 import { getStages } from "./utils/interact";
+import Stats from "./pages/Stats";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
     path: "/testing",
     element: <Testing />,
     loader: getAllCampaigns
+  },
+  {
+    path: "/stats",
+    element: <Stats />
   },
   {
     path: "/testing/:campaignAddress",
