@@ -804,7 +804,7 @@ html{
 .campaign-progress
 {
     position: absolute;
-    top: 0;
+    top: 30px;
     left: 0;
     background-color: var(--bg-color-700);
     height: 5px;

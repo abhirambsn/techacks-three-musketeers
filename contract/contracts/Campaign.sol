@@ -13,7 +13,7 @@ contract Campaign {
     uint public totalProjectTime; // Total Project Time in Days
     uint256 public totalAmountNeeded;
     bool isValid; // Is the campaign valid
-    bool goalReached;
+    bool public goalReached;
     bool public cancelled;
     uint public projectDeadlineStartTime;
 

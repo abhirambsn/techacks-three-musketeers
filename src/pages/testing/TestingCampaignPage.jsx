@@ -25,6 +25,7 @@ const TestingCampaign = () => {
   const [registered, setRegistered] = useState(false);
   const [maticPrice, setMaticPrice] = useState(0);
   const [powText, setPowText] = useState("");
+  const [voted, setVoted] = useState(false);
   const location = useLocation();
 
   useLayoutEffect(() => {
@@ -43,6 +44,7 @@ const TestingCampaign = () => {
       if (maticPrice == 0) {
         setMaticPrice(await getMaticToINRPrice());
       }
+      setVoted(await checkVote(campaignData.address, campaignData.currentStage));
     })();
   }, [location, window.ethereum, address]);
   return (
@@ -171,6 +173,7 @@ const TestingCampaign = () => {
                         alert("Request Cancelled");
                       }
                     }}
+                    disabled={campaignData.currentStage !== 1 && !campaignData.stages[campaignData.currentStage - 1].voted}
                   >
                     Get Funds for the Stage
                   </button>
@@ -248,76 +251,106 @@ const TestingCampaign = () => {
                         <td>{i + 1}</td>
                         <td>{stageData.amount}</td>
                         <td>
-                          {stageData.deadline.toLocaleDateString("en-IN", {
-                            dateStyle: "medium",
-                          })}
+                          {getDaysFromDeadline(campaignData.projectDeadline) !== -1
+                            ? stageData.deadline.toLocaleDateString("en-IN", {
+                                dateStyle: "medium",
+                              })
+                            : "Not Started"}
                         </td>
                         <td>
                           {campaignData.currentStage == i + 1
                             ? "In Progress"
                             : "Not Started"}
                         </td>
-                        <td>
-                          <button
-                            onClick={async () =>
-                              await voteForNextStage(
-                                campaignData.address,
-                                i + 1,
-                                address,
-                                true
-                              )
-                            }
-                            disabled={
-                              campaignData.author === address ||
-                              i + 1 !== campaignData.currentStage ||
-                              stageData.voted
-                            }
-                          >
-                            Yes
-                          </button>
-                          <button
-                            onClick={async () =>
-                              await voteForNextStage(
-                                campaignData.address,
-                                i + 1,
-                                address,
-                                false
-                              )
-                            }
-                            disabled={
-                              campaignData.author === address ||
-                              i + 1 !== campaignData.currentStage ||
-                              stageData.voted
-                            }
-                          >
-                            No
-                          </button>
-                          {campaignData.author === address &&
-                            !stageData.created && (
-                              <>
-                                <button
-                                  onClick={async () => {
-                                    await createVote(
-                                      campaignData.address,
-                                      i + 1,
-                                      powText
-                                    );
-                                    setPowText("");
-                                  }}
-                                  disabled={i + 1 !== campaignData.currentStage}
-                                >
-                                  Create Vote
-                                </button>
-                                {i + 1 === campaignData.currentStage && (
-                                  <textarea
-                                    value={powText}
-                                    onChange={(e) => setPowText(e.target.value)}
-                                    placeholder="Proof of work"
-                                  ></textarea>
-                                )}
-                              </>
-                            )}
-                        </td>
+                        {getDaysFromDeadline(campaignData.projectDeadline) !==
+                        -1 ? (
+                          <td>
+                            <button
+                              onClick={async () =>
+                                await voteForNextStage(
+                                  campaignData.address,
+                                  i + 1,
+                                  address,
+                                  true
+                                )
+                              }
+                              disabled={
+                                campaignData.author === address ||
+                                i + 1 !== campaignData.currentStage ||
+                                stageData.voted || voted
+                              }
+                            >
+                              Yes
+                            </button>
+                            <button
+                              onClick={async () =>
+                                await voteForNextStage(
+                                  campaignData.address,
+                                  i + 1,
+                                  address,
+                                  false
+                                )
+                              }
+                              disabled={
+                                campaignData.author === address ||
+                                i + 1 !== campaignData.currentStage ||
+                                stageData.voted || voted
+                              }
+                            >
+                              No
+                            </button>
+                            <button
+                              disabled={
+                                campaignData.author === address ||
+                                i + 1 !== campaignData.currentStage ||
+                                stageData.voted
+                              }
+                              onClick={() =>
+                                (window.location.href = `/testing/results/${
+                                  campaignData.address
+                                }/${i + 1}`)
+                              }
+                            >
+                              Results
+                            </button>
+                            {campaignData.author === address &&
+                              getDaysFromDeadline(
+                                campaignData.stages[
+                                  campaignData.currentStage - 1
+                                ]?.deadline
+                              ) <= 1 &&
+                              !stageData.created && (
+                                <>
+                                  <button
+                                    onClick={async () => {
+                                      await createVote(
+                                        campaignData.address,
+                                        i + 1,
+                                        powText
+                                      );
+                                      setPowText("");
+                                    }}
+                                    disabled={
+                                      i + 1 !== campaignData.currentStage
+                                    }
+                                  >
+                                    Create Vote
+                                  </button>
+                                  {i + 1 === campaignData.currentStage && (
+                                    <textarea
+                                      value={powText}
+                                      onChange={(e) =>
+                                        setPowText(e.target.value)
+                                      }
+                                      placeholder="Proof of work"
+                                    ></textarea>
+                                  )}
+                                </>
+                              )}
+                          </td>
+                        ) : (
+                          <td>Project not Started yet</td>
+                        )}
                       </tr>
                     ))}
                   </tbody>
