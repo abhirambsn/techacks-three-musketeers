@@ -72,6 +72,21 @@ html{
     cursor: pointer;
 }
 
+.btn-disabled
+{
+    padding: 10px 15px;
+    border-radius: 5px;
+    background:var(--text-color-300);
+    color: var(--text-color-700);
+    font-size: 15px;
+    font-weight: 600;
+    border: 1px solid var(--text-color-700);
+    transition: all 0.3s ease;
+    font-family: 'Roboto Slab', serif;
+    cursor: none;
+}
+
+
 .btn:hover
 {
     border: 1px solid var(--bg-color-500);
