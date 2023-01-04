@@ -140,12 +140,14 @@ export const getStages = async (contractAddress, nStages) => {
     let stages = [];
     for (let i = 1; i <= nStages; i++) {
       const stageDetail = await contract.getStageDetail(i);
-      const resp = await axios.get(`http://localhost:5000/api/${contractAddress}/${i}/check`)
+      const resp = await axios.get(
+        `http://localhost:5000/api/${contractAddress}/${i}/check`
+      );
       stages.push({
         amount: ethers.utils.formatEther(stageDetail.amountNeeded),
         deadline: new Date(stageDetail.deadline.toNumber() * 1000),
         voted: stageDetail.voted,
-        created: resp.data.isValid
+        created: resp.data.isValid,
       });
     }
     return stages;
@@ -252,17 +254,22 @@ export const voteForNextStage = async (
 
 export const createVote = async (contractAddress, stage, powText) => {
   try {
-    let resp = await axios.get(`http://localhost:5000/api/${contractAddress}/${stage}/check`);
+    let resp = await axios.get(
+      `http://localhost:5000/api/${contractAddress}/${stage}/check`
+    );
     const isValid = resp.data.isValid;
-    if (isValid) return true;
+    if (isValid) {
+      console.log("Vote already created");
+      return true;
+    }
     resp = await axios.post(`http://localhost:5000/api/${contractAddress}/`, {
       stage,
-      powText
-    })
+      powText,
+    });
     if (resp.status === 201) {
       return true;
     } else {
-      alert("Failed")
+      alert("Failed");
       return false;
     }
   } catch (e) {
@@ -273,16 +280,32 @@ export const createVote = async (contractAddress, stage, powText) => {
 
 export const checkVote = async (contractAddress, stage) => {
   try {
-    const resp = await axios.get(`http://localhost:5000/api/${contractAddress}/${stage}/check`);
+    const resp = await axios.get(
+      `http://localhost:5000/api/${contractAddress}/${stage}/check`
+    );
     const isValid = resp.data.isValid;
     return isValid;
   } catch (e) {
     console.error(e);
     return false;
   }
-}
+};
 
-export const completeStageVoting = async (contractAddress) => {
+export const checkUserVote = async (contractAddress, walletAddress, stage) => {
+  try {
+    const resp = await axios.post(
+      `http://localhost:5000/api/${contractAddress}/${stage}/check`,
+      { address: walletAddress }
+    );
+    const voted = resp.data;
+    return voted;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+};
+
+export const completeStageVoting = async (contractAddress, stage) => {
   try {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -290,12 +313,12 @@ export const completeStageVoting = async (contractAddress) => {
       contractAddress,
       campaignAbi.abi,
       signer
-    )
-    const txn = await contract.voted();
+    );
+    const txn = await contract.voted(stage);
     await txn.wait(1);
     return true;
   } catch (e) {
     console.error(e);
     return false;
   }
-}
+};

@@ -1,7 +1,8 @@
 import React, { useLayoutEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useLoaderData, useLocation } from "react-router-dom";
-import { cancelCampaign,
+import {
+  cancelCampaign,
   checkInvestorship,
   checkVote,
   createVote,
@@ -9,7 +10,8 @@ import { cancelCampaign,
   registerAsInvestor,
   releaseFundsToCampaigner,
   voteForNextStage,
-  withdraw, } from "../utils/interact";
+  withdraw,
+} from "../utils/interact";
 import useAccount from "../hooks/useAccount";
 import useProvider from "../hooks/useProvider";
 import { getDaysFromDeadline, getMaticToINRPrice } from "../utils/functions";
@@ -42,6 +44,7 @@ const Campaign = () => {
       }
     })();
   }, [location, window.ethereum, address]);
+  console.log(campaignData);
   return (
     <section className="section campaign" id="campaign">
       <div className="campaign-grid">
@@ -131,7 +134,7 @@ const Campaign = () => {
                 <button
                   className="btn-theme"
                   onClick={async () =>
-                    await registerAsInvestor(campaignData.address)
+                    await registerAsInvestor(campaignData.address, address)
                   }
                 >
                   Register as Investor
@@ -149,10 +152,33 @@ const Campaign = () => {
               </a>
             </div>
             <div className="grid-100 campaign-funds">
-              <a href="/stats">
-                {/* Toggle this btn-disabled class with btn-theme */}
-                <button className="btn-disabled">Release funds</button>
-              </a>
+              {/* Toggle this btn-disabled class with btn-theme */}
+              <button
+                onClick={async () => {
+                  const confirmation = confirm("Confirm Release of the funds");
+                  if (confirmation) {
+                    await releaseFundsToCampaigner(campaignData.address);
+                    alert(
+                      `Funds for Stage ${campaignData.currentStage} have been released`
+                    );
+                  } else {
+                    alert("Request Cancelled");
+                  }
+                }}
+                disabled={
+                  campaignData.currentStage !== 1 &&
+                  !campaignData.stages[campaignData.currentStage - 1].voted
+                }
+                className={
+                  campaignData.currentStage !== 1 &&
+                  !campaignData.stages[campaignData.currentStage - 1].voted
+                    ? "btn-disabled"
+                    : "btn-theme"
+                }
+              >
+                
+                Release funds
+              </button>
             </div>
           </div>
           <div className="grid-50 campaign-form">

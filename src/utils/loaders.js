@@ -90,7 +90,7 @@ export const getVotingResults = async (contractAddress, stage) => {
     `http://localhost:5000/api/results/${contractAddress}/${stage}`
   );
   if (resp.data.over) {
-    await completeStageVoting(contractAddress);
+    await completeStageVoting(contractAddress, stage);
   }
   return { ...resp.data, address: contractAddress, stage };
 };

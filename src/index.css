@@ -83,7 +83,7 @@ html{
     border: 1px solid var(--text-color-700);
     transition: all 0.3s ease;
     font-family: 'Roboto Slab', serif;
-    cursor: none;
+    cursor: not-allowed;
 }
 
 

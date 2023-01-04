@@ -1,68 +1,160 @@
-import React, {useState} from 'react'
+import React, { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import { createNewCampaign } from "../utils/interact";
 const NewCampaign = () => {
+  const [name, setName] = useState("");
+  const [desc, setDesc] = useState("");
+  const [stagePeriod, setStagePeriod] = useState(0);
+  const [projectPeriod, setProjectPeriod] = useState(0);
+  const [totalAmt, setTotalAmt] = useState(0);
+  const [stageWiseAmt, setStageWiseAmt] = useState({});
 
-    const [page, setPage] = useState(0);
+  const calcNstages = () => {
+    if (stagePeriod == 0 || projectPeriod == 0) {
+      return 0;
+    }
+    return Math.round(projectPeriod / stagePeriod);
+  };
 
   return (
-    <section className='section form' id='form'>
-        <div className='form-grid'>
-            <div className='grid-100 form-back-btn'>
-                <a href="/list">
-                <button className='btn-theme'>
-                <FaArrowLeft className="listing-btn" />
-                </button>
-                </a>
-            </div>
-            <div className='grid-100 form-head'>
-                <p>Start a campaign!</p>
-            </div>
-            <div className='grid-100 form-container'>
-                <form action="#" className='form-form'>
-                    <div className='grid-50 form-left'>
-                        <div className='form-group'>
-                            <label htmlFor="campaign-title">Campaign Title: </label>
-                            <input type="text" name='campaign-title' className='form-control' placeholder='What would you like to name your campaign?' />
-                        </div>
-                        <div className='form-group'>
-                            <label htmlFor="campaign-desc">Campaign Description: </label>
-                            <textarea name="campaign-desc" className='form-control' placeholder='A crisp description to attract investors to your project'></textarea>
-                        </div>
-                        <div className='form-group'>
-                            <label htmlFor="campaign-title">Campaign Target: </label>
-                            <input type="number" name='campaign-title' className='form-control' placeholder='How much amount you need to raise?' />
-                        </div>
-                        <div className='form-group padd-5'>
-                            <button className='btn-theme'>Create Campaign</button>
-                        </div>
-                    </div>
-                    <div className='grid-50 form-right'>
-                        <div className='form-group'>
-                            <label htmlFor="stage-1">Stage 1 </label>
-                            <input type="number" name="stage-1" className='form-control' placeholder='Amount to be used in stage 1?' />
-                            <textarea name="stage-1" className='form-control' placeholder='Stage - 1 targets and how you plan on acheiving them?'></textarea>
-                        </div>
-                        <div className='form-group'>
-                            <label htmlFor="stage-2">Stage 2 </label>
-                            <input type="number" name="stage-2" className='form-control' placeholder='Amount to be used in stage 2?' />
-                            <textarea name="stage-2" className='form-control' placeholder='Stage - 2 targets and how you plan on acheiving them?'></textarea>
-                        </div>
-                        <div className='form-group'>
-                            <label htmlFor="stage-3">Stage 3 </label>
-                            <input type="number" name="stage-3" className='form-control' placeholder='Amount to be used in stage 3?' />
-                            <textarea name="stage-3" className='form-control' placeholder='Stage - 3 targets and how you plan on acheiving them?'></textarea>
-                        </div>
-                        <div className='form-group'>
-                            <label htmlFor="stage-4">Stage 4 </label>
-                            <input type="number" name="stage-4" className='form-control' placeholder='Amount to be used in stage 4?' />
-                            <textarea name="stage-4" className='form-control' placeholder='Stage - 4 targets and how you plan on acheiving them?'></textarea>
-                        </div>
-                    </div>
-                </form>
-            </div>
+    <section className="section form" id="form">
+      <div className="form-grid">
+        <div className="grid-100 form-back-btn">
+          <a href="/list">
+            <button className="btn-theme">
+              <FaArrowLeft className="listing-btn" />
+            </button>
+          </a>
         </div>
+        <div className="grid-100 form-head">
+          <p>Start a campaign!</p>
+        </div>
+        <div className="grid-100 form-container">
+          <div className="form-form">
+            <div className="grid-50 form-left">
+              <div className="form-group">
+                <label htmlFor="campaign-title">Campaign Title: </label>
+                <input
+                  type="text"
+                  name="campaign-title"
+                  className="form-control"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="What would you like to name your campaign?"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="campaign-desc">Campaign Description: </label>
+                <textarea
+                  name="campaign-desc"
+                  className="form-control"
+                  value={desc}
+                  onChange={(e) => setDesc(e.target.value)}
+                  placeholder="A crisp description to attract investors to your project"
+                ></textarea>
+              </div>
+              <div className="form-group">
+                <label htmlFor="campaign-title">Campaign Target: </label>
+                <input
+                  type="number"
+                  name="campaign-title"
+                  className="form-control"
+                  placeholder="How much amount you need to raise? (in MATIC)"
+                  value={totalAmt}
+                  onChange={(e) => setTotalAmt(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="campaign-title">
+                  Project Period (in Days):{" "}
+                </label>
+                <input
+                  type="number"
+                  name="campaign-title"
+                  className="form-control"
+                  value={projectPeriod}
+                  onChange={(e) => setProjectPeriod(parseInt(e.target.value))}
+                  placeholder="How much time is required to finish the project?"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="campaign-title">Stage Period (in Days): </label>
+                <input
+                  type="number"
+                  name="campaign-title"
+                  className="form-control"
+                  value={stagePeriod}
+                  onChange={(e) => setStagePeriod(parseInt(e.target.value))}
+                  placeholder="How much time is required to finish a single stage?"
+                />
+              </div>
+              <div className="form-group padd-5">
+                <button
+                  className="btn-theme"
+                  onClick={async () => {
+                    const result = await createNewCampaign(
+                      name,
+                      desc,
+                      stagePeriod,
+                      projectPeriod,
+                      totalAmt,
+                      Object.values(stageWiseAmt)
+                    );
+                    if (!result) {
+                      alert("Failure");
+                      return result;
+                    }
+                    alert("Success");
+                    return result;
+                  }}
+                >
+                  Create Campaign
+                </button>
+              </div>
+            </div>
+            <div className="grid-50 form-right">
+              {(stagePeriod !== "" ||
+                projectPeriod !== "" ||
+                projectPeriod !== 0 ||
+                stagePeriod !== 0) && (
+                <>
+                  {Array(calcNstages())
+                    .fill(0)
+                    .map((_, idx) => (
+                      <div className="form-group" key={idx}>
+                        <label htmlFor={`stage-${idx + 1}`}>
+                          Stage {idx + 1}
+                        </label>
+                        <input
+                          type="number"
+                          name={`stage-${idx + 1}`}
+                          className="form-control"
+                          value={stageWiseAmt[idx]}
+                          onChange={(e) =>
+                            setStageWiseAmt({
+                              ...stageWiseAmt,
+                              [idx]: e.target.value,
+                            })
+                          }
+                          placeholder="Amount to be used in stage 1?"
+                        />
+                        <textarea
+                          name={`stage-${idx + 1}`}
+                          className="form-control"
+                          placeholder={`"Stage - ${
+                            idx + 1
+                          } targets and how you plan on acheiving them?"`}
+                        ></textarea>
+                      </div>
+                    ))}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
-  )
-}
+  );
+};
 
-export default NewCampaign  
+export default NewCampaign;

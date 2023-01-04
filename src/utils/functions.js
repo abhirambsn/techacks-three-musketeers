@@ -1,8 +1,15 @@
+import { shiftTimeBy } from "time-fast-forward";
+
 export const formatAddress = (addr) =>
   String(addr).slice(0, 6) + "..." + String(addr).slice(-4);
 
 export const getDaysFromDeadline = (date) => {
-  const now = new Date(Date.now());
+  let now;
+  if (import.meta.env.VITE_NODE_ENV === "development") {
+    now = new Date(date);
+  } else {
+    now = new Date(Date.now());
+  }
   const deadline = new Date(date);
   const diffTime = Math.abs(now - deadline);
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));

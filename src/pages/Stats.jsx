@@ -4,20 +4,30 @@ import { useLoaderData, useLocation } from "react-router-dom";
 import useAccount from "../hooks/useAccount";
 import useProvider from "../hooks/useProvider";
 import { getDaysFromDeadline } from "../utils/functions";
-import { checkVote, voteForNextStage } from "../utils/interact";
+import {
+  checkVote,
+  voteForNextStage,
+  createVote,
+  checkUserVote,
+  completeStageVoting,
+} from "../utils/interact";
 
 const Stats = () => {
   const campaignData = useLoaderData();
   const provider = useProvider();
   const { address } = useAccount(provider);
   const [powText, setPowText] = useState("");
-  const [voted, setVoted] = useState(false);
+  const [voted, setVoted] = useState({ voted: false, vote: null });
   const location = useLocation();
 
   useLayoutEffect(() => {
     (async () => {
       setVoted(
-        await checkVote(campaignData.address, campaignData.currentStage)
+        await checkUserVote(
+          campaignData.address,
+          address,
+          campaignData.currentStage
+        )
       );
     })();
   }, [location, address]);
@@ -60,44 +70,68 @@ const Stats = () => {
                     <>
                       {address !== campaignData.author ? (
                         <>
-                          <button
-                            onClick={async () =>
-                              await voteForNextStage(
-                                campaignData.address,
-                                i + 1,
-                                address,
-                                true
-                              )
-                            }
-                            disabled={
-                              campaignData.author === address ||
-                              i + 1 !== campaignData.currentStage ||
-                              stageData.voted ||
-                              voted
-                            }
-                            className="btn-inverse"
-                          >
-                            Yes
-                          </button>
-                          <button
-                            onClick={async () =>
-                              await voteForNextStage(
-                                campaignData.address,
-                                i + 1,
-                                address,
-                                false
-                              )
-                            }
-                            disabled={
-                              campaignData.author === address ||
-                              i + 1 !== campaignData.currentStage ||
-                              stageData.voted ||
-                              voted
-                            }
-                            className="btn-inverse"
-                          >
-                            No
-                          </button>
+                          {!voted.voted ? (
+                            <>
+                              <button
+                                onClick={async () =>
+                                  await voteForNextStage(
+                                    campaignData.address,
+                                    i + 1,
+                                    address,
+                                    true
+                                  )
+                                }
+                                disabled={
+                                  campaignData.author === address ||
+                                  i + 1 !== campaignData.currentStage ||
+                                  stageData.voted ||
+                                  voted.voted
+                                }
+                                className={
+                                  campaignData.author === address ||
+                                  i + 1 !== campaignData.currentStage ||
+                                  stageData.voted ||
+                                  voted.voted
+                                    ? "btn-disabled"
+                                    : "btn-inverse"
+                                }
+                              >
+                                Yes
+                              </button>
+                              <button
+                                onClick={async () =>
+                                  await voteForNextStage(
+                                    campaignData.address,
+                                    i + 1,
+                                    address,
+                                    false
+                                  )
+                                }
+                                disabled={
+                                  campaignData.author === address ||
+                                  i + 1 !== campaignData.currentStage ||
+                                  stageData.voted ||
+                                  voted.voted
+                                }
+                                className={
+                                  campaignData.author === address ||
+                                  i + 1 !== campaignData.currentStage ||
+                                  stageData.voted ||
+                                  voted.voted
+                                    ? "btn-disabled"
+                                    : "btn-inverse"
+                                }
+                              >
+                                No
+                              </button>
+                            </>
+                          ) : (
+                            <button className="btn-disabled">
+                              {!stageData.created
+                                ? "Vote not created"
+                                : `Voted: ${voted.vote ? "Yes" : "No"}`}
+                            </button>
+                          )}
                         </>
                       ) : (
                         <>
@@ -110,31 +144,68 @@ const Stats = () => {
                               );
                               setPowText("");
                             }}
-                            className="btn-inverse"
+                            className={
+                              i + 1 !== campaignData.currentStage ||
+                              !(
+                                getDaysFromDeadline(
+                                  campaignData.stages[
+                                    campaignData.currentStage - 1
+                                  ]?.deadline
+                                ) <= 1
+                              ) ||
+                              stageData.created
+                                ? "btn-disabled"
+                                : "btn-inverse"
+                            }
                             disabled={
                               i + 1 !== campaignData.currentStage ||
-                              !getDaysFromDeadline(
-                                campaignData.stages[
-                                  campaignData.currentStage - 1
-                                ]?.deadline
-                              ) <= 1 ||
+                              !(
+                                getDaysFromDeadline(
+                                  campaignData.stages[
+                                    campaignData.currentStage - 1
+                                  ]?.deadline
+                                ) <= 1
+                              ) ||
                               stageData.created
                             }
                           >
-                            Create Vote
+                            {stageData.created ? "Vote Created" : "Create Vote"}
                           </button>
-                          {i + 1 !== campaignData.currentStage ||
-                            !getDaysFromDeadline(
+                          <button
+                            className={
+                              stageData.created ? "btn-inverse" : "btn-disabled"
+                            }
+                            disabled={!stageData.created}
+                            onClick={() =>
+                              (window.location.href = `/testing/results/${
+                                campaignData.address
+                              }/${i + 1}`)
+                            }
+                          >
+                            Results
+                          </button>
+                          <button
+                            onClick={async () =>
+                              await completeStageVoting(
+                                campaignData.address,
+                                campaignData.currentStage
+                              )
+                            }
+                          >
+                            Complete Voting for test
+                          </button>
+                          {i + 1 === campaignData.currentStage &&
+                            getDaysFromDeadline(
                               campaignData.stages[campaignData.currentStage - 1]
                                 ?.deadline
-                            ) <= 1 ||
-                            (stageData.created && (
+                            ) <= 1 &&
+                            !stageData.created && (
                               <textarea
                                 value={powText}
                                 onChange={(e) => setPowText(e.target.value)}
                                 placeholder="Proof of work"
                               ></textarea>
-                            ))}
+                            )}
                         </>
                       )}
                     </>

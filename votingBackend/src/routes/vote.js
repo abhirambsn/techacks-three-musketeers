@@ -56,6 +56,24 @@ router.get("/:campaignAddress/:stage/check", async (req, res) => {
   return res.status(200).json({ isValid: false });
 });
 
+router.post("/:campaignAddress/:stage/check", async (req, res) => {
+  // TODO: Check if an investor has voted for the stage of a campaign or not
+  const { campaignAddress, stage } = req.params;
+  const {address} = req.body;
+  const allVotes = await voteModel
+    .findOne({ campaign: campaignAddress, stage: parseInt(stage) })
+    .exec();
+  if (allVotes) {
+    const investors = allVotes.votes;
+    const voted = investors.find((x) => x.investorAddress === address);
+    if (!voted) {
+      return res.status(200).json({ voted: false, vote: null });
+    }
+    return res.status(200).json({ voted: true, vote: voted.vote });
+  }
+  return res.status(200).json({ voted: false, vote: null });
+});
+
 router.post("/:campaignAddress", async (req, res) => {
   // TODO: Add a vote for a campaign
   const { stage, powText } = req.body;
@@ -217,18 +235,16 @@ router.get("/results/:campaignAddress/:stage", async (req, res) => {
 
   const timeToOver = getTimeDifference(vote.deadline);
   const over = timeToOver > 0 ? false : true;
-  return res
-    .status(200)
-    .json({
-      yes: yay,
-      no: nay,
-      verdict,
-      deadline: {
-        days: Math.floor((timeToOver / 1000 / 60 / 60) / 24),
-        hours: Math.floor((timeToOver / 1000 / 60 / 60)) % 24
-      }, // hours
-      over,
-    });
+  return res.status(200).json({
+    yes: yay,
+    no: nay,
+    verdict,
+    deadline: {
+      days: Math.floor(timeToOver / 1000 / 60 / 60 / 24),
+      hours: Math.floor(timeToOver / 1000 / 60 / 60) % 24,
+    }, // hours
+    over,
+  });
 });
 
 module.exports = router;

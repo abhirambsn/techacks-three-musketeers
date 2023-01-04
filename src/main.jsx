@@ -39,11 +39,11 @@ const router = createBrowserRouter([
       const cDetail = await getCampaignDetails(params.campaignAddress);
       const stageDetail = await getStages(
         cDetail.address,
-        Math.round(cDetail.stagePeriod / cDetail.totalProjectTime)
+        Math.round(cDetail.totalProjectTime / cDetail.stagePeriod)
       );
       return {
         ...cDetail,
-        ...stageDetail,
+        stages: stageDetail,
       };
     },
   },
