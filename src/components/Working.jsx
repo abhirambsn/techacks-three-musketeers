@@ -20,7 +20,9 @@ const Working = () => {
                     <p>Join a community of like-minded individuals and supporters who believe in the power of community and in the potential of great ideas.</p>
                 </div>
                 <div className='working-btn'>
+                    <a href="/list">
                     <button className='btn-theme'>Learn More</button>
+                    </a>
                 </div>
             </div>
         </div>

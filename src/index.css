@@ -575,6 +575,7 @@ html{
     color: var(--text-color-900);
     font-size: 40px;
     padding-bottom: 3%;
+    text-align: center;
     font-family: 'Caveat', cursive;
 }
 
@@ -986,6 +987,178 @@ html{
     left: 13vh;
 }
 
+.form-grid
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.form-back-btn
+{
+    position: absolute;
+    margin: 2%;
+}
+
+.form-head
+{
+    left: 40%;
+    margin: 1% 0;
+    position: absolute;
+    font-size: 50px;
+    color: var(--text-color-300);
+    opacity: 1;
+    text-shadow: 2px 2px var(--text-color-900);
+    font-family: 'Caveat', cursive;
+}
+
+.form-form
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    font-family: 'Roboto Slab', serif;
+}
+
+.form-form .form-left div:first-child
+{
+    padding-top: 5%;
+}
+
+.form-form .form-right div:first-child
+{
+    padding-top: 10%;
+}
+
+.form-form div:last-child
+{
+    padding-bottom: 10%;
+}
+
+.form-form div
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-left
+{
+    background-color: var(--text-color-100);
+}
+
+.form-right
+{
+    background-color: var(--bg-color-500);
+}
+
+.form-group
+{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.form-left .form-group label
+{
+    text-align: center;
+    width: 100%;
+    font-size: 20px;
+    margin-top: 3%;
+    color: var(--text-color-900);
+    font-weight: 400;
+}
+
+.form-left .form-group input
+{
+    margin-top: 3%;
+    width: 80vh;
+    font-size: 16px;
+    line-height: 25px;
+    padding: 2%;
+    color: var(--text-color-900);
+    border-radius: 10px;
+    border: 2px solid var(--bg-color-300);
+    text-align: center;
+}
+
+.form-left .form-group textarea
+{
+    text-align: center;
+    margin-top: 3%;
+    width: 80vh;
+    height: 30vh;
+    font-size: 12px;
+    line-height: 15px;
+    padding: 2%;
+    color: var(--text-color-900);
+    border-radius: 10px;
+    border: 2px solid var(--bg-color-300);
+    resize: none;
+}
+
+.form-left .form-group textarea:focus, .form-left .form-group input:focus
+{
+    box-shadow: 0 0 3px var(--bg-color-800);
+}
+
+.form-right .form-group label
+{
+    text-align: center;
+    width: 100%;
+    font-size: 20px;
+    margin-top: 3%;
+    color: var(--text-color-100);
+    font-weight: 400;
+}
+
+.form-right .form-group input::placeholder
+{
+    color: var(--bg-color-900);
+}
+
+.form-right .form-group input
+{
+    margin-top: 3%;
+    width: 80vh;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 1%;
+    color: var(--text-color-100);
+    border-radius: 5px;
+    border: 2px solid var(--text-color-100);
+    background-color: transparent;
+    text-align: center;
+}
+
+.form-right .form-group textarea::placeholder
+{
+    color: var(--bg-color-900);
+}
+
+.form-right .form-group textarea
+{
+    text-align: center;
+    margin-top: 3%;
+    width: 80vh;
+    height: 10vh;
+    font-size: 12px;
+    line-height: 15px;
+    padding: 2%;
+    color: var(--text-color-100);
+    border-radius: 5px;
+    border: 2px solid var(--text-color-100);
+    resize: none;
+    background-color: transparent;
+}
+
+.form-right .form-group textarea:focus, .form-right .form-group input:focus
+{
+    box-shadow: 0 0 3px var(--text-color-300);
+}
+
 /* media query begins */
 
 @media (max-width:1200px)
@@ -1138,6 +1311,48 @@ html{
     .campaign-desc
     {
         border: none;
+    }
+
+    .listing-grid div
+    {
+        display: flex;
+        justify-content: center;
+    }
+
+    .disp-no
+    {
+        display: none;
+    }
+
+    .small-padd-0
+    {
+        padding: 0;
+    }
+
+    .small-padd-5
+    {
+        padding: 0 10%;
+    }
+
+    .campaign-card-inverse
+    {
+        border-radius: 0;
+        background-color: var(--bg-color-300);
+        color: var(--text-color-100);
+        font-weight: 600;
+        text-align: center;
+        padding: 0;
+        font-size: 20px;
+        height: auto;
+    }
+    .campaign-left, .campaign-right
+    {
+        min-height: 100vh;
+    }
+
+    .campaign-right button
+    {
+        margin: 10px 0;
     }
 
 }

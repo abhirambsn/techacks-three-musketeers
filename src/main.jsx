@@ -16,6 +16,7 @@ import { getStages } from "./utils/interact";
 import Stats from "./pages/Stats";
 import TestingNewCampaign from "./pages/testing/TestingNewCampaign";
 import TestinResultPage from "./pages/testing/TestingResultPage";
+import NewCampaign from "./pages/NewCampaign";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
     path: "/list",
     element: <Listing />,
     loader: getAllCampaigns,
+  },
+  {
+    path: "/newCampaign",
+    element: <NewCampaign />
   },
   {
     path: "/campaign/:campaignAddress",

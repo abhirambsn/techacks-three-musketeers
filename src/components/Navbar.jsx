@@ -41,7 +41,7 @@ const Navbar = () => {
           </div>
 
           <div className='nav-end-btn'>
-            <a href="#"><button className='btn nav-btn'>Get Started</button></a>
+            <a href="/newCampaign"><button className='btn nav-btn'>Get Started</button></a>
           </div>
 
         </div>

@@ -1,6 +1,6 @@
 import React, { useLayoutEffect } from "react";
 import CampaignCard from "../components/CampaignCard";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useLoaderData, useLocation } from "react-router-dom";
 import { truncateDescription } from "../utils/functions";
 
@@ -10,7 +10,7 @@ const Listing = () => {
   return (
     <section className="section listing" id="listing">
       <div className="listing-grid">
-        <div className="grid-40">
+        <div className="grid-20">
           <a href="/">
             <button className="btn-theme">
               {" "}
@@ -21,6 +21,15 @@ const Listing = () => {
         </div>
         <div className="grid-60 listing-head">
           <p>Ongoing Campaigns</p>
+        </div>
+        <div className="grid-20">
+          <a href="/newCampaign">
+            <button className="btn-theme">
+              {" "}
+              Start a campaign
+              <FaArrowRight className="listing-btn" />
+            </button>
+          </a>
         </div>
         {campaignData.map((cD, i) => (
           <div className="grid-30">
