@@ -150,6 +150,7 @@ const Campaign = () => {
             </div>
             <div className="grid-100 campaign-funds">
               <a href="/stats">
+                {/* Toggle this btn-disabled class with btn-theme */}
                 <button className="btn-disabled">Release funds</button>
               </a>
             </div>

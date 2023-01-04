@@ -915,7 +915,7 @@ html{
 
 .stats
 {
-    background-color: var(--bg-color-300);
+    background-color: var(--bg-color-500);
 }
 
 .stats-grid
@@ -947,8 +947,8 @@ html{
     flex-wrap: wrap;
     flex-direction: row;
     text-align: justify;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
 .stats-table-head
