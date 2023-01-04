@@ -54,16 +54,16 @@ const Campaign = () => {
               </button>
             </a>
           </div>
-          <div className="grid-50 padd-5"></div>
-          <div className="grid-20"></div>
-          <div className="grid-60">
+          <div className="grid-50 padd-5 disp-no"></div>
+          <div className="grid-20 disp-no"></div>
+          <div className="grid-60 small-padd-5">
             <div className="campaign-img">
               <img src="https://picsum.photos/400/300" alt="img-desc" />
             </div>
           </div>
-          <div className="grid-20"></div>
-          <div className="grid-20"></div>
-          <div className="grid-60">
+          <div className="grid-20 disp-no"></div>
+          <div className="grid-20 disp-no"></div>
+          <div className="grid-60 small-padd-5">
             <div className="campaign-progress-bar-holder">
               <div className="campaign-progress-bar"></div>
               <div
@@ -85,8 +85,8 @@ const Campaign = () => {
               % Funded
             </div>
           </div>
-          <div className="grid-20"></div>
-          <div className="grid-20"></div>
+          <div className="grid-20 disp-no"></div>
+          <div className="grid-20 disp-no"></div>
           <div className="grid-60 campaign-card-inverse">
             <div className="campaign-deadline">
               Deadline: {campaignData.projectDeadline}{" "}
@@ -111,7 +111,7 @@ const Campaign = () => {
               Stage period: {campaignData.stagePeriod / 60 / 60 / 24} day(s)
             </div>
           </div>
-          <div className="grid-20"></div>
+          <div className="grid-20 disp-no"></div>
         </div>
         <div className="grid-60 campaign-right">
           <div className="campaign-head grid-100">
