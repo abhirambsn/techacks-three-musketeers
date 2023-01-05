@@ -5,7 +5,7 @@ import { useLoaderData, useLocation, useNavigation } from "react-router-dom";
 import LoaderComponent from "../components/LoaderComponent";
 import useAccount from "../hooks/useAccount";
 import useProvider from "../hooks/useProvider";
-import { getDaysFromDeadline } from "../utils/functions";
+import { disableClick, getDaysFromDeadline } from "../utils/functions";
 import {
   voteForNextStage,
   createVote,
@@ -86,12 +86,10 @@ const Stats = () => {
                             <>
                               <button
                                 onClick={async () => {
-                                  document.addEventListener("click", (e) => {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                    document.body.style.pointerEvents = "none";
-                                    document.body.style.cursor = "progress";
-                                  });
+                                  document.addEventListener(
+                                    "click",
+                                    disableClick
+                                  );
                                   const notification =
                                     toast.loading("Processing vote...");
                                   const result = await voteForNextStage(
@@ -112,14 +110,13 @@ const Stats = () => {
                                     toast.error("Voting Failed", {
                                       id: notification,
                                     });
+                                    document.body.style.pointerEvents = "auto";
+                                    document.body.style.cursor = "auto";
                                   }
-                                  document.body.style.pointerEvents = "auto";
-                                  document.removeEventListener("click", (e) => {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                    document.body.style.pointerEvents = "none";
-                                    document.body.style.cursor = "progress";
-                                  });
+                                  document.removeEventListener(
+                                    "click",
+                                    disableClick
+                                  );
                                 }}
                                 disabled={
                                   campaignData.author === address ||
@@ -140,12 +137,10 @@ const Stats = () => {
                               </button>
                               <button
                                 onClick={async () => {
-                                  document.addEventListener("click", (e) => {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                    document.body.style.pointerEvents = "none";
-                                    document.body.style.cursor = "progress";
-                                  });
+                                  document.addEventListener(
+                                    "click",
+                                    disableClick
+                                  );
                                   const notification =
                                     toast.loading("Processing vote...");
                                   const result = await voteForNextStage(
@@ -166,14 +161,13 @@ const Stats = () => {
                                     toast.error("Voting Failed", {
                                       id: notification,
                                     });
+                                    document.body.style.pointerEvents = "auto";
+                                    document.body.style.cursor = "auto";
                                   }
-                                  document.body.style.pointerEvents = "auto";
-                                  document.removeEventListener("click", (e) => {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                    document.body.style.pointerEvents = "none";
-                                    document.body.style.cursor = "progress";
-                                  });
+                                  document.removeEventListener(
+                                    "click",
+                                    disableClick
+                                  );
                                 }}
                                 disabled={
                                   campaignData.author === address ||
@@ -218,12 +212,7 @@ const Stats = () => {
                         <>
                           <button
                             onClick={async () => {
-                              document.addEventListener("click", (e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                document.body.style.pointerEvents = "none";
-                                document.body.style.cursor = "progress";
-                              });
+                              document.addEventListener("click", disableClick);
                               const notification =
                                 toast.loading("Creating Vote...");
                               const result = await createVote(
@@ -244,14 +233,13 @@ const Stats = () => {
                                 toast.error("Failed to create vote", {
                                   id: notification,
                                 });
+                                document.body.style.pointerEvents = "auto";
+                                document.body.style.cursor = "auto";
                               }
-                              document.body.style.pointerEvents = "auto";
-                              document.removeEventListener("click", (e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                document.body.style.pointerEvents = "none";
-                                document.body.style.cursor = "progress";
-                              });
+                              document.removeEventListener(
+                                "click",
+                                disableClick
+                              );
                             }}
                             className={
                               i + 1 !== campaignData.currentStage ||
@@ -295,12 +283,7 @@ const Stats = () => {
                           </button>
                           <button
                             onClick={async () => {
-                              document.addEventListener("click", (e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                document.body.style.pointerEvents = "none";
-                                document.body.style.cursor = "progress";
-                              });
+                              document.addEventListener("click", disableClick);
                               const result = await completeStageVoting(
                                 campaignData.address,
                                 campaignData.currentStage
@@ -310,12 +293,11 @@ const Stats = () => {
                                 window.location.reload();
                               }
                               document.body.style.pointerEvents = "auto";
-                              document.removeEventListener("click", (e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                document.body.style.pointerEvents = "none";
-                                document.body.style.cursor = "progress";
-                              });
+                              document.body.style.cursor = "auto";
+                              document.removeEventListener(
+                                "click",
+                                disableClick
+                              );
                             }}
                           >
                             Complete Voting for test

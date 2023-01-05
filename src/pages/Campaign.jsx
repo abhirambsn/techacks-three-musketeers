@@ -4,17 +4,18 @@ import { useLoaderData, useLocation, useNavigation } from "react-router-dom";
 import {
   cancelCampaign,
   checkInvestorship,
-  checkVote,
-  createVote,
   fund,
   registerAsInvestor,
   releaseFundsToCampaigner,
-  voteForNextStage,
   withdraw,
 } from "../utils/interact";
 import useAccount from "../hooks/useAccount";
 import useProvider from "../hooks/useProvider";
-import { getDaysFromDeadline, getMaticToINRPrice } from "../utils/functions";
+import {
+  getDaysFromDeadline,
+  getMaticToINRPrice,
+  disableClick,
+} from "../utils/functions";
 import { completeCampaign } from "../utils/interact";
 import { toast } from "react-hot-toast";
 import LoaderComponent from "../components/LoaderComponent";
@@ -144,16 +145,11 @@ const Campaign = () => {
           </div>
           <div className="grid-50 campaign-funds grid">
             <div className="grid-100 campaign-funds">
-              {!registered && (
+              {(!registered && campaignData.author !== address) && (
                 <button
                   className="btn-theme"
                   onClick={async () => {
-                    document.addEventListener("click", (e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      document.body.style.pointerEvents = "none";
-                      document.body.style.cursor = "progress";
-                    });
+                    document.addEventListener("click", disableClick);
                     const notification = toast.loading("Processing Request...");
                     const result = await registerAsInvestor(
                       campaignData.address,
@@ -166,14 +162,10 @@ const Campaign = () => {
                       setTimeout(() => window.location.reload(), 1000);
                     } else {
                       toast.error("Registration Failed", { id: notification });
+                      document.body.style.pointerEvents = "auto";
+                      document.body.style.cursor = "auto";
                     }
-                    document.body.style.pointerEvents = "auto";
-                    document.removeEventListener("click", (e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      document.body.style.pointerEvents = "none";
-                      document.body.style.cursor = "progress";
-                    });
+                    document.removeEventListener("click", disableClick);
                   }}
                 >
                   Register as Investor
@@ -190,12 +182,7 @@ const Campaign = () => {
                 <div className="grid-100 campaign-funds">
                   <button
                     onClick={async () => {
-                      document.addEventListener("click", (e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        document.body.style.pointerEvents = "none";
-                        document.body.style.cursor = "progress";
-                      });
+                      document.addEventListener("click", disableClick);
                       const notification = toast.loading(
                         "Processing Request..."
                       );
@@ -211,14 +198,10 @@ const Campaign = () => {
                         toast.error("Error occurred while processing request", {
                           id: notification,
                         });
+                        document.body.style.pointerEvents = "auto";
+                        document.body.style.cursor = "auto";
                       }
-                      document.body.style.pointerEvents = "auto";
-                      document.removeEventListener("click", (e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        document.body.style.pointerEvents = "none";
-                        document.body.style.cursor = "progress";
-                      });
+                      document.removeEventListener("click", disableClick);
                     }}
                     className={
                       campaignData.currentStage <=
@@ -244,12 +227,7 @@ const Campaign = () => {
                       const confirmation = confirm(
                         "Confirm Release of the funds"
                       );
-                      document.addEventListener("click", (e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        document.body.style.pointerEvents = "none";
-                        document.body.style.cursor = "progress";
-                      });
+                      document.addEventListener("click", disableClick);
                       if (confirmation) {
                         const notification = toast.loading(
                           "Processing request..."
@@ -270,14 +248,10 @@ const Campaign = () => {
                         }
                       } else {
                         toast.error("Request Cancelled");
+                        document.body.style.pointerEvents = "auto";
+                        document.body.style.cursor = "auto";
                       }
-                      document.body.style.pointerEvents = "auto";
-                      document.removeEventListener("click", (e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        document.body.style.pointerEvents = "none";
-                        document.body.style.cursor = "progress";
-                      });
+                      document.removeEventListener("click", disableClick);
                     }}
                     disabled={
                       campaignData.currentStage !== 1 &&
@@ -311,34 +285,36 @@ const Campaign = () => {
             </div>
             <div className="grid-100 campaign-funds">
               <button
-                className="btn-theme"
+                className={fundAmount <= 0 ? "btn-disabled" : "btn-theme"}
+                disabled={fundAmount <= 0}
                 onClick={async () => {
-                  document.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    document.body.style.pointerEvents = "none";
-                    document.body.style.cursor = "progress";
-                  });
+                  document.addEventListener("click", disableClick);
                   const notification = toast.loading(
                     "Transaction in progress..."
                   );
-                  const result = await fund(
-                    campaignData.address,
-                    address,
-                    fundAmount
-                  );
-                  if (result) {
-                    toast.success("Funding successful", { id: notification });
-                    setTimeout(() => window.location.reload(), 1000);
+                  if (fundAmount <= 0) {
+                    toast.error("Fund Amount cannot be 0", {
+                      id: notification,
+                    });
+                    document.body.style.pointerEvents = "auto";
+                    document.body.style.cursor = "auto";
                   } else {
-                    toast.error("Transaction failed", { id: notification });
+                    const result = await fund(
+                      campaignData.address,
+                      address,
+                      fundAmount
+                    );
+                    if (result) {
+                      toast.success("Funding successful", { id: notification });
+                      setTimeout(() => window.location.reload(), 1000);
+                    } else {
+                      toast.error("Transaction failed", { id: notification });
+                      document.body.style.pointerEvents = "auto";
+                      document.body.style.cursor = "auto";
+                    }
                   }
-                  document.removeEventListener("click", (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    document.body.style.pointerEvents = "none";
-                    document.body.style.cursor = "progress";
-                  });
+
+                  document.removeEventListener("click", disableClick);
                 }}
               >
                 Fund campaign
@@ -351,29 +327,31 @@ const Campaign = () => {
               <button
                 className="btn-theme"
                 onClick={async () => {
-                  document.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    document.body.style.pointerEvents = "none";
-                    document.body.style.cursor = "progress";
-                  });
+                  document.addEventListener("click", disableClick);
                   const notification = toast.loading("Processing withdrawal");
-                  const result = await withdraw(campaignData.address, address);
-                  if (result) {
-                    toast.success("Withdrawal successful", {
+                  if (parseFloat(campaignData.currentProgress) <= 0) {
+                    toast.error("Campaign's Account is empty cannot withdraw", {
                       id: notification,
                     });
-                    setTimeout(() => window.location.reload(), 1000);
+                    document.body.style.pointerEvents = "auto";
+                    document.body.style.cursor = "auto";
                   } else {
-                    toast.error("Withdrawal failed", { id: notification });
+                    const result = await withdraw(
+                      campaignData.address,
+                      address
+                    );
+                    if (result) {
+                      toast.success("Withdrawal successful", {
+                        id: notification,
+                      });
+                      setTimeout(() => window.location.reload(), 1000);
+                    } else {
+                      toast.error("Withdrawal failed", { id: notification });
+                      document.body.style.pointerEvents = "auto";
+                      document.body.style.cursor = "auto";
+                    }
                   }
-                  document.body.style.pointerEvents = "auto";
-                  document.removeEventListener("click", (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    document.body.style.pointerEvents = "none";
-                    document.body.style.cursor = "progress";
-                  });
+                  document.removeEventListener("click", disableClick);
                 }}
               >
                 Withdraw Funds

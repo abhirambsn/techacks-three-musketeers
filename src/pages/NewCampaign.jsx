@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { FaArrowLeft } from "react-icons/fa";
+import { disableClick } from "../utils/functions";
 import { createNewCampaign } from "../utils/interact";
 const NewCampaign = () => {
   const [name, setName] = useState("");
@@ -93,12 +94,7 @@ const NewCampaign = () => {
                 <button
                   className="btn-theme"
                   onClick={async () => {
-                    document.addEventListener("click", (e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      document.body.style.pointerEvents = "none";
-                      document.body.style.cursor = "progress";
-                    });
+                    document.addEventListener("click", disableClick);
                     const notification = toast.loading(
                       "Campaign creation in progress..."
                     );
@@ -123,12 +119,8 @@ const NewCampaign = () => {
                       setTimeout(() => (window.location.href = "/list"), 1000);
                     }
                     document.body.style.pointerEvents = "auto";
-                    document.removeEventListener("click", (e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      document.body.style.pointerEvents = "none";
-                      document.body.style.cursor = "progress";
-                    });
+                    document.body.style.cursor = "auto";
+                    document.removeEventListener("click", disableClick);
                   }}
                 >
                   Create Campaign
