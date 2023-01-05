@@ -17,6 +17,7 @@ import Stats from "./pages/Stats";
 import TestingNewCampaign from "./pages/testing/TestingNewCampaign";
 import TestinResultPage from "./pages/testing/TestingResultPage";
 import NewCampaign from "./pages/NewCampaign";
+import { Toaster } from "react-hot-toast";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
     loader: getAllCampaigns,
   },
   {
-    path: "/newCampaign",
+    path: "/new",
     element: <NewCampaign />
   },
   {
@@ -97,6 +98,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+    <Toaster position="top-center" />
     <RouterProvider router={router} />
   </React.StrictMode>
 );

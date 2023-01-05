@@ -1,11 +1,12 @@
 import React, { useLayoutEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { FaArrowLeft } from "react-icons/fa";
-import { useLoaderData, useLocation } from "react-router-dom";
+import { useLoaderData, useLocation, useNavigation } from "react-router-dom";
+import LoaderComponent from "../components/LoaderComponent";
 import useAccount from "../hooks/useAccount";
 import useProvider from "../hooks/useProvider";
 import { getDaysFromDeadline } from "../utils/functions";
 import {
-  checkVote,
   voteForNextStage,
   createVote,
   checkUserVote,
@@ -18,7 +19,9 @@ const Stats = () => {
   const { address } = useAccount(provider);
   const [powText, setPowText] = useState("");
   const [voted, setVoted] = useState({ voted: false, vote: null });
+  const [loading, setLoading] = useState(true);
   const location = useLocation();
+  const navigation = useNavigation();
 
   useLayoutEffect(() => {
     (async () => {
@@ -29,14 +32,23 @@ const Stats = () => {
           campaignData.currentStage
         )
       );
+      setLoading(false);
     })();
   }, [location, address]);
-  return (
+
+  return navigation.state === "loading" || loading ? (
+    <LoaderComponent />
+  ) : (
     <section className="section stats" id="stats">
       <div className="stats-grid padd-5">
         <div className="stats-grid stats-box">
           <div className="grid-20 stats-btn">
-            <button className="btn">
+            <button
+              className="btn"
+              onClick={() =>
+                (window.location.href = `/campaign/${campaignData.address}`)
+              }
+            >
               <FaArrowLeft className="campaign-btn" />
             </button>
           </div>
@@ -73,14 +85,42 @@ const Stats = () => {
                           {!voted.voted ? (
                             <>
                               <button
-                                onClick={async () =>
-                                  await voteForNextStage(
+                                onClick={async () => {
+                                  document.addEventListener("click", (e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    document.body.style.pointerEvents = "none";
+                                    document.body.style.cursor = "progress";
+                                  });
+                                  const notification =
+                                    toast.loading("Processing vote...");
+                                  const result = await voteForNextStage(
                                     campaignData.address,
                                     i + 1,
                                     address,
                                     true
-                                  )
-                                }
+                                  );
+                                  if (result) {
+                                    toast.success("Vote casted successfully", {
+                                      id: notification,
+                                    });
+                                    setTimeout(
+                                      () => window.location.reload(),
+                                      1000
+                                    );
+                                  } else {
+                                    toast.error("Voting Failed", {
+                                      id: notification,
+                                    });
+                                  }
+                                  document.body.style.pointerEvents = "auto";
+                                  document.removeEventListener("click", (e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    document.body.style.pointerEvents = "none";
+                                    document.body.style.cursor = "progress";
+                                  });
+                                }}
                                 disabled={
                                   campaignData.author === address ||
                                   i + 1 !== campaignData.currentStage ||
@@ -99,14 +139,42 @@ const Stats = () => {
                                 Yes
                               </button>
                               <button
-                                onClick={async () =>
-                                  await voteForNextStage(
+                                onClick={async () => {
+                                  document.addEventListener("click", (e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    document.body.style.pointerEvents = "none";
+                                    document.body.style.cursor = "progress";
+                                  });
+                                  const notification =
+                                    toast.loading("Processing vote...");
+                                  const result = await voteForNextStage(
                                     campaignData.address,
                                     i + 1,
                                     address,
                                     false
-                                  )
-                                }
+                                  );
+                                  if (result) {
+                                    toast.success("Vote casted successfully", {
+                                      id: notification,
+                                    });
+                                    setTimeout(
+                                      () => window.location.reload(),
+                                      1000
+                                    );
+                                  } else {
+                                    toast.error("Voting Failed", {
+                                      id: notification,
+                                    });
+                                  }
+                                  document.body.style.pointerEvents = "auto";
+                                  document.removeEventListener("click", (e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    document.body.style.pointerEvents = "none";
+                                    document.body.style.cursor = "progress";
+                                  });
+                                }}
                                 disabled={
                                   campaignData.author === address ||
                                   i + 1 !== campaignData.currentStage ||
@@ -132,17 +200,58 @@ const Stats = () => {
                                 : `Voted: ${voted.vote ? "Yes" : "No"}`}
                             </button>
                           )}
+                          <button
+                            className={
+                              stageData.created ? "btn-inverse" : "btn-disabled"
+                            }
+                            disabled={!stageData.created}
+                            onClick={() =>
+                              (window.location.href = `/testing/results/${
+                                campaignData.address
+                              }/${i + 1}`)
+                            }
+                          >
+                            Results
+                          </button>
                         </>
                       ) : (
                         <>
                           <button
                             onClick={async () => {
-                              await createVote(
+                              document.addEventListener("click", (e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                document.body.style.pointerEvents = "none";
+                                document.body.style.cursor = "progress";
+                              });
+                              const notification =
+                                toast.loading("Creating Vote...");
+                              const result = await createVote(
                                 campaignData.address,
                                 i + 1,
                                 powText
                               );
-                              setPowText("");
+                              if (result) {
+                                toast.success("Vote created!", {
+                                  id: notification,
+                                });
+                                setPowText("");
+                                setTimeout(
+                                  () => window.location.reload(),
+                                  1000
+                                );
+                              } else {
+                                toast.error("Failed to create vote", {
+                                  id: notification,
+                                });
+                              }
+                              document.body.style.pointerEvents = "auto";
+                              document.removeEventListener("click", (e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                document.body.style.pointerEvents = "none";
+                                document.body.style.cursor = "progress";
+                              });
                             }}
                             className={
                               i + 1 !== campaignData.currentStage ||
@@ -185,12 +294,29 @@ const Stats = () => {
                             Results
                           </button>
                           <button
-                            onClick={async () =>
-                              await completeStageVoting(
+                            onClick={async () => {
+                              document.addEventListener("click", (e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                document.body.style.pointerEvents = "none";
+                                document.body.style.cursor = "progress";
+                              });
+                              const result = await completeStageVoting(
                                 campaignData.address,
                                 campaignData.currentStage
-                              )
-                            }
+                              );
+                              if (result) {
+                                alert("Voting completed");
+                                window.location.reload();
+                              }
+                              document.body.style.pointerEvents = "auto";
+                              document.removeEventListener("click", (e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                document.body.style.pointerEvents = "none";
+                                document.body.style.cursor = "progress";
+                              });
+                            }}
                           >
                             Complete Voting for test
                           </button>
@@ -221,38 +347,5 @@ const Stats = () => {
     </section>
   );
 };
-
-{
-  /* <div className='grid-20 stats-table-body'>
-                <div>2</div>
-                <div>100</div>
-                <div>100 days</div>
-                <div>Impressive</div>
-                <div>
-                  <button className='btn-inverse'>Yes</button>
-                  <button className='btn-inverse'>No</button>
-                </div>
-              </div>
-              <div className='grid-20 stats-table-body'>
-                <div>3</div>
-                <div>100</div>
-                <div>100 days</div>
-                <div>Impressive</div>
-                <div>
-                  <button className='btn-inverse'>Yes</button>
-                  <button className='btn-inverse'>No</button>
-                </div>
-              </div>
-              <div className='grid-20 stats-table-body'>
-                <div>4</div>
-                <div>100</div>
-                <div>100 days</div>
-                <div>Impressive</div>
-                <div>
-                  <button className='btn-inverse'>Yes</button>
-                  <button className='btn-inverse'>No</button>
-                </div>
-              </div> */
-}
 
 export default Stats;

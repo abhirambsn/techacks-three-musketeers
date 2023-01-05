@@ -5,7 +5,10 @@ const TestinResultPage = () => {
   const data = useLoaderData();
   const location = useLocation();
 
+
+
   useLayoutEffect(() => {
+    console.log(data);
   }, [location]);
   return (
     <div>
@@ -20,9 +23,9 @@ const TestinResultPage = () => {
         No: <span style={{ color: "red" }}>{data.no}</span>
       </p>
       <br /><br />
-      <h2>Verdict: {data.verdict}</h2><br />
+      
       <h3>Voting ends in: {data.deadline.days} day(s) {data.deadline.hours} hour(s)</h3><br />
-      <a style={{fontSize: "20px"}} href={`/testing/${data.address}`}>Back</a>
+      <a style={{fontSize: "20px"}} href={`/campaign/${data.address}`}>Back</a>
     </div>
   );
 };
