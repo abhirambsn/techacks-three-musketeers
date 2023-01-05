@@ -200,7 +200,7 @@ const Stats = () => {
                             }
                             disabled={!stageData.created}
                             onClick={() =>
-                              (window.location.href = `/testing/results/${
+                              (window.location.href = `/results/${
                                 campaignData.address
                               }/${i + 1}`)
                             }
@@ -274,7 +274,7 @@ const Stats = () => {
                             }
                             disabled={!stageData.created}
                             onClick={() =>
-                              (window.location.href = `/testing/results/${
+                              (window.location.href = `/results/${
                                 campaignData.address
                               }/${i + 1}`)
                             }

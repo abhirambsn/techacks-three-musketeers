@@ -25,7 +25,7 @@ const Listing = () => {
           <p>Ongoing Campaigns</p>
         </div>
         <div className="grid-20">
-          <a href="/newCampaign">
+          <a href="/new">
             <button className="btn-theme">
               Start a campaign{"  "}
               <FaPlus className="listing-btn" />
