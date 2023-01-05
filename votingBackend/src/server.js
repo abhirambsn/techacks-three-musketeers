@@ -14,7 +14,7 @@ app.get("/", (req, res) => {
 const routes = require('./routes/vote');
 app.use("/api", routes);
 
-mongoose.connect(process.env.MONGO_URI, {}, () => {
+mongoose.connect(process.env.MONGO_URI, {}).then(() => {
     console.log('Connected to MongoDB');
     app.listen(5000, () => {
         console.log('Server running on port 5000');
