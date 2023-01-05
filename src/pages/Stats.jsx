@@ -70,12 +70,12 @@ const Stats = () => {
                     ? stageData.deadline.toLocaleDateString("en-IN", {
                         dateStyle: "medium",
                       })
-                    : "Not Started"}
+                    : stageData.voted ? "Completed" : "Not Started"}
                 </div>
                 <div>
                   {campaignData.currentStage == i + 1
                     ? "In Progress"
-                    : "Not Started"}
+                    : stageData.voted ? "Stage Completed" : "Not Started"}
                 </div>
                 <div>
                   {getDaysFromDeadline(campaignData.projectDeadline) !== -1 ? (
