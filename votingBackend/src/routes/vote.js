@@ -217,28 +217,17 @@ router.get("/:campaignAddress/:stage/stats", async (req, res) => {
 router.get("/results/:campaignAddress/:stage", async (req, res) => {
   const { campaignAddress, stage } = req.params;
   const vote = await voteModel
-    .findOne({ address: campaignAddress, stage: parseInt(stage) })
+    .findOne({ campaign: campaignAddress, stage: parseInt(stage) })
     .exec();
   const yay = vote.votes.filter((v) => v.vote === true).length;
   const nay = vote.votes.length - yay;
-  let verdict = "";
-  if (yay === 0 && nay === 0) {
-    verdict = "No one has voted yet.";
-  } else if (yay > nay) {
-    verdict = "Campaign is running desireably";
-  } else if (nay > yay) {
-    verdict =
-      "Campaign might fail as the current investors are voting negatively";
-  } else {
-    verdict = "Campaign may or may not fail";
-  }
+  
 
   const timeToOver = getTimeDifference(vote.deadline);
   const over = timeToOver > 0 ? false : true;
   return res.status(200).json({
     yes: yay,
     no: nay,
-    verdict,
     deadline: {
       days: Math.floor(timeToOver / 1000 / 60 / 60 / 24),
       hours: Math.floor(timeToOver / 1000 / 60 / 60) % 24,

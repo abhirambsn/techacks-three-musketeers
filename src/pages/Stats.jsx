@@ -200,6 +200,19 @@ const Stats = () => {
                                 : `Voted: ${voted.vote ? "Yes" : "No"}`}
                             </button>
                           )}
+                          <button
+                            className={
+                              stageData.created ? "btn-inverse" : "btn-disabled"
+                            }
+                            disabled={!stageData.created}
+                            onClick={() =>
+                              (window.location.href = `/testing/results/${
+                                campaignData.address
+                              }/${i + 1}`)
+                            }
+                          >
+                            Results
+                          </button>
                         </>
                       ) : (
                         <>
