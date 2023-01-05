@@ -78,7 +78,7 @@ contract Campaign {
 
     function pledgeFunds() external payable {
         require(investors[msg.sender].isValid, "Please Register as investor before pledging funds");
-        escrow.deposit{value:msg.value}(msg.sender);
+        escrow.deposit{value:msg.value}(investorLUT, msg.sender);
         if (address(escrow).balance*100/totalAmountNeeded >= 100) {
             goalReached = true;
             projectDeadlineStartTime = block.timestamp;
@@ -95,7 +95,7 @@ contract Campaign {
     function releaseFunds() external {
         require(currentStage <= totalProjectTime/stagePeriod, "Invalid Stage No.");
         Stage memory myStage = stages[currentStage - 1];
-        escrow.releaseFundsToSeller(investorLUT, myStage.amountNeeded);
+        escrow.releaseFundsToSeller(myStage.amountNeeded);
         currentStage++;
         emit FundsReleased(myStage);
     }
@@ -116,7 +116,7 @@ contract Campaign {
     function cancelCampaign() external {
         require(msg.sender == author, "Only Campaign author can cancel a campaign.");
         for(uint i = 0; i < investorCount; i++) {
-            escrow.refund(investorLUT[i]);
+            escrow.refund(investorLUT, investorLUT[i]);
         }
         isValid = false;
         cancelled = true;
@@ -133,7 +133,7 @@ contract Campaign {
 
     function refund() external {
         require(investors[msg.sender].isValid, "Only investors can call this function");
-        escrow.refund(msg.sender);
+        escrow.refund(investorLUT, msg.sender);
         emit FundsPulledOut(investors[msg.sender]);
     }
 }

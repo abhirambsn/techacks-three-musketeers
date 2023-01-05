@@ -322,3 +322,20 @@ export const completeStageVoting = async (contractAddress, stage) => {
     return false;
   }
 };
+
+export const getInvestmentRatio = async (contractAddress) => {
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      contractAddress,
+      campaignAbi.abi,
+      signer
+    );
+    const ratio = await contract.getInvestorRatio();
+    return ratio.toNumber();
+  } catch (e) {
+    console.error(e);
+    return -1;
+  }
+};
