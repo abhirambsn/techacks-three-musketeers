@@ -25,7 +25,7 @@ const Home = () => {
                 <p>Join us and be a part of something special. Together, we can make a difference and bring your dreams to reality.</p>
               </div>
               <div className='home-btn'>
-                <a href="/list"><button className='btn-inverse'>Start Campaign</button></a>
+                <a href="/list"><button className='btn-inverse'>View Campaigns</button></a>
               </div>
               <div className='home-socials'>
                 <span className='home-socials-text'>Available on </span> <span className='home-socials-socials'><FaTwitter /></span> <span className='home-socials-socials'><FaLinkedin /></span>

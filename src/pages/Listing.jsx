@@ -1,21 +1,23 @@
 import React, { useLayoutEffect } from "react";
 import CampaignCard from "../components/CampaignCard";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { useLoaderData, useLocation } from "react-router-dom";
+import { FaArrowLeft, FaPlus } from "react-icons/fa";
+import { useLoaderData, useLocation, useNavigation } from "react-router-dom";
 import { truncateDescription } from "../utils/functions";
+import LoaderComponent from "../components/LoaderComponent";
 
 const Listing = () => {
   const campaignData = useLoaderData();
+  const navigation = useNavigation();
 
-  return (
+  return navigation.state === "loading" ? (
+    <LoaderComponent />
+  ) : (
     <section className="section listing" id="listing">
       <div className="listing-grid">
         <div className="grid-20">
           <a href="/">
             <button className="btn-theme">
-              {" "}
               <FaArrowLeft className="listing-btn" />
-              Home
             </button>
           </a>
         </div>
@@ -25,14 +27,13 @@ const Listing = () => {
         <div className="grid-20">
           <a href="/newCampaign">
             <button className="btn-theme">
-              {" "}
-              Start a campaign
-              <FaArrowRight className="listing-btn" />
+              Start a campaign{"  "}
+              <FaPlus className="listing-btn" />
             </button>
           </a>
         </div>
         {campaignData.map((cD, i) => (
-          <div className="grid-30">
+          <div className="grid-30" key={i}>
             <CampaignCard
               title={cD.name}
               image="https://picsum.photos/300/200"

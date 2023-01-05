@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import { FaArrowLeft } from "react-icons/fa";
 import { createNewCampaign } from "../utils/interact";
 const NewCampaign = () => {
@@ -92,6 +93,15 @@ const NewCampaign = () => {
                 <button
                   className="btn-theme"
                   onClick={async () => {
+                    document.addEventListener("click", (e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      document.body.style.pointerEvents = "none";
+                      document.body.style.cursor = "progress";
+                    });
+                    const notification = toast.loading(
+                      "Campaign creation in progress..."
+                    );
                     const result = await createNewCampaign(
                       name,
                       desc,
@@ -101,11 +111,24 @@ const NewCampaign = () => {
                       Object.values(stageWiseAmt)
                     );
                     if (!result) {
-                      alert("Failure");
-                      return result;
+                      toast.error("Failure", { id: notification });
+                    } else {
+                      setName("");
+                      setDesc("");
+                      setProjectPeriod(0);
+                      setTotalAmt(0);
+                      setStagePeriod(0);
+                      setStageWiseAmt({});
+                      toast.success("Success", { id: notification });
+                      setTimeout(() => (window.location.href = "/list"), 1000);
                     }
-                    alert("Success");
-                    return result;
+                    document.body.style.pointerEvents = "auto";
+                    document.removeEventListener("click", (e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      document.body.style.pointerEvents = "none";
+                      document.body.style.cursor = "progress";
+                    });
                   }}
                 >
                   Create Campaign

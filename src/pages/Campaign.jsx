@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import { useLoaderData, useLocation } from "react-router-dom";
+import { useLoaderData, useLocation, useNavigation } from "react-router-dom";
 import {
   cancelCampaign,
   checkInvestorship,
@@ -16,6 +16,8 @@ import useAccount from "../hooks/useAccount";
 import useProvider from "../hooks/useProvider";
 import { getDaysFromDeadline, getMaticToINRPrice } from "../utils/functions";
 import { completeCampaign } from "../utils/interact";
+import { toast } from "react-hot-toast";
+import LoaderComponent from "../components/LoaderComponent";
 
 const Campaign = () => {
   const campaignData = useLoaderData();
@@ -24,28 +26,40 @@ const Campaign = () => {
   const [fundAmount, setFundAmount] = useState(0);
   const [registered, setRegistered] = useState(false);
   const [maticPrice, setMaticPrice] = useState(0);
+  const [loading, setLoading] = useState(true);
   const location = useLocation();
+  const navigation = useNavigation();
 
   useLayoutEffect(() => {
     if (!window.ethereum) {
       return;
     }
-    var element = document.getElementsByClassName("campaign-progress")[0];
-    var w = element.dataset.progress;
-    if (w >= 100) {
-      w = 100;
-    }
-    element.style.width = `${w}%`;
+
     (async () => {
       if (!address) return;
       setRegistered(await checkInvestorship(campaignData.address, address));
       if (maticPrice == 0) {
         setMaticPrice(await getMaticToINRPrice());
       }
+      setLoading(false);
     })();
   }, [location, window.ethereum, address]);
-  console.log(campaignData);
-  return (
+
+  useLayoutEffect(() => {
+    if (!loading) {
+      if (!loading) {
+        var element = document.getElementsByClassName("campaign-progress")[0];
+        var w = element.dataset.progress;
+        if (w >= 100) {
+          w = 100;
+        }
+        element.style.width = `${w}%`;
+      }
+    }
+  }, [loading, location]);
+  return navigation.state === "loading" || loading ? (
+    <LoaderComponent />
+  ) : (
     <section className="section campaign" id="campaign">
       <div className="campaign-grid">
         <div className="grid-40 campaign-left">
@@ -133,9 +147,34 @@ const Campaign = () => {
               {!registered && (
                 <button
                   className="btn-theme"
-                  onClick={async () =>
-                    await registerAsInvestor(campaignData.address, address)
-                  }
+                  onClick={async () => {
+                    document.addEventListener("click", (e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      document.body.style.pointerEvents = "none";
+                      document.body.style.cursor = "progress";
+                    });
+                    const notification = toast.loading("Processing Request...");
+                    const result = await registerAsInvestor(
+                      campaignData.address,
+                      address
+                    );
+                    if (result) {
+                      toast.success("Registration Successful!!", {
+                        id: notification,
+                      });
+                      setTimeout(() => window.location.reload(), 1000);
+                    } else {
+                      toast.error("Registration Failed", { id: notification });
+                    }
+                    document.body.style.pointerEvents = "auto";
+                    document.removeEventListener("click", (e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      document.body.style.pointerEvents = "none";
+                      document.body.style.cursor = "progress";
+                    });
+                  }}
                 >
                   Register as Investor
                 </button>
@@ -146,40 +185,116 @@ const Campaign = () => {
                 <button className="btn-theme">View Stages</button>
               </a>
             </div>
-            <div className="grid-100 campaign-funds">
-              <a href="/stats">
-                <button className="btn-theme">Complete campaign</button>
-              </a>
-            </div>
-            <div className="grid-100 campaign-funds">
-              {/* Toggle this btn-disabled class with btn-theme */}
-              <button
-                onClick={async () => {
-                  const confirmation = confirm("Confirm Release of the funds");
-                  if (confirmation) {
-                    await releaseFundsToCampaigner(campaignData.address);
-                    alert(
-                      `Funds for Stage ${campaignData.currentStage} have been released`
-                    );
-                  } else {
-                    alert("Request Cancelled");
-                  }
-                }}
-                disabled={
-                  campaignData.currentStage !== 1 &&
-                  !campaignData.stages[campaignData.currentStage - 1].voted
-                }
-                className={
-                  campaignData.currentStage !== 1 &&
-                  !campaignData.stages[campaignData.currentStage - 1].voted
-                    ? "btn-disabled"
-                    : "btn-theme"
-                }
-              >
-                
-                Release funds
-              </button>
-            </div>
+            {campaignData.author === address && (
+              <>
+                <div className="grid-100 campaign-funds">
+                  <button
+                    onClick={async () => {
+                      document.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        document.body.style.pointerEvents = "none";
+                        document.body.style.cursor = "progress";
+                      });
+                      const notification = toast.loading(
+                        "Processing Request..."
+                      );
+                      const result = await completeCampaign(
+                        campaignData.address
+                      );
+                      if (result) {
+                        toast.success("Campaign marked as complete", {
+                          id: notification,
+                        });
+                        setTimeout(() => window.location.reload(), 1000);
+                      } else {
+                        toast.error("Error occurred while processing request", {
+                          id: notification,
+                        });
+                      }
+                      document.body.style.pointerEvents = "auto";
+                      document.removeEventListener("click", (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        document.body.style.pointerEvents = "none";
+                        document.body.style.cursor = "progress";
+                      });
+                    }}
+                    className={
+                      campaignData.currentStage <=
+                      Math.round(
+                        campaignData.totalProjectTime / campaignData.stagePeriod
+                      )
+                        ? "btn-disabled"
+                        : "btn-theme"
+                    }
+                    disabled={
+                      campaignData.currentStage <=
+                      Math.round(
+                        campaignData.totalProjectTime / campaignData.stagePeriod
+                      )
+                    }
+                  >
+                    Mark as complete
+                  </button>
+                </div>
+                <div className="grid-100 campaign-funds">
+                  <button
+                    onClick={async () => {
+                      const confirmation = confirm(
+                        "Confirm Release of the funds"
+                      );
+                      document.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        document.body.style.pointerEvents = "none";
+                        document.body.style.cursor = "progress";
+                      });
+                      if (confirmation) {
+                        const notification = toast.loading(
+                          "Processing request..."
+                        );
+                        const result = await releaseFundsToCampaigner(
+                          campaignData.address
+                        );
+                        if (result) {
+                          toast.success(
+                            `Funds for Stage ${campaignData.currentStage} have been released`,
+                            { id: notification }
+                          );
+                          setTimeout(() => window.location.reload(), 1000);
+                        } else {
+                          toast.error(
+                            "Error Occurred cannot release funds contact at support@crowdfundr.org"
+                          );
+                        }
+                      } else {
+                        toast.error("Request Cancelled");
+                      }
+                      document.body.style.pointerEvents = "auto";
+                      document.removeEventListener("click", (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        document.body.style.pointerEvents = "none";
+                        document.body.style.cursor = "progress";
+                      });
+                    }}
+                    disabled={
+                      campaignData.currentStage !== 1 &&
+                      !campaignData.stages[campaignData.currentStage - 1].voted
+                    }
+                    className={
+                      campaignData.currentStage !== 1 &&
+                      !campaignData.stages[campaignData.currentStage - 1].voted
+                        ? "btn-disabled"
+                        : "btn-theme"
+                    }
+                  >
+                    Release funds
+                  </button>
+                </div>
+              </>
+            )}
           </div>
           <div className="grid-50 campaign-form">
             <div className="grid-100 campaign-funds">
@@ -197,9 +312,34 @@ const Campaign = () => {
             <div className="grid-100 campaign-funds">
               <button
                 className="btn-theme"
-                onClick={async () =>
-                  await fund(campaignData.address, address, fundAmount)
-                }
+                onClick={async () => {
+                  document.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    document.body.style.pointerEvents = "none";
+                    document.body.style.cursor = "progress";
+                  });
+                  const notification = toast.loading(
+                    "Transaction in progress..."
+                  );
+                  const result = await fund(
+                    campaignData.address,
+                    address,
+                    fundAmount
+                  );
+                  if (result) {
+                    toast.success("Funding successful", { id: notification });
+                    setTimeout(() => window.location.reload(), 1000);
+                  } else {
+                    toast.error("Transaction failed", { id: notification });
+                  }
+                  document.removeEventListener("click", (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    document.body.style.pointerEvents = "none";
+                    document.body.style.cursor = "progress";
+                  });
+                }}
               >
                 Fund campaign
               </button>
@@ -210,9 +350,31 @@ const Campaign = () => {
             <div className="grid-50 campaign-funds">
               <button
                 className="btn-theme"
-                onClick={async () =>
-                  await withdraw(campaignData.address, address)
-                }
+                onClick={async () => {
+                  document.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    document.body.style.pointerEvents = "none";
+                    document.body.style.cursor = "progress";
+                  });
+                  const notification = toast.loading("Processing withdrawal");
+                  const result = await withdraw(campaignData.address, address);
+                  if (result) {
+                    toast.success("Withdrawal successful", {
+                      id: notification,
+                    });
+                    setTimeout(() => window.location.reload(), 1000);
+                  } else {
+                    toast.error("Withdrawal failed", { id: notification });
+                  }
+                  document.body.style.pointerEvents = "auto";
+                  document.removeEventListener("click", (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    document.body.style.pointerEvents = "none";
+                    document.body.style.cursor = "progress";
+                  });
+                }}
               >
                 Withdraw Funds
               </button>
