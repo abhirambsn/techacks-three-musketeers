@@ -28,6 +28,7 @@ const TestinResultPage = () => {
       </p>
       <br />
       <br />
+      <div style={{height: '400px', width: '600px'}}>
       <Doughnut
         datasetIdKey="pie"
         data={{
@@ -44,6 +45,7 @@ const TestinResultPage = () => {
           ],
         }}
       />
+      </div>
 
       <h3>
         Voting ends in: {data.deadline.days} day(s) {data.deadline.hours}{" "}
