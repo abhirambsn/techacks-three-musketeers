@@ -5,6 +5,7 @@ import {
   cancelCampaign,
   checkInvestorship,
   fund,
+  getInvestmentRatio,
   registerAsInvestor,
   releaseFundsToCampaigner,
   withdraw,
@@ -27,6 +28,7 @@ const Campaign = () => {
   const [fundAmount, setFundAmount] = useState(0);
   const [registered, setRegistered] = useState(false);
   const [maticPrice, setMaticPrice] = useState(0);
+  const [ratio, setRatio] = useState(0);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
   const navigation = useNavigation();
@@ -42,6 +44,7 @@ const Campaign = () => {
       if (maticPrice == 0) {
         setMaticPrice(await getMaticToINRPrice());
       }
+      setRatio(await getInvestmentRatio(campaignData.address, address));
       setLoading(false);
     })();
   }, [location, window.ethereum, address]);
@@ -127,6 +130,9 @@ const Campaign = () => {
             </div>
             <div className="campaign-stage-period">
               Stage period: {campaignData.stagePeriod / 60 / 60 / 24} day(s)
+            </div>
+            <div className="campaign-investment-ratio">
+              Investment Ratio: {ratio} %
             </div>
           </div>
           <div className="grid-20 disp-no"></div>

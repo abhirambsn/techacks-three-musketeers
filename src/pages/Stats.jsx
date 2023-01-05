@@ -122,13 +122,13 @@ const Stats = () => {
                                   campaignData.author === address ||
                                   i + 1 !== campaignData.currentStage ||
                                   stageData.voted ||
-                                  voted.voted
+                                  voted.voted || !stageData.created
                                 }
                                 className={
                                   campaignData.author === address ||
                                   i + 1 !== campaignData.currentStage ||
-                                  stageData.voted ||
-                                  voted.voted
+                                  stageData.voted || 
+                                  voted.voted || !stageData.created
                                     ? "btn-disabled"
                                     : "btn-inverse"
                                 }
@@ -173,13 +173,13 @@ const Stats = () => {
                                   campaignData.author === address ||
                                   i + 1 !== campaignData.currentStage ||
                                   stageData.voted ||
-                                  voted.voted
+                                  voted.voted || !stageData.created
                                 }
                                 className={
                                   campaignData.author === address ||
                                   i + 1 !== campaignData.currentStage ||
                                   stageData.voted ||
-                                  voted.voted
+                                  voted.voted || !stageData.created
                                     ? "btn-disabled"
                                     : "btn-inverse"
                                 }
