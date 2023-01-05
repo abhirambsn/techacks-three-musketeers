@@ -43,7 +43,7 @@ export const registerAsInvestor = async (contractAddress, walletAddress) => {
   );
   try {
     const resp = await axios.post(
-      `http://localhost:5000/api/${contractAddress}/registerInvestor`,
+      `${import.meta.env.VITE_API_URL}/api/${contractAddress}/registerInvestor`,
       {
         investorAddress: walletAddress,
         name,
@@ -141,7 +141,7 @@ export const getStages = async (contractAddress, nStages) => {
     for (let i = 1; i <= nStages; i++) {
       const stageDetail = await contract.getStageDetail(i);
       const resp = await axios.get(
-        `http://localhost:5000/api/${contractAddress}/${i}/check`
+        `${import.meta.env.VITE_API_URL}/api/${contractAddress}/${i}/check`
       );
       stages.push({
         amount: ethers.utils.formatEther(stageDetail.amountNeeded),
@@ -234,7 +234,7 @@ export const voteForNextStage = async (
 ) => {
   try {
     const req = await axios.post(
-      `http://localhost:5000/api/${contractAddress}/${stage}/vote`,
+      `${import.meta.env.VITE_API_URL}/api/${contractAddress}/${stage}/vote`,
       {
         yes,
         investorAddress: walletAddress,
@@ -255,14 +255,14 @@ export const voteForNextStage = async (
 export const createVote = async (contractAddress, stage, powText) => {
   try {
     let resp = await axios.get(
-      `http://localhost:5000/api/${contractAddress}/${stage}/check`
+      `${import.meta.env.VITE_API_URL}/api/${contractAddress}/${stage}/check`
     );
     const isValid = resp.data.isValid;
     if (isValid) {
       console.log("Vote already created");
       return true;
     }
-    resp = await axios.post(`http://localhost:5000/api/${contractAddress}/`, {
+    resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/${contractAddress}/`, {
       stage,
       powText,
     });
@@ -281,7 +281,7 @@ export const createVote = async (contractAddress, stage, powText) => {
 export const checkVote = async (contractAddress, stage) => {
   try {
     const resp = await axios.get(
-      `http://localhost:5000/api/${contractAddress}/${stage}/check`
+      `${import.meta.env.VITE_API_URL}/api/${contractAddress}/${stage}/check`
     );
     const isValid = resp.data.isValid;
     return isValid;
@@ -294,7 +294,7 @@ export const checkVote = async (contractAddress, stage) => {
 export const checkUserVote = async (contractAddress, walletAddress, stage) => {
   try {
     const resp = await axios.post(
-      `http://localhost:5000/api/${contractAddress}/${stage}/check`,
+      `${import.meta.env.VITE_API_URL}/api/${contractAddress}/${stage}/check`,
       { address: walletAddress }
     );
     const voted = resp.data;

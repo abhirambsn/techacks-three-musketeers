@@ -87,7 +87,7 @@ export const getAllCampaigns = async () => {
 
 export const getVotingResults = async (contractAddress, stage) => {
   const resp = await axios.get(
-    `http://localhost:5000/api/results/${contractAddress}/${stage}`
+    `${import.meta.env.VITE_API_URL}/api/results/${contractAddress}/${stage}`
   );
   if (resp.data.over) {
     await completeStageVoting(contractAddress, stage);
