@@ -34,3 +34,10 @@ export const getMaticToINRPrice = async () => {
 export const truncateDescription = (text, words = 10) => {
     return String(text).split(' ').slice(0, words).join(' ') + "...";
 }
+
+export const disableClick = (e) => {
+  e.stopPropagation();
+  e.preventDefault();
+  document.body.style.pointerEvents = "none";
+  document.body.style.cursor = "progress";
+}
