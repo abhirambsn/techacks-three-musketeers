@@ -9,6 +9,8 @@ const Listing = () => {
   const campaignData = useLoaderData();
   const navigation = useNavigation();
 
+  console.log(campaignData);
+
   return navigation.state === "loading" ? (
     <LoaderComponent />
   ) : (
@@ -36,7 +38,7 @@ const Listing = () => {
           <div className="grid-30" key={i}>
             <CampaignCard
               title={cD.name}
-              image="https://picsum.photos/300/200"
+              image={cD.coverImg}
               description={truncateDescription(cD.desc)}
               raised={cD.currentProgress}
               target={cD.totalAmountNeeded}
@@ -46,7 +48,6 @@ const Listing = () => {
           </div>
         ))}
       </div>
-      <Widget />
     </section>
   );
 };

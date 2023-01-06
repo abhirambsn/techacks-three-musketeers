@@ -102,6 +102,7 @@ const NewCampaign = () => {
               <PictureUploadBtn
                   disabled={imgUrl.length > 0}
                   setImgUrl={setImgUrl}
+                  imgUrl={imgUrl}
                 />
               </div>
               <div className="grid">
@@ -156,6 +157,10 @@ const NewCampaign = () => {
                   <button
                     className="btn-theme"
                     onClick={async () => {
+                      if (imgUrl === "") {
+                        alert("Please upload a cover image");
+                        return;
+                      }
                       document.addEventListener("click", disableClick);
                       const notification = toast.loading(
                         "Campaign creation in progress..."
@@ -166,10 +171,14 @@ const NewCampaign = () => {
                         stagePeriod,
                         projectPeriod,
                         totalAmt,
-                        Object.values(stageWiseAmt)
+                        Object.values(stageWiseAmt),
+                        imgUrl
                       );
                       if (!result) {
                         toast.error("Failure", { id: notification });
+                        document.body.style.pointerEvents = "auto";
+                        document.body.style.cursor = "auto";
+                        document.removeEventListener("click", disableClick);
                       } else {
                         setName("");
                         setDesc("");
