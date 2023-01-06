@@ -6,7 +6,7 @@ const Footer = () => {
     <section className='footer' id='contact'>
         <div className='footer-grid'>
             <div className='grid-30 footer-logo'>
-                <span><a href="/">crowdfundr</a></span>
+                <span><a href="/">Massfundr</a></span>
             </div>
             <div className='grid-50 footer-body'>
                 <div className='footer-body-links'><a href="#home">Home</a></div>
