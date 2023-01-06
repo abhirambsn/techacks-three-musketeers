@@ -18,6 +18,7 @@ import TestingNewCampaign from "./pages/testing/TestingNewCampaign";
 import TestinResultPage from "./pages/testing/TestingResultPage";
 import NewCampaign from "./pages/NewCampaign";
 import { Toaster } from "react-hot-toast";
+import ResultPage from "./pages/ResultPage";
 
 const router = createBrowserRouter([
   {
@@ -88,8 +89,12 @@ const router = createBrowserRouter([
     element: <TestingNewCampaign />,
   },
   {
-    path: "/testing/results/:campaignAddress/:stage",
-    element: <TestinResultPage />,
+    path: '/result',
+    element: <ResultPage />,
+  },
+  {
+    path: "/results/:campaignAddress/:stage",
+    element: <ResultPage />,
     loader: async ({ params }) => {
       return await getVotingResults(params.campaignAddress, params.stage);
     },
