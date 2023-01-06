@@ -414,7 +414,6 @@ const Campaign = () => {
           <div className="grid-50"></div>
         </div>
       </div>
-      <Widget />
     </section>
   );
 };

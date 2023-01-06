@@ -48,7 +48,6 @@ const Listing = () => {
           </div>
         ))}
       </div>
-      <Widget />
     </section>
   );
 };
