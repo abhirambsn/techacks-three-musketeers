@@ -4,6 +4,8 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { FaArrowLeft} from "react-icons/fa";
 
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 const ResultPage = () => {
 
   const data = useLoaderData();
@@ -18,7 +20,7 @@ const ResultPage = () => {
       <div className='result-grid'>
         <div className='grid-20'>
         <a style={{ fontSize: "20px" }} href={`/campaign/${data.address}/stats`}> 
-          <button className='btn-theme'><FaArrowLeft className="listing-btn" /></button>
+          <button className='btn-inverse'><FaArrowLeft className="listing-btn" /></button>
           </a>
         </div>
         <div className='grid-60 result-head'>
