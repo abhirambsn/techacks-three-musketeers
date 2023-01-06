@@ -804,6 +804,8 @@ html{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 
 .campaign-progress-bar
@@ -1204,6 +1206,11 @@ html{
 .form-left .form-group input:focus, .form-left .form-group textarea:focus, .form-right .form-group input:focus
 {
     box-shadow: 0 0 1px var(--bg-color-900);
+}
+
+.campaign-funds button
+{
+    width: 25vh;
 }
 
 /* media query begins */
