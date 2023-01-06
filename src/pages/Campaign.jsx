@@ -20,6 +20,7 @@ import {
 import { completeCampaign } from "../utils/interact";
 import { toast } from "react-hot-toast";
 import LoaderComponent from "../components/LoaderComponent";
+import Widget from "../components/Widget";
 
 const Campaign = () => {
   const campaignData = useLoaderData();
@@ -373,6 +374,7 @@ const Campaign = () => {
           <div className="grid-50"></div>
         </div>
       </div>
+      <Widget />
     </section>
   );
 };
