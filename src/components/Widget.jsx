@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { FaWallet } from "react-icons/fa";
-import { useLocation } from 'react-router-dom';
 import useAccount from '../hooks/useAccount';
 import useProvider from '../hooks/useProvider';
 import { getBalance } from '../utils/interact';
@@ -21,9 +20,9 @@ const Widget = () => {
     
 
   return (
-    <div className={`widget ${toggle ? 'widget-on' : 'widget-off'}`} onClick={() => setToggle(!toggle)}>
+    <div className={`widget ${toggle ? 'widget-off' : 'widget-on'}`} onClick={() => setToggle(!toggle)}>
         <div className='widget-grid'>
-            <div className='widget-img'><FaWallet /></div>
+            <div className='widget-img' ><FaWallet /></div>
             <div className='widget-balance'><p>Balance: {balance} MATIC</p></div>
         </div>
     </div>

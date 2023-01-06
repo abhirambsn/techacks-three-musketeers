@@ -4,7 +4,7 @@ import { FaArrowLeft, FaPlus } from "react-icons/fa";
 import { useLoaderData, useLocation, useNavigation } from "react-router-dom";
 import { truncateDescription } from "../utils/functions";
 import LoaderComponent from "../components/LoaderComponent";
-
+import Widget from '../components/Widget'
 const Listing = () => {
   const campaignData = useLoaderData();
   const navigation = useNavigation();
@@ -46,6 +46,7 @@ const Listing = () => {
           </div>
         ))}
       </div>
+      <Widget />
     </section>
   );
 };
