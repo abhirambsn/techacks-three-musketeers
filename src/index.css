@@ -1085,6 +1085,7 @@ html{
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    padding: 3%;
 }
 
 .form-head
@@ -1094,6 +1095,7 @@ html{
     font-family: 'Caveat', cursive;
     color: var(--text-color-900);
     font-weight: 400;
+    margin-bottom: 20px;
 }
 
 .form-decoration
@@ -1154,14 +1156,23 @@ html{
     flex-direction: row;
     flex-wrap: nowrap;
     position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+.multistep-btn
+{
+    position: absolute;
+    bottom: -5vh;
+    right: 0;
 }
 
 .form-left, .form-right 
 {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
     margin-left: 5%;
     margin-top: 3%;
     padding: 2%;
@@ -1193,6 +1204,11 @@ html{
     border-radius: 5px;
     padding: 5px;
 
+}
+
+.form-form ol li::before
+{
+    background-color: var(--bg-color-500);
 }
 
 .form-right .form-group input
