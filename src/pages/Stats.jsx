@@ -11,6 +11,7 @@ import {
   createVote,
   checkUserVote,
   completeStageVoting,
+  getVoteOfUser,
 } from "../utils/interact";
 
 const Stats = () => {
@@ -18,20 +19,25 @@ const Stats = () => {
   const provider = useProvider();
   const { address } = useAccount(provider);
   const [powText, setPowText] = useState("");
-  const [voted, setVoted] = useState({ voted: false, vote: null });
+  const [voted, setVoted] = useState({ voted: true, vote: null });
   const [loading, setLoading] = useState(true);
   const location = useLocation();
   const navigation = useNavigation();
 
   useLayoutEffect(() => {
     (async () => {
-      setVoted(
-        await checkUserVote(
+      setVoted({
+        voted: await checkUserVote(
           campaignData.address,
           address,
           campaignData.currentStage
-        )
-      );
+        ),
+        vote: await getVoteOfUser(
+          campaignData.address,
+          address,
+          campaignData.currentStage
+        ),
+      });
       setLoading(false);
     })();
   }, [location, address]);
@@ -70,12 +76,16 @@ const Stats = () => {
                     ? stageData.deadline.toLocaleDateString("en-IN", {
                         dateStyle: "medium",
                       })
-                    : stageData.voted ? "Completed" : "Not Started"}
+                    : stageData.voted
+                    ? "Completed"
+                    : "Not Started"}
                 </div>
                 <div>
                   {campaignData.currentStage == i + 1
                     ? "In Progress"
-                    : stageData.voted ? "Stage Completed" : "Not Started"}
+                    : stageData.voted
+                    ? "Stage Completed"
+                    : "Not Started"}
                 </div>
                 <div>
                   {getDaysFromDeadline(campaignData.projectDeadline) !== -1 ? (
@@ -122,13 +132,15 @@ const Stats = () => {
                                   campaignData.author === address ||
                                   i + 1 !== campaignData.currentStage ||
                                   stageData.voted ||
-                                  voted.voted || !stageData.created
+                                  voted.voted ||
+                                  !stageData.created
                                 }
                                 className={
                                   campaignData.author === address ||
                                   i + 1 !== campaignData.currentStage ||
-                                  stageData.voted || 
-                                  voted.voted || !stageData.created
+                                  stageData.voted ||
+                                  voted.voted ||
+                                  !stageData.created
                                     ? "btn-disabled"
                                     : "btn-inverse"
                                 }
@@ -173,13 +185,15 @@ const Stats = () => {
                                   campaignData.author === address ||
                                   i + 1 !== campaignData.currentStage ||
                                   stageData.voted ||
-                                  voted.voted || !stageData.created
+                                  voted.voted ||
+                                  !stageData.created
                                 }
                                 className={
                                   campaignData.author === address ||
                                   i + 1 !== campaignData.currentStage ||
                                   stageData.voted ||
-                                  voted.voted || !stageData.created
+                                  voted.voted ||
+                                  !stageData.created
                                     ? "btn-disabled"
                                     : "btn-inverse"
                                 }

@@ -3,6 +3,7 @@ import { BigNumber } from "ethers";
 import cfundingAbi from "../abi/CFunding.json";
 import campaignAbi from "../abi/Campaign.json";
 import escrowAbi from "../abi/Escrow.json";
+import votingfactoryAbi from "../abi/VotingFactory.json"
 import axios from "axios";
 import { completeStageVoting } from "./interact";
 
@@ -86,11 +87,20 @@ export const getAllCampaigns = async () => {
 };
 
 export const getVotingResults = async (contractAddress, stage) => {
-  const resp = await axios.get(
-    `${import.meta.env.VITE_API_URL}/api/results/${contractAddress}/${stage}`
+  // const resp = await axios.get(
+  //   `${import.meta.env.VITE_API_URL}/api/results/${contractAddress}/${stage}`
+  // );
+  // if (resp.data.over) {
+  //   await completeStageVoting(contractAddress, stage);
+  // }
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const votingFactoryContract = new ethers.Contract(
+    import.meta.env.VITE_VOTING_FACTORY,
+    votingfactoryAbi.abi,
+    signer
   );
-  if (resp.data.over) {
-    await completeStageVoting(contractAddress, stage);
-  }
-  return { ...resp.data, address: contractAddress, stage };
+
+  const resp = await votingFactoryContract.getResult(contractAddress, stage);
+  return { yes: resp[0]?.toNumber(), no: resp[1]?.toNumber(), address: contractAddress, stage };
 };
