@@ -33,7 +33,7 @@ const PictureUploadBtn = ({ setImgUrl, imgUrl, disabled }) => {
         disabled={disabled}
         className={disabled ? "btn-disabled" : "btn-theme"}
       >
-        Upload Cover Picture
+        Upload Picture
       </button>
       
     </div>
