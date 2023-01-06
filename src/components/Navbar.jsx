@@ -18,7 +18,7 @@ const Navbar = () => {
       <div className='nav'>
 
         <div className='nav-head'>
-          <a href="/" className='nav-head-link'>crowdfundr</a>
+          <a href="/" className='nav-head-link'>Massfundr</a>
         </div>
         
         <div onClick={() => setOpen((open) => !open)} className={`${isMobile ? "shown" : "hidden"}`}>
