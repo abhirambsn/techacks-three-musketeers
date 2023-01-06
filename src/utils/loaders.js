@@ -1,11 +1,7 @@
 import { ethers } from "ethers";
-import { BigNumber } from "ethers";
 import cfundingAbi from "../abi/CFunding.json";
 import campaignAbi from "../abi/Campaign.json";
-import escrowAbi from "../abi/Escrow.json";
-import votingfactoryAbi from "../abi/VotingFactory.json"
-import axios from "axios";
-import { completeStageVoting } from "./interact";
+import votingfactoryAbi from "../abi/VotingFactory.json";
 
 const getEscrowBalance = async (provider, escrowAddr) => {
   const balance = await provider.getBalance(escrowAddr);
@@ -102,5 +98,10 @@ export const getVotingResults = async (contractAddress, stage) => {
   );
 
   const resp = await votingFactoryContract.getResult(contractAddress, stage);
-  return { yes: resp[0]?.toNumber(), no: resp[1]?.toNumber(), address: contractAddress, stage };
+  return {
+    yes: resp[0]?.toNumber(),
+    no: resp[1]?.toNumber(),
+    address: contractAddress,
+    stage,
+  };
 };
