@@ -9,13 +9,9 @@ import {
   getCampaignDetails,
   getVotingResults,
 } from "./utils/loaders";
-import Testing from "./pages/testing/Testing";
 import Campaign from "./pages/Campaign";
-import TestingCampaign from "./pages/testing/TestingCampaignPage";
 import { getStages } from "./utils/interact";
 import Stats from "./pages/Stats";
-import TestingNewCampaign from "./pages/testing/TestingNewCampaign";
-import TestinResultPage from "./pages/testing/TestingResultPage";
 import NewCampaign from "./pages/NewCampaign";
 import { Toaster } from "react-hot-toast";
 import ResultPage from "./pages/ResultPage";
@@ -32,7 +28,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/new",
-    element: <NewCampaign />
+    element: <NewCampaign />,
   },
   {
     path: "/campaign/:campaignAddress",
@@ -50,11 +46,6 @@ const router = createBrowserRouter([
     },
   },
   {
-    path: "/testing",
-    element: <Testing />,
-    loader: getAllCampaigns,
-  },
-  {
     path: "/campaign/:campaignAddress/stats",
     element: <Stats />,
     loader: async ({ params }) => {
@@ -70,26 +61,7 @@ const router = createBrowserRouter([
     },
   },
   {
-    path: "/testing/:campaignAddress",
-    element: <TestingCampaign />,
-    loader: async ({ params }) => {
-      const cDetail = await getCampaignDetails(params.campaignAddress);
-      const stageDetail = await getStages(
-        cDetail.address,
-        Math.round(cDetail.totalProjectTime / cDetail.stagePeriod)
-      );
-      return {
-        ...cDetail,
-        stages: stageDetail,
-      };
-    },
-  },
-  {
-    path: "/testing/new",
-    element: <TestingNewCampaign />,
-  },
-  {
-    path: '/result',
+    path: "/result",
     element: <ResultPage />,
   },
   {
