@@ -295,7 +295,7 @@ const Stats = () => {
                           >
                             Results
                           </button>
-                          <button
+                          {/* <button
                             onClick={async () => {
                               document.addEventListener("click", disableClick);
                               const result = await completeStageVoting(
@@ -315,7 +315,7 @@ const Stats = () => {
                             }}
                           >
                             Complete Voting for test
-                          </button>
+                          </button> */}
                           {i + 1 === campaignData.currentStage &&
                             getDaysFromDeadline(
                               campaignData.stages[campaignData.currentStage - 1]

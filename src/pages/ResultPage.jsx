@@ -6,6 +6,8 @@ import { FaArrowLeft } from "react-icons/fa";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 const ResultPage = () => {
   const data = useLoaderData();
   const location = useLocation();

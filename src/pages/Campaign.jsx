@@ -277,7 +277,46 @@ const Campaign = () => {
                 </div>
               </>
             )}
+
+            {registered && (
+            <div className="grid-100 campaign-funds">
+              <button
+                className="btn-theme"
+                onClick={async () => {
+                  document.addEventListener("click", disableClick);
+                  const notification = toast.loading("Processing withdrawal");
+                  if (parseFloat(campaignData.currentProgress) <= 0) {
+                    toast.error("Campaign's Account is empty cannot withdraw", {
+                      id: notification,
+                    });
+                    document.body.style.pointerEvents = "auto";
+                    document.body.style.cursor = "auto";
+                  } else {
+                    const result = await withdraw(
+                      campaignData.address,
+                      address
+                    );
+                    if (result) {
+                      toast.success("Withdrawal successful", {
+                        id: notification,
+                      });
+                      setTimeout(() => window.location.reload(), 1000);
+                    } else {
+                      toast.error("Withdrawal failed", { id: notification });
+                      document.body.style.pointerEvents = "auto";
+                      document.body.style.cursor = "auto";
+                    }
+                  }
+                  document.removeEventListener("click", disableClick);
+                }}
+              >
+                Withdraw Funds
+              </button>
+            </div>
+          )}
+
           </div>
+          {registered && campaignData.author !== address && ( 
           <div className="grid-50 campaign-form">
             <div className="grid-100 campaign-funds">
               <input
@@ -329,43 +368,9 @@ const Campaign = () => {
               </button>
             </div>
           </div>
-          <div className="grid-50"></div>
-          {registered && (
-            <div className="grid-50 campaign-funds">
-              <button
-                className="btn-theme"
-                onClick={async () => {
-                  document.addEventListener("click", disableClick);
-                  const notification = toast.loading("Processing withdrawal");
-                  if (parseFloat(campaignData.currentProgress) <= 0) {
-                    toast.error("Campaign's Account is empty cannot withdraw", {
-                      id: notification,
-                    });
-                    document.body.style.pointerEvents = "auto";
-                    document.body.style.cursor = "auto";
-                  } else {
-                    const result = await withdraw(
-                      campaignData.address,
-                      address
-                    );
-                    if (result) {
-                      toast.success("Withdrawal successful", {
-                        id: notification,
-                      });
-                      setTimeout(() => window.location.reload(), 1000);
-                    } else {
-                      toast.error("Withdrawal failed", { id: notification });
-                      document.body.style.pointerEvents = "auto";
-                      document.body.style.cursor = "auto";
-                    }
-                  }
-                  document.removeEventListener("click", disableClick);
-                }}
-              >
-                Withdraw Funds
-              </button>
-            </div>
           )}
+
+          <div className="grid-50"></div>
         </div>
       </div>
     </section>
