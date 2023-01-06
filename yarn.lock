@@ -1153,7 +1153,7 @@ globals@^11.1.0:
   resolved "https://registry.yarnpkg.com/globals/-/globals-11.12.0.tgz#ab8795338868a0babd8525758018c2a7eb95c42e"
   integrity sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==
 
-goober@^2.1.10:
+goober@2.1.11, goober@^2.1.10:
   version "2.1.11"
   resolved "https://registry.yarnpkg.com/goober/-/goober-2.1.11.tgz#bbd71f90d2df725397340f808dbe7acc3118e610"
   integrity sha512-5SS2lmxbhqH0u9ABEWq7WPU69a4i2pYcHeCxqaNq6Cw3mnrF0ghWNM4tEGid4dKy8XNIAUbuThuozDHHKJVh3A==
@@ -1365,6 +1365,13 @@ react-icons@^4.7.1:
   version "4.7.1"
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.7.1.tgz#0f4b25a5694e6972677cb189d2a72eabea7a8345"
   integrity sha512-yHd3oKGMgm7zxo3EA7H2n7vxSoiGmHk5t6Ou4bXsfcgWyhfDKMpyKfhHR6Bjnn63c+YXBLBPUql9H4wPJM6sXw==
+
+react-multistep@^5.3.4:
+  version "5.3.4"
+  resolved "https://registry.yarnpkg.com/react-multistep/-/react-multistep-5.3.4.tgz#ed4075a35a6356af89ed913d2454b4c4d4da47a0"
+  integrity sha512-a2HL2xvax1NuUYvj9sWF6KOIIALeWWMu3wtQFRdzFK1WRXbss56gyx1SvunS6yn6yUiIjv3yiQJ8Nke6UEbzwA==
+  dependencies:
+    goober "2.1.11"
 
 react-refresh@^0.14.0:
   version "0.14.0"
