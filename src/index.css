@@ -26,6 +26,7 @@ html{
     outline: none;
     text-decoration: none;
     box-sizing: border-box;  
+    overflow: hidden;
 }
 
 ::before, ::after
@@ -166,6 +167,7 @@ html{
     float: left;
     display: flex;
     justify-content: flex-end;
+    margin-left: 40%;
 }
 
 .nav .nav-head .nav-head-link
@@ -1211,6 +1213,58 @@ html{
 .campaign-funds button
 {
     width: 25vh;
+}
+
+.widget
+{
+    width: 30vh;
+    background-color: var(--bg-color-300);
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    border: 1px solid var(--text-color-100);
+}
+
+.widget-off
+{
+    position: absolute;
+    top: 25vh;
+    right: -25vh;
+}
+
+.widget-on
+{
+    position: absolute;
+    top: 25vh;
+    right: 0;
+}
+
+.widget-grid
+{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 4% 0;
+}
+
+.widget-grid div
+{
+    color: var(--text-color-100);
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.widget-img
+{
+    position: absolute;
+    left: 10px;
+    top: 9px;
+}
+
+.widget-balance
+{
+    padding-right: 2%;
 }
 
 /* media query begins */
