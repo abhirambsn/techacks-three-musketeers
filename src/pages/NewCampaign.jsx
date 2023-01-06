@@ -3,6 +3,8 @@ import { FaArrowLeft } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { disableClick } from "../utils/functions";
 import { createNewCampaign } from "../utils/interact";
+import { Cloudinary } from "@cloudinary/url-gen";
+import PictureUploadBtn from "../components/PictureUploadBtn";
 
 const NewCampaign = () => {
   const [name, setName] = useState("");
@@ -11,6 +13,7 @@ const NewCampaign = () => {
   const [projectPeriod, setProjectPeriod] = useState(0);
   const [totalAmt, setTotalAmt] = useState(0);
   const [stageWiseAmt, setStageWiseAmt] = useState({});
+  const [imgUrl, setImgUrl] = useState("");
 
   const [part2, setPart2] = useState(false);
 
@@ -24,6 +27,10 @@ const NewCampaign = () => {
     }
     return Math.round(parseInt(projectPeriod) / parseInt(stagePeriod));
   };
+
+  const cld = new Cloudinary({
+    url: import.meta.env.VITE_CLOUDINARY_URL,
+  });
 
   return (
     <section className="section form-page" id="form-page">
@@ -46,7 +53,7 @@ const NewCampaign = () => {
           <div className="form-circle-3"></div>
         </div>
         <div className="grid-100 form-div">
-          <form className="form-form">
+          <div className="form-form">
             <div className="form-left">
               <div className="form-group">
                 <label htmlFor="title">Campaign title: </label>
@@ -94,7 +101,24 @@ const NewCampaign = () => {
                 />
               </div>
               <div className="form-group">
-                <button className="btn-theme" onClick={() => setPart2(true)}>
+                <PictureUploadBtn
+                  disabled={imgUrl.length > 0}
+                  setImgUrl={setImgUrl}
+                />
+                <button
+                  onClick={() => setImgUrl("")}
+                  className={
+                    imgUrl.length <= 0 ? "btn-disabled" : "btn-inverse"
+                  }
+                  disabled={imgUrl.length <= 0}
+                >
+                  Reset
+                </button>
+                <button
+                  className={imgUrl.length <= 0 ? "btn-disabled" : "btn-theme"}
+                  disabled={imgUrl.length <= 0}
+                  onClick={() => setPart2(true)}
+                >
                   Proceed
                 </button>
               </div>
@@ -163,7 +187,7 @@ const NewCampaign = () => {
                 </div>
               </div>
             )}
-          </form>
+          </div>
         </div>
       </div>
     </section>
