@@ -2,6 +2,7 @@ import axios from "axios";
 import { ethers } from "ethers";
 import campaignAbi from "../abi/Campaign.json";
 import cfundingAbi from "../abi/CFunding.json";
+import votingfactoryAbi from "../abi/VotingFactory.json";
 
 export const getBalance = async (walletAddress) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -42,16 +43,16 @@ export const registerAsInvestor = async (contractAddress, walletAddress) => {
     signer
   );
   try {
-    const resp = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/${contractAddress}/registerInvestor`,
-      {
-        investorAddress: walletAddress,
-        name,
-      }
-    );
-    if (resp.status !== 200) {
-      return false;
-    }
+    // const resp = await axios.post(
+    //   `${import.meta.env.VITE_API_URL}/api/${contractAddress}/registerInvestor`,
+    //   {
+    //     investorAddress: walletAddress,
+    //     name,
+    //   }
+    // );
+    // if (resp.status !== 200) {
+    //   return false;
+    // }
     const txn = await contract.registerInvestor(name);
     await txn.wait(1);
     return true;
@@ -136,18 +137,30 @@ export const getStages = async (contractAddress, nStages) => {
     campaignAbi.abi,
     signer
   );
+  const votingFactoryContract = new ethers.Contract(
+    import.meta.env.VITE_VOTING_FACTORY,
+    votingfactoryAbi.abi,
+    signer
+  );
   try {
     let stages = [];
     for (let i = 1; i <= nStages; i++) {
       const stageDetail = await contract.getStageDetail(i);
-      const resp = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/${contractAddress}/${i}/check`
-      );
+      // const resp = await axios.get(
+      //   `${import.meta.env.VITE_API_URL}/api/${contractAddress}/${i}/check`
+      // );
+      let vl = false;
+      try {
+        const valid = await votingFactoryContract.checkVote(contractAddress, i);
+        vl = valid;
+      } catch (e) {
+        vl = false;
+      }
       stages.push({
         amount: ethers.utils.formatEther(stageDetail.amountNeeded),
         deadline: new Date(stageDetail.deadline.toNumber() * 1000),
         voted: stageDetail.voted,
-        created: resp.data.isValid,
+        created: vl,
       });
     }
     return stages;
@@ -233,19 +246,34 @@ export const voteForNextStage = async (
   yes
 ) => {
   try {
-    const req = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/${contractAddress}/${stage}/vote`,
-      {
-        yes,
-        investorAddress: walletAddress,
-      }
-    );
+    // const req = await axios.post(
+    //   `${import.meta.env.VITE_API_URL}/api/${contractAddress}/${stage}/vote`,
+    //   {
+    //     yes,
+    //     investorAddress: walletAddress,
+    //   }
+    // );
 
-    if (req.status === 201) {
-      alert(req.data.message);
-      return req.data.success;
-    }
-    return req.data.success;
+    // if (req.status === 201) {
+    //   alert(req.data.message);
+    //   return req.data.success;
+    // }
+    // return req.data.success;
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const votingFactoryContract = new ethers.Contract(
+      import.meta.env.VITE_VOTING_FACTORY,
+      votingfactoryAbi.abi,
+      signer
+    );
+    const txn = await votingFactoryContract.vote(
+      contractAddress,
+      walletAddress,
+      stage,
+      yes
+    );
+    await txn.wait(1);
+    return true;
   } catch (e) {
     console.error(e);
     return false;
@@ -254,37 +282,29 @@ export const voteForNextStage = async (
 
 export const createVote = async (contractAddress, stage, powText) => {
   try {
-    let resp = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/${contractAddress}/${stage}/check`
+    // let resp = await axios.get(
+    //   `${import.meta.env.VITE_API_URL}/api/${contractAddress}/${stage}/check`
+    // );
+    // const isValid = resp.data.isValid;
+    // if (isValid) {
+    //   console.log("Vote already created");
+    //   return true;
+    // }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const votingFactoryContract = new ethers.Contract(
+      import.meta.env.VITE_VOTING_FACTORY,
+      votingfactoryAbi.abi,
+      signer
     );
-    const isValid = resp.data.isValid;
-    if (isValid) {
-      console.log("Vote already created");
-      return true;
-    }
-    resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/${contractAddress}/`, {
-      stage,
-      powText,
-    });
-    if (resp.status === 201) {
-      return true;
-    } else {
-      alert("Failed");
-      return false;
-    }
-  } catch (e) {
-    console.error(e);
-    return false;
-  }
-};
 
-export const checkVote = async (contractAddress, stage) => {
-  try {
-    const resp = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/${contractAddress}/${stage}/check`
+    const txn = await votingFactoryContract.createVote(
+      contractAddress,
+      stage,
+      powText
     );
-    const isValid = resp.data.isValid;
-    return isValid;
+    await txn.wait(1);
+    return true;
   } catch (e) {
     console.error(e);
     return false;
@@ -293,17 +313,53 @@ export const checkVote = async (contractAddress, stage) => {
 
 export const checkUserVote = async (contractAddress, walletAddress, stage) => {
   try {
-    const resp = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/${contractAddress}/${stage}/check`,
-      { address: walletAddress }
+    // const resp = await axios.post(
+    //   `${import.meta.env.VITE_API_URL}/api/${contractAddress}/${stage}/check`,
+    //   { address: walletAddress }
+    // );
+    // const voted = resp.data;
+    // return voted;
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const votingFactoryContract = new ethers.Contract(
+      import.meta.env.VITE_VOTING_FACTORY,
+      votingfactoryAbi.abi,
+      signer
     );
-    const voted = resp.data;
-    return voted;
+    try {
+      const voted = await votingFactoryContract.checkUserVote(
+        contractAddress,
+        walletAddress,
+        stage
+      );
+      return voted;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   } catch (e) {
     console.error(e);
     return false;
   }
 };
+
+export const getVoteOfUser = async (contractAddress, walletAddress, stage) => {
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const votingFactoryContract = new ethers.Contract(
+      import.meta.env.VITE_VOTING_FACTORY,
+      votingfactoryAbi.abi,
+      signer
+    );
+
+    const data = await votingFactoryContract.getVoteOfUser(contractAddress, walletAddress, stage);
+    return data;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+}
 
 export const completeStageVoting = async (contractAddress, stage) => {
   try {
