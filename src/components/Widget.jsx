@@ -14,6 +14,7 @@ const Widget = () => {
 
     useEffect(() => {
       ;(async () => {
+        if (!address) return;
         setBalance(await getBalance(address));
       })();
     }, [address]);

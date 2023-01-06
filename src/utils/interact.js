@@ -4,11 +4,12 @@ import campaignAbi from "../abi/Campaign.json";
 import cfundingAbi from "../abi/CFunding.json";
 import votingfactoryAbi from "../abi/VotingFactory.json";
 
-export const getBalance = async (walletAddress) => {
+export const getBalance = async () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  let balance = await provider.getBalance(walletAddress);
+  const signer = provider.getSigner();
+  let balance = await signer.getBalance();
   balance = ethers.utils.formatEther(balance);
-  return parseFloat(balance).toFixed(2);
+  return parseFloat(balance).toFixed(4);
 };
 
 export const checkInvestorship = async (contractAddress, walletAddress) => {
@@ -353,13 +354,17 @@ export const getVoteOfUser = async (contractAddress, walletAddress, stage) => {
       signer
     );
 
-    const data = await votingFactoryContract.getVoteOfUser(contractAddress, walletAddress, stage);
+    const data = await votingFactoryContract.getVoteOfUser(
+      contractAddress,
+      walletAddress,
+      stage
+    );
     return data;
   } catch (e) {
     console.error(e);
     return false;
   }
-}
+};
 
 export const completeStageVoting = async (contractAddress, stage) => {
   try {
