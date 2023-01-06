@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaWallet } from "react-icons/fa";
 import { useLocation } from 'react-router-dom';
 import useAccount from '../hooks/useAccount';
@@ -11,13 +11,12 @@ const Widget = () => {
     const [balance, setBalance] = useState("0");
     const provider = useProvider();
     const address = useAccount(provider);
-    const location = useLocation();
 
-    useLayoutEffect(() => {
+    useEffect(() => {
       ;(async () => {
         setBalance(await getBalance(address));
       })();
-    }, [location, address]);
+    }, [address]);
     
 
   return (
