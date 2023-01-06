@@ -195,7 +195,8 @@ export const createNewCampaign = async (
   stagePeriod,
   projectPeriod,
   totalAmt,
-  stages
+  stages,
+  imgUrl
 ) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -211,7 +212,8 @@ export const createNewCampaign = async (
       stagePeriod,
       projectPeriod,
       ethers.utils.parseEther(totalAmt),
-      stages.map((stage) => ethers.utils.parseEther(stage))
+      stages.map((stage) => ethers.utils.parseEther(stage)),
+      imgUrl
     );
     await txn.wait(1);
     return true;

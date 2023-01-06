@@ -42,6 +42,7 @@ const Listing = () => {
               target={cD.totalAmountNeeded}
               deadline={cD.projectDeadline}
               linkTo={`/campaign/${cD.address}`}
+              coverImg={cD.coverImg}
             />
           </div>
         ))}

@@ -155,7 +155,8 @@ const NewCampaign = () => {
                         stagePeriod,
                         projectPeriod,
                         totalAmt,
-                        Object.values(stageWiseAmt)
+                        Object.values(stageWiseAmt),
+                        imgUrl
                       );
                       if (!result) {
                         toast.error("Failure", { id: notification });

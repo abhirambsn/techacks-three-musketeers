@@ -16,6 +16,7 @@ contract Campaign {
     bool public goalReached;
     bool public cancelled;
     uint public projectDeadlineStartTime;
+    string public coverImg;
 
     address payable _owner;
     
@@ -45,7 +46,7 @@ contract Campaign {
     event FundsReleased(Stage s);
     event FundsPulledOut(Investor i);
     
-    constructor(string memory _name, string memory _description, address _author, uint _sPeriod, uint _totalProjectTime, uint _totalAmountNeeded, uint[] memory _stages) {
+    constructor(string memory _name, string memory _description, address _author, uint _sPeriod, uint _totalProjectTime, uint _totalAmountNeeded, uint[] memory _stages, string memory _coverImg) {
         name = _name;
         description = _description;
         author = payable(_author);
@@ -60,6 +61,7 @@ contract Campaign {
             stages.push(Stage(_stages[i], stagePeriod, false));
             // curTime += stagePeriod;
         }
+        coverImg = _coverImg;
         isValid = true;
         goalReached = false;
         investorCount = 0;

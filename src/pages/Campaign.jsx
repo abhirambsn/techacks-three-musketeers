@@ -80,7 +80,7 @@ const Campaign = () => {
           <div className="grid-20 disp-no"></div>
           <div className="grid-60 small-padd-5">
             <div className="campaign-img">
-              <img src="https://picsum.photos/400/300" alt="img-desc" />
+              <img src={campaignData.coverImg} alt="img-desc" />
             </div>
           </div>
           <div className="grid-20 disp-no"></div>
