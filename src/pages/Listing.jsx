@@ -16,7 +16,7 @@ const Listing = () => {
       <div className="listing-grid">
         <div className="grid-20">
           <a href="/">
-            <button className="btn-theme">
+            <button className="btn-inverse">
               <FaArrowLeft className="listing-btn" />
             </button>
           </a>
@@ -26,7 +26,7 @@ const Listing = () => {
         </div>
         <div className="grid-20">
           <a href="/new">
-            <button className="btn-theme">
+            <button className="btn-inverse">
               Start a campaign{"  "}
               <FaPlus className="listing-btn" />
             </button>
