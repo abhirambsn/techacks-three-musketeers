@@ -10,7 +10,6 @@ import {
   voteForNextStage,
   createVote,
   checkUserVote,
-  completeStageVoting,
   getVoteOfUser,
 } from "../utils/interact";
 
