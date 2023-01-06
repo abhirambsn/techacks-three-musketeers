@@ -131,9 +131,11 @@ const Campaign = () => {
             <div className="campaign-stage-period">
               Stage period: {campaignData.stagePeriod / 60 / 60 / 24} day(s)
             </div>
-            <div className="campaign-investment-ratio">
-              Investment Ratio: {ratio} %
-            </div>
+            {registered && (
+              <div className="campaign-investment-ratio">
+                Investment Ratio: {ratio} %
+              </div>
+            )}
           </div>
           <div className="grid-20 disp-no"></div>
         </div>
@@ -151,7 +153,7 @@ const Campaign = () => {
           </div>
           <div className="grid-50 campaign-funds grid">
             <div className="grid-100 campaign-funds">
-              {(!registered && campaignData.author !== address) && (
+              {!registered && campaignData.author !== address && (
                 <button
                   className="btn-theme"
                   onClick={async () => {
