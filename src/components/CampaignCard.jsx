@@ -21,7 +21,7 @@ const CampaignCard = ({
   return (
     <div className="campaignCard">
       <div className="campaignCardImg">
-        <img height={300} width={400} style={{objectFit: 'cover'}} src={image} alt="#" />
+        <img height={200} width={300} style={{objectFit: 'cover'}} src={image} alt="#" />
       </div>
       <div className="campaignCardData">
         <div className="campaignCardHead grid-100">
