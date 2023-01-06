@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { toast } from "react-hot-toast";
 import { FaArrowLeft } from "react-icons/fa";
+import { toast } from "react-hot-toast";
 import { disableClick } from "../utils/functions";
 import { createNewCampaign } from "../utils/interact";
+
 const NewCampaign = () => {
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
@@ -11,161 +12,158 @@ const NewCampaign = () => {
   const [totalAmt, setTotalAmt] = useState(0);
   const [stageWiseAmt, setStageWiseAmt] = useState({});
 
+  const [part2, setPart2] = useState(false);
+
   const calcNstages = () => {
-    if (stagePeriod == 0 || projectPeriod == 0) {
+    if (
+      stagePeriod.length === 0 ||
+      parseInt(stagePeriod) == 0 ||
+      parseInt(projectPeriod) == 0
+    ) {
       return 0;
     }
-    return Math.round(projectPeriod / stagePeriod);
+    return Math.round(parseInt(projectPeriod) / parseInt(stagePeriod));
   };
 
   return (
-    <section className="section form" id="form">
+    <section className="section form-page" id="form-page">
       <div className="form-grid">
-        <div className="grid-100 form-back-btn">
-          <a href="/list">
-            <button className="btn-theme">
+        <div className="grid-20">
+          <a href="/">
+            <button className="btn-inverse">
               <FaArrowLeft className="listing-btn" />
             </button>
           </a>
         </div>
-        <div className="grid-100 form-head">
-          <p>Start a campaign!</p>
+        <div className="grid-60 form-head">
+          <p>Start a campaign</p>
         </div>
-        <div className="grid-100 form-container">
-          <div className="form-form">
-            <div className="grid-50 form-left">
+        <div className="grid-20"></div>
+        <div className="grid-100 form-decoration">
+          <div className="form-circle-0"></div>
+          <div className="form-circle-1"></div>
+          <div className="form-circle-2"></div>
+          <div className="form-circle-3"></div>
+        </div>
+        <div className="grid-100 form-div">
+          <form className="form-form">
+            <div className="form-left">
               <div className="form-group">
-                <label htmlFor="campaign-title">Campaign Title: </label>
+                <label htmlFor="title">Campaign title: </label>
                 <input
                   type="text"
-                  name="campaign-title"
-                  className="form-control"
                   value={name}
+                  name="title"
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="What would you like to name your campaign?"
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="campaign-desc">Campaign Description: </label>
+                <label htmlFor="description">Campaign description: </label>
                 <textarea
-                  name="campaign-desc"
-                  className="form-control"
+                  name="description"
                   value={desc}
                   onChange={(e) => setDesc(e.target.value)}
-                  placeholder="A crisp description to attract investors to your project"
                 ></textarea>
               </div>
               <div className="form-group">
-                <label htmlFor="campaign-title">Campaign Target: </label>
+                <label htmlFor="period">Project period: </label>
                 <input
-                  type="number"
-                  name="campaign-title"
-                  className="form-control"
-                  placeholder="How much amount you need to raise? (in MATIC)"
+                  type="text"
+                  name="period"
+                  value={projectPeriod}
+                  onChange={(e) => setProjectPeriod(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="stage">Period per stage: </label>
+                <input
+                  type="text"
+                  name="stage"
+                  value={stagePeriod}
+                  onChange={(e) => setStagePeriod(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="target">Amount required: </label>
+                <input
+                  type="text"
+                  name="target"
                   value={totalAmt}
                   onChange={(e) => setTotalAmt(e.target.value)}
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="campaign-title">
-                  Project Period (in Days):{" "}
-                </label>
-                <input
-                  type="number"
-                  name="campaign-title"
-                  className="form-control"
-                  value={projectPeriod}
-                  onChange={(e) => setProjectPeriod(parseInt(e.target.value))}
-                  placeholder="How much time is required to finish the project?"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="campaign-title">Stage Period (in Days): </label>
-                <input
-                  type="number"
-                  name="campaign-title"
-                  className="form-control"
-                  value={stagePeriod}
-                  onChange={(e) => setStagePeriod(parseInt(e.target.value))}
-                  placeholder="How much time is required to finish a single stage?"
-                />
-              </div>
-              <div className="form-group padd-5">
-                <button
-                  className="btn-theme"
-                  onClick={async () => {
-                    document.addEventListener("click", disableClick);
-                    const notification = toast.loading(
-                      "Campaign creation in progress..."
-                    );
-                    const result = await createNewCampaign(
-                      name,
-                      desc,
-                      stagePeriod,
-                      projectPeriod,
-                      totalAmt,
-                      Object.values(stageWiseAmt)
-                    );
-                    if (!result) {
-                      toast.error("Failure", { id: notification });
-                    } else {
-                      setName("");
-                      setDesc("");
-                      setProjectPeriod(0);
-                      setTotalAmt(0);
-                      setStagePeriod(0);
-                      setStageWiseAmt({});
-                      toast.success("Success", { id: notification });
-                      setTimeout(() => (window.location.href = "/list"), 1000);
-                    }
-                    document.body.style.pointerEvents = "auto";
-                    document.body.style.cursor = "auto";
-                    document.removeEventListener("click", disableClick);
-                  }}
-                >
-                  Create Campaign
+                <button className="btn-theme" onClick={() => setPart2(true)}>
+                  Proceed
                 </button>
               </div>
             </div>
-            <div className="grid-50 form-right">
-              {(stagePeriod !== "" ||
-                projectPeriod !== "" ||
-                projectPeriod !== 0 ||
-                stagePeriod !== 0) && (
-                <>
-                  {Array(calcNstages())
-                    .fill(0)
-                    .map((_, idx) => (
-                      <div className="form-group" key={idx}>
-                        <label htmlFor={`stage-${idx + 1}`}>
-                          Stage {idx + 1}
-                        </label>
-                        <input
-                          type="number"
-                          name={`stage-${idx + 1}`}
-                          className="form-control"
-                          value={stageWiseAmt[idx]}
-                          onChange={(e) =>
-                            setStageWiseAmt({
-                              ...stageWiseAmt,
-                              [idx]: e.target.value,
-                            })
-                          }
-                          placeholder="Amount to be used in stage 1?"
-                        />
-                        <textarea
-                          name={`stage-${idx + 1}`}
-                          className="form-control"
-                          placeholder={`"Stage - ${
-                            idx + 1
-                          } targets and how you plan on acheiving them?"`}
-                        ></textarea>
-                      </div>
-                    ))}
-                </>
-              )}
-            </div>
-          </div>
+            {part2 && (
+              <div className="form-right">
+                {Array(calcNstages())
+                  .fill(0)
+                  .map((_, i) => (
+                    <div key={i} className="form-group">
+                      <label htmlFor={`stage-${i + 1}`}>
+                        Fund needed for Stage {i + 1}
+                      </label>
+                      <input
+                        type="number"
+                        value={stageWiseAmt[i]}
+                        onChange={(e) =>
+                          setStageWiseAmt({
+                            ...stageWiseAmt,
+                            [i]: e.target.value,
+                          })
+                        }
+                        name={`stage-${i + 1}`}
+                      />
+                    </div>
+                  ))}
+
+                <div className="form-group">
+                  <button
+                    className="btn-theme"
+                    onClick={async () => {
+                      document.addEventListener("click", disableClick);
+                      const notification = toast.loading(
+                        "Campaign creation in progress..."
+                      );
+                      const result = await createNewCampaign(
+                        name,
+                        desc,
+                        stagePeriod,
+                        projectPeriod,
+                        totalAmt,
+                        Object.values(stageWiseAmt)
+                      );
+                      if (!result) {
+                        toast.error("Failure", { id: notification });
+                      } else {
+                        setName("");
+                        setDesc("");
+                        setProjectPeriod(0);
+                        setTotalAmt(0);
+                        setStagePeriod(0);
+                        setStageWiseAmt({});
+                        toast.success("Success", { id: notification });
+                        setTimeout(
+                          () => (window.location.href = "/list"),
+                          1000
+                        );
+                      }
+                      document.body.style.pointerEvents = "auto";
+                      document.body.style.cursor = "auto";
+                      document.removeEventListener("click", disableClick);
+                    }}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            )}
+          </form>
         </div>
       </div>
     </section>
