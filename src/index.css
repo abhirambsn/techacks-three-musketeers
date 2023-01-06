@@ -1222,6 +1222,7 @@ html{
     border-top-left-radius: 50px;
     border-bottom-left-radius: 50px;
     border: 1px solid var(--text-color-100);
+    transition: all 0.3s ease;
 }
 
 .widget-off
@@ -1235,7 +1236,7 @@ html{
 {
     position: absolute;
     top: 25vh;
-    right: 0;
+    right: -1px;
 }
 
 .widget-grid
