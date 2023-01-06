@@ -47,7 +47,10 @@ const NewCampaign = () => {
           <div className="form-circle-2"></div>
           <div className="form-circle-3"></div>
         </div>
-        <div className="grid-100 form-div">
+        <div className="bor">
+
+        
+        <div className="grid-100 form-div" >
           <div className="form-form">
             <div className="form-left">
               <div className="form-group">
@@ -96,11 +99,24 @@ const NewCampaign = () => {
                 />
               </div>
               <div className="form-group">
-                <PictureUploadBtn
+              <PictureUploadBtn
                   disabled={imgUrl.length > 0}
                   setImgUrl={setImgUrl}
                 />
+              </div>
+              <div className="grid">
+              <div className="form-group">
+                
                 <button
+                  className={imgUrl.length <= 0 ? "btn-disabled" : "btn-theme"}
+                  disabled={imgUrl.length <= 0}
+                  onClick={() => setPart2(true)}
+                >
+                  Proceed
+                </button>
+                </div>
+                <div className="form-group">
+              <button
                   onClick={() => setImgUrl("")}
                   className={
                     imgUrl.length <= 0 ? "btn-disabled" : "btn-inverse"
@@ -109,13 +125,8 @@ const NewCampaign = () => {
                 >
                   Reset
                 </button>
-                <button
-                  className={imgUrl.length <= 0 ? "btn-disabled" : "btn-theme"}
-                  disabled={imgUrl.length <= 0}
-                  onClick={() => setPart2(true)}
-                >
-                  Proceed
-                </button>
+              </div>
+              
               </div>
             </div>
             {part2 && (
@@ -183,6 +194,7 @@ const NewCampaign = () => {
               </div>
             )}
           </div>
+        </div>
         </div>
       </div>
     </section>

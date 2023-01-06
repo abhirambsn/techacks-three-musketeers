@@ -1103,44 +1103,48 @@ html{
 .form-circle-0
 {
     position: absolute;
-    background-color: var(--bg-color-300);
-    width: 28vh;
-    height: 28vh;
+    border: 7vh solid var(--bg-color-500);
+    background-color: white;
+    width: 32vh;
+    height: 32vh;
     border-radius: 50%;
-    top: -25vh;
+    top: -20vh;
     right: -20vh;
 }
 
 .form-circle-1
 {
     position: absolute;
-    background-color: var(--bg-color-300);
-    width: 40vh;
-    height: 40vh;
+    /*border: 12vh solid var(--bg-color-500);*/
+    background-color: var(--bg-color-500);
+    width: 50vh;
+    height: 50vh;
     border-radius: 50%;
-    right: -20vh;
+    right: -22vh;
 }
 
 .form-circle-2
 {
     position: absolute;
-    background-color: var(--bg-color-300);
-    width: 80vh;
-    height: 80vh;
+     background-color: white;
+     border: 10vh solid var(--bg-color-500);
+    width: 73vh;
+    height: 73vh;
     border-radius: 50%;
-    top: 35vh;
-    right: -25vh;
+    top: 30vh;
+    right: -20vh;
 }
 
 .form-circle-3
 {
     position: absolute;
-    background-color: var(--bg-color-300);
-    width: 80vh;
-    height: 80vh;
+    background-color: var(--bg-color-500);
+    /*border: 20vh solid var(--bg-color-500);*/
+    width: 100vh;
+    height: 100vh;
     border-radius: 50%;
-    top: 65vh;
-    right: 40vh;
+    top: 68vh;
+    right: -18vh;
 }
 
 .form-form
@@ -1192,7 +1196,7 @@ html{
 
 .form-right .form-group input
 {
-    width: 50vh;
+    width: 40vh;
     height: 5vh;
     border: 1px solid var(--bg-color-500);
     border-radius: 5px;
@@ -1277,6 +1281,16 @@ html{
 {
     padding-right: 2%;
     overflow: hidden;
+}
+
+.grid .form-group
+{
+    margin-right: 5px;
+}
+
+.bor {
+    border-left: 1em solid var(--bg-color-500);
+
 }
 
 /* media query begins */
