@@ -617,6 +617,7 @@ html{
 .campaignCardImg img
 {
     border-radius: 20px;
+    object-fit: cover;
 }
 
 .grid-50

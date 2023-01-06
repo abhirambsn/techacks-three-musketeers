@@ -35,6 +35,7 @@ const getCampaignDetail = async (provider, signer, campaignAddr) => {
     ).toLocaleDateString("en-US", { dateStyle: "medium" });
   }
   let author = await campaignContract.author();
+  let coverImg = await campaignContract.coverImg();
 
   return {
     author,
@@ -48,6 +49,7 @@ const getCampaignDetail = async (provider, signer, campaignAddr) => {
     currentStage,
     currentProgress: await getEscrowBalance(provider, escrowAddr),
     projectDeadline,
+    coverImg
   };
 };
 

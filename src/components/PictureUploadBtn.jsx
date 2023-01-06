@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const PictureUploadBtn = ({ setImgUrl, disabled }) => {
+const PictureUploadBtn = ({ setImgUrl, imgUrl, disabled }) => {
   useEffect(() => {
     const cloudname = "dl5h5jhdk";
     const preset = "etbnphr9";
@@ -11,9 +11,9 @@ const PictureUploadBtn = ({ setImgUrl, disabled }) => {
       },
       (error, result) => {
         if (!error && result && result.event === "success") {
-          console.log("Done! Here is the image info: ", result.info);
-          console.log("URL:", result.info.secure_url);
           setImgUrl(result.info.secure_url);
+          uploadWidget.close();
+          alert(`Image Uploaded at ${result.info.secure_url}`);
         }
       }
     );
@@ -35,6 +35,7 @@ const PictureUploadBtn = ({ setImgUrl, disabled }) => {
       >
         Upload Cover Picture
       </button>
+      
     </div>
   );
 };

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { ethers } from "ethers";
+import { useEffect, useState } from "react";
 
 const useAccount = (provider) => {
   const [address, setAddress] = useState(null);
