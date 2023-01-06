@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { disableClick } from "../utils/functions";
@@ -13,84 +13,108 @@ const Form = () => {
   const [stageWiseAmt, setStageWiseAmt] = useState({});
 
   const calcNstages = () => {
-    if (int(stagePeriod) == 0 || int(projectPeriod) == 0) {
+    if (
+      stagePeriod.length === 0 ||
+      parseInt(stagePeriod) == 0 ||
+      parseInt(projectPeriod) == 0
+    ) {
       return 0;
     }
-    return Math.round(projectPeriod / stagePeriod);
+    return Math.round(parseInt(projectPeriod) / parseInt(stagePeriod));
   };
 
-  function rightForm()
-  {
-    /* Abhiram go here */
-  }
-
   return (
-    <section className='section form-page' id='form-page'>
-      <div className='form-grid'>
-        <div className='grid-20'>
-        <a href="/">
+    <section className="section form-page" id="form-page">
+      <div className="form-grid">
+        <div className="grid-20">
+          <a href="/">
             <button className="btn-inverse">
               <FaArrowLeft className="listing-btn" />
             </button>
           </a>
         </div>
-        <div className='grid-60 form-head'>
+        <div className="grid-60 form-head">
           <p>Start a campaign</p>
         </div>
-        <div className='grid-20'></div>
-        <div className='grid-100 form-decoration'>
-          <div className='form-circle-0'></div>
-          <div className='form-circle-1'></div>
-          <div className='form-circle-2'></div>
-          <div className='form-circle-3'></div>
+        <div className="grid-20"></div>
+        <div className="grid-100 form-decoration">
+          <div className="form-circle-0"></div>
+          <div className="form-circle-1"></div>
+          <div className="form-circle-2"></div>
+          <div className="form-circle-3"></div>
         </div>
-        <div className='grid-100 form-div'>
-          <form className='form-form'>
-            <div className='form-left'>
-              <div className='form-group'>
+        <div className="grid-100 form-div">
+          <form className="form-form">
+            <div className="form-left">
+              <div className="form-group">
                 <label htmlFor="title">Campaign title: </label>
-                <input type="text" value={name} name="title" onChange={(e) => setName(e.target.value)} />
+                <input
+                  type="text"
+                  value={name}
+                  name="title"
+                  onChange={(e) => setName(e.target.value)}
+                />
               </div>
-              <div className='form-group'>
+              <div className="form-group">
                 <label htmlFor="description">Campaign description: </label>
-                <textarea name="description" value={desc} onChange={(e) => setDesc(e.target.value)} ></textarea>
+                <textarea
+                  name="description"
+                  value={desc}
+                  onChange={(e) => setDesc(e.target.value)}
+                ></textarea>
               </div>
-              <div className='form-group'>
+              <div className="form-group">
                 <label htmlFor="period">Project period: </label>
-                <input type="text" name="period" value={projectPeriod} onChange={(e) => setProjectPeriod(parseInt(e.target.value))} />
+                <input
+                  type="text"
+                  name="period"
+                  value={projectPeriod}
+                  onChange={(e) => setProjectPeriod(e.target.value)}
+                />
               </div>
 
-              <div className='form-group'>
+              <div className="form-group">
                 <label htmlFor="stage">Period per stage: </label>
-                <input type="text" name="stage" value={stagePeriod} onChange={(e) => setStagePeriod(parseInt(e.target.value))} />
+                <input
+                  type="text"
+                  name="stage"
+                  value={stagePeriod}
+                  onChange={(e) => setStagePeriod(e.target.value)}
+                />
               </div>
-              <div className='form-group'>
+              <div className="form-group">
                 <label htmlFor="target">Amount required: </label>
-                <input type="text" name="target" value={totalAmt} onChange={(e) => setTotalAmt(e.target.value)} />
+                <input
+                  type="text"
+                  name="target"
+                  value={totalAmt}
+                  onChange={(e) => setTotalAmt(e.target.value)}
+                />
               </div>
-              <div className='form-group'>
-                <button className='btn-theme' onClick={rightForm()}>Proceed</button>
+              <div className="form-group">
+                <button className="btn-theme" onClick={rightForm()}>
+                  Proceed
+                </button>
               </div>
             </div>
-            <div className='form-right hidden'>
-              <div className='form-group'>
-                <label htmlFor="stage-1">Fund needed for stage 1</label>
-                <input type="text" name="stage-1" />
-              </div>
-              <div className='form-group'>
-                <label htmlFor="stage-1">Fund needed for stage 1</label>
-                <input type="text" name="stage-1" />
-              </div>
-              <div className='form-group'>
-                <label htmlFor="stage-1">Fund needed for stage 1</label>
-                <input type="text" name="stage-1" />
-              </div>
-              <div className='form-group'>
-                <label htmlFor="stage-1">Fund needed for stage 1</label>
-                <input type="text" name="stage-1" />
-              </div>
-              <div className='form-group'>
-                <button className='btn-theme'
+            <div className="form-right hidden">
+              {Array(calcNstages())
+                .fill(0)
+                .map((_, i) => (
+                  <div key={i} className="form-group">
+                    <label htmlFor={`stage-${i + 1}`}>
+                      Fund needed for Stage {i + 1}
+                    </label>
+                    <input type="number" value={stageWiseAmt[i]} onChange={e => setStageWiseAmt({
+                      ...stageWiseAmt,
+                      [i]: e.target.value
+                    })} name={`stage-${i + 1}`} />
+                  </div>
+                ))}
+
+              <div className="form-group">
+                <button
+                  className="btn-theme"
                   onClick={async () => {
                     document.addEventListener("click", disableClick);
                     const notification = toast.loading(
@@ -119,16 +143,17 @@ const Form = () => {
                     document.body.style.pointerEvents = "auto";
                     document.body.style.cursor = "auto";
                     document.removeEventListener("click", disableClick);
-                  }}>
-                    Submit
-                    </button>
+                  }}
+                >
+                  Submit
+                </button>
               </div>
             </div>
           </form>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Form
+export default Form;

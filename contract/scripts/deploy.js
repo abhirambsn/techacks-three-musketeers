@@ -7,12 +7,12 @@
 const hre = require("hardhat");
 
 async function main() {
-  // const CFunding = await hre.ethers.getContractFactory("CFunding");
-  // const cfunding = await CFunding.deploy("AB Funding");
+  const CFunding = await hre.ethers.getContractFactory("CFunding");
+  const cfunding = await CFunding.deploy("AB Funding");
 
-  // await cfunding.deployed();
+  await cfunding.deployed();
 
-  // console.log(`CFunding Contract Deployed at Address: ${cfunding.address}`);
+  console.log(`CFunding Contract Deployed at Address: ${cfunding.address}`);
 
   const VotingFactory = await hre.ethers.getContractFactory("VotingFactory");
   const votingFactory = await VotingFactory.deploy();
