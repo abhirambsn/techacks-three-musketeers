@@ -37,6 +37,8 @@ const getCampaignDetail = async (provider, signer, campaignAddr) => {
   let author = await campaignContract.author();
   let coverImg = await campaignContract.coverImg();
 
+  let cancelled = await campaignContract.cancelled();
+
   return {
     author,
     name,
@@ -49,7 +51,8 @@ const getCampaignDetail = async (provider, signer, campaignAddr) => {
     currentStage,
     currentProgress: await getEscrowBalance(provider, escrowAddr),
     projectDeadline,
-    coverImg
+    coverImg,
+    cancelled
   };
 };
 

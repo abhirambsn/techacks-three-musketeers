@@ -4,7 +4,7 @@ import { FaArrowLeft, FaPlus } from "react-icons/fa";
 import { useLoaderData, useLocation, useNavigation } from "react-router-dom";
 import { truncateDescription } from "../utils/functions";
 import LoaderComponent from "../components/LoaderComponent";
-import Widget from '../components/Widget'
+import Widget from "../components/Widget";
 const Listing = () => {
   const campaignData = useLoaderData();
   const navigation = useNavigation();
@@ -34,19 +34,22 @@ const Listing = () => {
             </button>
           </a>
         </div>
-        {campaignData.map((cD, i) => (
-          <div className="grid-30" key={i}>
-            <CampaignCard
-              title={cD.name}
-              image={cD.coverImg}
-              description={truncateDescription(cD.desc)}
-              raised={cD.currentProgress}
-              target={cD.totalAmountNeeded}
-              deadline={cD.projectDeadline}
-              linkTo={`/campaign/${cD.address}`}
-            />
-          </div>
-        ))}
+        {campaignData.map(
+          (cD, i) =>
+            !cD.cancelled && (
+              <div className="grid-30" key={i}>
+                <CampaignCard
+                  title={cD.name}
+                  image={cD.coverImg}
+                  description={truncateDescription(cD.desc)}
+                  raised={cD.currentProgress}
+                  target={cD.totalAmountNeeded}
+                  deadline={cD.projectDeadline}
+                  linkTo={`/campaign/${cD.address}`}
+                />
+              </div>
+            )
+        )}
       </div>
     </section>
   );
