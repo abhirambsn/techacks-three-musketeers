@@ -15,8 +15,7 @@ import Stats from "./pages/Stats";
 import NewCampaign from "./pages/NewCampaign";
 import { Toaster } from "react-hot-toast";
 import ResultPage from "./pages/ResultPage";
-import Form from "./pages/Form"
-import Widget from "./components/Widget"
+import Widget from "./components/Widget";
 
 const router = createBrowserRouter([
   {
@@ -72,10 +71,6 @@ const router = createBrowserRouter([
     loader: async ({ params }) => {
       return await getVotingResults(params.campaignAddress, params.stage);
     },
-  },
-  {
-    path: '/form',
-    element: <Form />
   },
 ]);
 
