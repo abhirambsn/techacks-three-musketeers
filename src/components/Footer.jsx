@@ -12,7 +12,7 @@ const Footer = () => {
                 <div className='footer-body-links'><a href="#home">Home</a></div>
                 <div className='footer-body-links'><a href="#mission">Mission</a></div>
                 <div className='footer-body-links'><a href="#flow">How it works</a></div>
-                <div className='footer-body-links'><a href="/list">Listings</a></div>
+                <div className='footer-body-links'><a href="#working">Listings</a></div>
                 <div className='footer-body-links'><a href="#contact">Contact us</a></div>
             </div>
             <div className='grid-20 footer-social'>
