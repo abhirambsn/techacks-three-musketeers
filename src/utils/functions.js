@@ -1,5 +1,3 @@
-import { shiftTimeBy } from "time-fast-forward";
-
 export const formatAddress = (addr) =>
   String(addr).slice(0, 6) + "..." + String(addr).slice(-4);
 
