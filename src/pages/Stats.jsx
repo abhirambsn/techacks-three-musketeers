@@ -18,7 +18,6 @@ const Stats = () => {
   const campaignData = useLoaderData();
   const provider = useProvider();
   const { address } = useAccount(provider);
-  const [powText, setPowText] = useState("");
   const [voted, setVoted] = useState({ voted: true, vote: null });
   const [loading, setLoading] = useState(true);
   const location = useLocation();
@@ -226,19 +225,33 @@ const Stats = () => {
                         <>
                           <button
                             onClick={async () => {
+                              const proofOfWorkLink = prompt(
+                                "Enter the video link for your Proof of Work so that backers can see your work"
+                              );
+                              if (proofOfWorkLink.length <= 0) {
+                                toast.error("Invalid Link");
+                                return;
+                              }
+                              if (
+                                !proofOfWorkLink.match(
+                                  /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/
+                                )
+                              ) {
+                                toast.error("Invalid Link");
+                                return;
+                              }
                               document.addEventListener("click", disableClick);
                               const notification =
                                 toast.loading("Creating Vote...");
                               const result = await createVote(
                                 campaignData.address,
                                 i + 1,
-                                powText
+                                proofOfWorkLink
                               );
                               if (result) {
                                 toast.success("Vote created!", {
                                   id: notification,
                                 });
-                                setPowText("");
                                 setTimeout(
                                   () => window.location.reload(),
                                   1000
@@ -316,18 +329,6 @@ const Stats = () => {
                           >
                             Complete Voting for test
                           </button> */}
-                          {i + 1 === campaignData.currentStage &&
-                            getDaysFromDeadline(
-                              campaignData.stages[campaignData.currentStage - 1]
-                                ?.deadline
-                            ) <= 1 &&
-                            !stageData.created && (
-                              <textarea
-                                value={powText}
-                                onChange={(e) => setPowText(e.target.value)}
-                                placeholder="Proof of work"
-                              ></textarea>
-                            )}
                         </>
                       )}
                     </>

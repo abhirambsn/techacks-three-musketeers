@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ethers } from "ethers";
 import campaignAbi from "../abi/Campaign.json";
 import cfundingAbi from "../abi/CFunding.json";
