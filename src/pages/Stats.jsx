@@ -11,6 +11,7 @@ import {
   createVote,
   checkUserVote,
   getVoteOfUser,
+  getPOWLinks,
 } from "../utils/interact";
 
 const Stats = () => {
@@ -18,6 +19,7 @@ const Stats = () => {
   const provider = useProvider();
   const { address } = useAccount(provider);
   const [voted, setVoted] = useState({ voted: true, vote: null });
+  const [powLinks, setPowLinks] = useState([]);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
   const navigation = useNavigation();
@@ -36,6 +38,9 @@ const Stats = () => {
           campaignData.currentStage
         ),
       });
+      setPowLinks(
+        await getPOWLinks(campaignData.address, campaignData.currentStage)
+      );
       setLoading(false);
     })();
   }, [location, address]);
@@ -198,6 +203,11 @@ const Stats = () => {
                               >
                                 No
                               </button>
+                              {i < campaignData.currentStage && (
+                                <a className="btn-inverse" target="_blank" href={powLinks[i]}>
+                                  Proof of Work Video
+                                </a>
+                              )}
                             </>
                           ) : (
                             <button className="btn-disabled">

@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import campaignAbi from "../abi/Campaign.json";
 import cfundingAbi from "../abi/CFunding.json";
 import votingfactoryAbi from "../abi/VotingFactory.json";
+import voteAbi from "../abi/Voting.json";
 
 export const getBalance = async () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -399,3 +400,30 @@ export const getInvestmentRatio = async (contractAddress) => {
     return -1;
   }
 };
+
+export const getPOWLinks = async (contractAddress, currentStage) => {
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      import.meta.env.VITE_VOTING_FACTORY,
+      votingfactoryAbi.abi,
+      signer
+    );
+    let arr = [];
+    for (let i = 0; i < currentStage; i++) {
+      const data = await contract.getStageVote(contractAddress, i+1);
+      const voteContract = new ethers.Contract(
+        data,
+        voteAbi.abi,
+        signer
+      );
+      const powLink = await voteContract.proofOfWorkURL();
+      arr.push(powLink);
+    }
+    return arr;
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
+}

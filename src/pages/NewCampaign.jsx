@@ -3,7 +3,6 @@ import { FaArrowLeft } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { disableClick } from "../utils/functions";
 import { createNewCampaign } from "../utils/interact";
-import { Cloudinary } from "@cloudinary/url-gen";
 import PictureUploadBtn from "../components/PictureUploadBtn";
 
 const NewCampaign = () => {
@@ -27,10 +26,6 @@ const NewCampaign = () => {
     }
     return Math.round(parseInt(projectPeriod) / parseInt(stagePeriod));
   };
-
-  const cld = new Cloudinary({
-    url: import.meta.env.VITE_CLOUDINARY_URL,
-  });
 
   return (
     <section className="section form-page" id="form-page">
