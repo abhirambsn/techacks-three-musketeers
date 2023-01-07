@@ -140,7 +140,7 @@ const Campaign = () => {
           </div>
           <div className="grid-20 disp-no"></div>
           <div className="grid-100 disp-no campaign-funds">
-            <a href="#">
+            <a href={campaignData.pptUrl} target="_blank">
             <button className="btn-inverse">View Pitch</button>
             </a>
           </div>
