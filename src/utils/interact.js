@@ -211,7 +211,7 @@ export const createNewCampaign = async (
     return;
   } else if (stageSum < totalAmt) {
     const c = confirm(
-      "Your tital Stage fund is less than the total Amount, do you wan to continue? it may lead to unexpected consequences!"
+      "Your total Stage fund is less than the total Amount, do you wan to continue? it may lead to unexpected consequences!"
     );
     if (!c) {
       alert("Request Cancelled!");
