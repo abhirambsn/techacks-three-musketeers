@@ -139,7 +139,7 @@ const Campaign = () => {
             )}
           </div>
           <div className="grid-20 disp-no"></div>
-          <div className="grid-100 disp-no padd-5 campaign-funds">
+          <div className="grid-100 disp-no campaign-funds">
             <a href="#">
             <button className="btn-inverse">View Pitch</button>
             </a>
