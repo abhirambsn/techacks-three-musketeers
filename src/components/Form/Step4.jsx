@@ -25,7 +25,7 @@ const Step4 = ({
           type="number"
           value={
             stageWiseAmt[0] > parseFloat(totalAmt) * 0.2
-              ? parseFloat(totalAmt) * 0.2
+              ? (parseFloat(totalAmt) * 0.2).toString()
               : stageWiseAmt[0]
           }
           onChange={(e) =>
