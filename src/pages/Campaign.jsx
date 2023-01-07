@@ -139,6 +139,11 @@ const Campaign = () => {
             )}
           </div>
           <div className="grid-20 disp-no"></div>
+          <div className="grid-100 disp-no campaign-funds">
+            <a href="#">
+            <button className="btn-inverse">View Pitch</button>
+            </a>
+          </div>
         </div>
         <div className="grid-60 campaign-right">
           <div className="campaign-head grid-100">

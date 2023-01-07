@@ -869,6 +869,7 @@ html{
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 2% 0;
 }
 
 .campaign-funds-input
@@ -1186,6 +1187,8 @@ html{
     flex-direction: column;
     flex-wrap: wrap;
     padding: 2% 0;
+    justify-content: center;
+    align-items: center;
 }
 
 .form-left .form-group label, .form-right .form-group label
@@ -1338,6 +1341,12 @@ html{
 {
     padding: 2.5% 0;
     height: 90vh;
+}
+
+.alert-campaign
+{
+    color: var(--text-color-700);
+    text-align: center;
 }
 
 /* media query begins */
