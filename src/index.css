@@ -1342,6 +1342,12 @@ html{
     height: 90vh;
 }
 
+.alert-campaign
+{
+    color: var(--text-color-700);
+    text-align: center;
+}
+
 /* media query begins */
 
 @media (max-width:1200px)
