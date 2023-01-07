@@ -15,7 +15,7 @@ const Step5 = ({
   investorOffering,
   setInvestorOffering,
   pptUrl,
-  setPptUrl
+  setPptUrl,
 }) => {
   return (
     <div className="form-left">
@@ -27,8 +27,21 @@ const Step5 = ({
           onChange={(e) => setInvestorOffering(e.target.value)}
         ></textarea>
       </div>
-      <div>
-        <PPTUploadBtn pptUrl={pptUrl} setPptUrl={setPptUrl} />
+      <div className="form-group">
+        <PPTUploadBtn
+          disabled={pptUrl.length > 0}
+          pptUrl={pptUrl}
+          setPptUrl={setPptUrl}
+        />
+      </div>
+      <div className="form-group">
+        <button
+          onClick={() => setPptUrl("")}
+          className={pptUrl.length <= 0 ? "btn-disabled" : "btn-inverse"}
+          disabled={pptUrl.length <= 0}
+        >
+          Reset
+        </button>
       </div>
       <div>
         <button
