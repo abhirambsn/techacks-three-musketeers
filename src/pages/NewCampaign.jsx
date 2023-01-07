@@ -1,34 +1,78 @@
 import React, { useState } from "react";
+import Multistep from "react-multistep";
+import Step1 from "../components/Form/Step1";
+import Step2 from "../components/Form/Step2";
+import Step3 from "../components/Form/Step3";
+import Step4 from "../components/Form/Step4";
+import Step5 from "../components/Form/Step5";
 import { FaArrowLeft } from "react-icons/fa";
-import { toast } from "react-hot-toast";
-import { disableClick } from "../utils/functions";
-import { createNewCampaign } from "../utils/interact";
-import PictureUploadBtn from "../components/PictureUploadBtn";
 
-const NewCampaign = () => {
+const Form = () => {
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
   const [stagePeriod, setStagePeriod] = useState(0);
   const [projectPeriod, setProjectPeriod] = useState(0);
   const [totalAmt, setTotalAmt] = useState(0);
   const [stageWiseAmt, setStageWiseAmt] = useState({});
+  const [investorOffering, setInvestorOffering] = useState("");
   const [imgUrl, setImgUrl] = useState("");
+  const [pptUrl, setPptUrl] = useState("");
 
-  const [part2, setPart2] = useState(false);
-
-  const calcNstages = () => {
-    if (
-      stagePeriod.length === 0 ||
-      parseInt(stagePeriod) == 0 ||
-      parseInt(projectPeriod) == 0
-    ) {
-      return 0;
-    }
-    return Math.round(parseInt(projectPeriod) / parseInt(stagePeriod));
-  };
+  const steps = [
+    { title: "Name", component: <Step1 name={name} setName={setName} /> },
+    {
+      title: "Description",
+      component: <Step2 desc={desc} setDesc={setDesc} />,
+    },
+    {
+      title: "Deadlines and Timings",
+      component: (
+        <Step3
+          stagePeriod={stagePeriod}
+          setStagePeriod={setStagePeriod}
+          projectPeriod={projectPeriod}
+          setProjectPeriod={setProjectPeriod}
+          totalAmt={totalAmt}
+          setTotalAmt={setTotalAmt}
+          imgUrl={imgUrl}
+          setImgUrl={setImgUrl}
+        />
+      ),
+    },
+    {
+      title: "Finance",
+      component: (
+        <Step4
+          stagePeriod={stagePeriod}
+          projectPeriod={projectPeriod}
+          totalAmt={totalAmt}
+          stageWiseAmt={stageWiseAmt}
+          setStageWiseAmt={setStageWiseAmt}
+        />
+      ),
+    },
+    {
+      title: "Misc",
+      component: (
+        <Step5
+          name={name}
+          desc={desc}
+          projectPeriod={projectPeriod}
+          totalAmt={totalAmt}
+          imgUrl={imgUrl}
+          stagePeriod={stagePeriod}
+          stageWiseAmt={stageWiseAmt}
+          pptUrl={pptUrl}
+          setPptUrl={setPptUrl}
+          investorOffering={investorOffering}
+          setInvestorOffering={setInvestorOffering}
+        />
+      ),
+    },
+  ];
 
   return (
-    <section className="section form-page" id="form-page">
+    <section className="section form">
       <div className="form-grid">
         <div className="grid-20">
           <a href="/">
@@ -41,173 +85,48 @@ const NewCampaign = () => {
           <p>Start a campaign</p>
         </div>
         <div className="grid-20"></div>
-        <div className="grid-100 form-decoration">
-          <div className="form-circle-0"></div>
-          <div className="form-circle-1"></div>
-          <div className="form-circle-2"></div>
-          <div className="form-circle-3"></div>
-        </div>
-        <div className="bor">
-
-        
-        <div className="grid-100 form-div" >
+        <div className="form-div grid-100">
           <div className="form-form">
-            <div className="form-left">
-              <div className="form-group">
-                <label htmlFor="title">Campaign title: </label>
-                <input
-                  type="text"
-                  value={name}
-                  name="title"
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="description">Campaign description: </label>
-                <textarea
-                  name="description"
-                  value={desc}
-                  onChange={(e) => setDesc(e.target.value)}
-                ></textarea>
-              </div>
-              <div className="form-group">
-                <label htmlFor="period">Project period: </label>
-                <input
-                  type="text"
-                  name="period"
-                  value={projectPeriod}
-                  onChange={(e) => setProjectPeriod(e.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="stage">Period per stage: </label>
-                <input
-                  type="text"
-                  name="stage"
-                  value={stagePeriod}
-                  onChange={(e) => setStagePeriod(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="target">Amount required: </label>
-                <input
-                  type="text"
-                  name="target"
-                  value={totalAmt}
-                  onChange={(e) => setTotalAmt(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-              <PictureUploadBtn
-                  disabled={imgUrl.length > 0}
-                  setImgUrl={setImgUrl}
-                  imgUrl={imgUrl}
-                />
-              </div>
-              <div className="grid">
-              <div className="form-group">
-                
-                <button
-                  className={imgUrl.length <= 0 ? "btn-disabled" : "btn-theme"}
-                  disabled={imgUrl.length <= 0}
-                  onClick={() => setPart2(true)}
-                >
-                  Proceed
-                </button>
-                </div>
-                <div className="form-group">
-              <button
-                  onClick={() => setImgUrl("")}
-                  className={
-                    imgUrl.length <= 0 ? "btn-disabled" : "btn-inverse"
-                  }
-                  disabled={imgUrl.length <= 0}
-                >
-                  Reset
-                </button>
-              </div>
-              
-              </div>
-            </div>
-            {part2 && (
-              <div className="form-right">
-                {Array(calcNstages())
-                  .fill(0)
-                  .map((_, i) => (
-                    <div key={i} className="form-group">
-                      <label htmlFor={`stage-${i + 1}`}>
-                        Fund needed for Stage {i + 1}
-                      </label>
-                      <input
-                        type="number"
-                        value={stageWiseAmt[i]}
-                        onChange={(e) =>
-                          setStageWiseAmt({
-                            ...stageWiseAmt,
-                            [i]: e.target.value,
-                          })
-                        }
-                        name={`stage-${i + 1}`}
-                      />
-                    </div>
-                  ))}
-
-                <div className="form-group">
-                  <button
-                    className="btn-theme"
-                    onClick={async () => {
-                      if (imgUrl === "") {
-                        alert("Please upload a cover image");
-                        return;
-                      }
-                      document.addEventListener("click", disableClick);
-                      const notification = toast.loading(
-                        "Campaign creation in progress..."
-                      );
-                      const result = await createNewCampaign(
-                        name,
-                        desc,
-                        stagePeriod,
-                        projectPeriod,
-                        totalAmt,
-                        Object.values(stageWiseAmt),
-                        imgUrl
-                      );
-                      if (!result) {
-                        toast.error("Failure", { id: notification });
-                        document.body.style.pointerEvents = "auto";
-                        document.body.style.cursor = "auto";
-                        document.removeEventListener("click", disableClick);
-                      } else {
-                        setName("");
-                        setDesc("");
-                        setProjectPeriod(0);
-                        setTotalAmt(0);
-                        setStagePeriod(0);
-                        setStageWiseAmt({});
-                        toast.success("Success", { id: notification });
-                        setTimeout(
-                          () => (window.location.href = "/list"),
-                          1000
-                        );
-                      }
-                      document.body.style.pointerEvents = "auto";
-                      document.body.style.cursor = "auto";
-                      document.removeEventListener("click", disableClick);
-                    }}
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-            )}
+            <Multistep
+              activeStep={0}
+              showNavigation={true}
+              steps={steps}
+              nextStyle={{
+                padding: "10px 15px",
+                borderRadius: "5px",
+                background: "var(--text-color-100)",
+                color: "var(--bg-color-500)",
+                fontSsize: "15px",
+                fontWeight: "600",
+                border: "1px solid var(--bg-color-500)",
+                transition: "all 0.3s ease",
+                fontFamily: '"Roboto Slab",serif',
+                cursor: "pointer",
+                margin: "0 90%",
+              }}
+              prevStyle={{
+                padding: "10px 15px",
+                borderRadius: "5px",
+                background: "var(--text-color-100)",
+                color: "var(--bg-color-500)",
+                fontSsize: "15px",
+                fontWeight: "600",
+                border: "1px solid var(--bg-color-500)",
+                transition: "all 0.3s ease",
+                fontFamily: '"Roboto Slab",serif',
+                cursor: "pointer",
+                position: "absolute",
+              }}
+              stepCustomStyle={{
+                color: "var(--bg-color-500)",
+                fontWeight: "600",
+              }}
+            />
           </div>
-        </div>
         </div>
       </div>
     </section>
   );
 };
 
-export default NewCampaign;
+export default Form;

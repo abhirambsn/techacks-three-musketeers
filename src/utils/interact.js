@@ -196,8 +196,27 @@ export const createNewCampaign = async (
   projectPeriod,
   totalAmt,
   stages,
-  imgUrl
+  imgUrl,
+  investorOffering
 ) => {
+  const stageSum = stages
+    .map((s) => parseFloat(s))
+    .reduce((pSum, a) => pSum + a, 0);
+  if (stageSum > totalAmt) {
+    console.log(stageSum);
+    alert(
+      "Stage Amount Sum is greater than Total Requested Amount, kindly adjust any one of the parameters"
+    );
+    return;
+  } else if (stageSum < totalAmt) {
+    const c = confirm(
+      "Your tital Stage fund is less than the total Amount, do you wan to continue? it may lead to unexpected consequences!"
+    );
+    if (!c) {
+      alert("Request Cancelled!");
+      return;
+    }
+  }
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const contract = new ethers.Contract(
@@ -213,7 +232,8 @@ export const createNewCampaign = async (
       projectPeriod,
       ethers.utils.parseEther(totalAmt),
       stages.map((stage) => ethers.utils.parseEther(stage)),
-      imgUrl
+      imgUrl,
+      investorOffering
     );
     await txn.wait(1);
     return true;
@@ -414,12 +434,8 @@ export const getPOWLinks = async (contractAddress, currentStage) => {
     );
     let arr = [];
     for (let i = 0; i < currentStage; i++) {
-      const data = await contract.getStageVote(contractAddress, i+1);
-      const voteContract = new ethers.Contract(
-        data,
-        voteAbi.abi,
-        signer
-      );
+      const data = await contract.getStageVote(contractAddress, i + 1);
+      const voteContract = new ethers.Contract(data, voteAbi.abi, signer);
       const powLink = await voteContract.proofOfWorkURL();
       arr.push(powLink);
     }
@@ -428,4 +444,4 @@ export const getPOWLinks = async (contractAddress, currentStage) => {
     console.error(e);
     return [];
   }
-}
+};

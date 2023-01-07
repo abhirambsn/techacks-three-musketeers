@@ -73,7 +73,10 @@ const Stats = () => {
             {campaignData?.stages.map((stageData, i) => (
               <div className="grid-20 stats-table-body" key={i}>
                 <div>{i + 1}</div>
-                <div>{stageData.amount}</div>
+                <div>
+                  {stageData.amount} MATIC (
+                  {(stageData.amount * 66.1).toFixed(2)} INR)
+                </div>
                 <div>
                   {getDaysFromDeadline(campaignData.projectDeadline) !== -1
                     ? stageData.deadline.toLocaleDateString("en-IN", {
@@ -84,10 +87,10 @@ const Stats = () => {
                     : "Not Started"}
                 </div>
                 <div>
-                  {campaignData.currentStage == i + 1
-                    ? "In Progress"
-                    : stageData.voted
+                  {stageData.voted
                     ? "Stage Completed"
+                    : campaignData.currentStage == i + 1
+                    ? "In Progress"
                     : "Not Started"}
                 </div>
                 <div>
@@ -203,8 +206,13 @@ const Stats = () => {
                               >
                                 No
                               </button>
-                              {i < campaignData.currentStage && (
-                                <a className="btn-inverse" target="_blank" href={powLinks[i]}>
+                              <br />
+                              {typeof powLinks[i] !== "undefined" && (
+                                <a
+                                  className="btn-inverse"
+                                  target="_blank"
+                                  href={powLinks[i]}
+                                >
                                   Proof of Work Video
                                 </a>
                               )}

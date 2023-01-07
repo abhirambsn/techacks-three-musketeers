@@ -151,7 +151,14 @@ const Campaign = () => {
             <div className="campaign-desc-text">
               <p>{campaignData.desc}</p>
             </div>
+            <div className="campaign-desc-head">
+              <span>Offerings for the Investor - </span>
+            </div>
+            <div className="campaign-desc-text">
+              <p>{campaignData.investorOffering}</p>
+            </div>
           </div>
+          
           <div className="grid-50 campaign-funds grid">
             <div className="grid-100 campaign-funds">
               {!registered && campaignData.author !== address && (
@@ -294,7 +301,10 @@ const Campaign = () => {
                           toast.success(`Campaign is cancelled!`, {
                             id: notification,
                           });
-                          setTimeout(() => window.location.reload(), 1000);
+                          setTimeout(
+                            () => (window.location.href = "/list"),
+                            1000
+                          );
                         } else {
                           toast.error(
                             "Error Occurred cannot release funds contact at support@massfundr.org"

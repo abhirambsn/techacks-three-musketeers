@@ -24,7 +24,7 @@ contract CFunding {
         owner = payable(msg.sender);
     }
 
-    function createCampaign(string memory _name, string memory _description, uint _sPeriod, uint _totalProjectTime, uint _totalAmountNeeded, uint[] memory _stages, string memory _coverImg) external {
+    function createCampaign(string memory _name, string memory _description, uint _sPeriod, uint _totalProjectTime, uint _totalAmountNeeded, uint[] memory _stages, string memory _coverImg, string memory _iOffering) external {
         if (!userRegister[msg.sender].isValid) {
             // New User
             userRegister[msg.sender].isValid = true;
@@ -42,7 +42,8 @@ contract CFunding {
                 _totalProjectTime,
                 _totalAmountNeeded,
                 _stages,
-                _coverImg
+                _coverImg,
+                _iOffering
             )
         );
         userRegister[msg.sender].userCampaignCount++; // Increase User CampaignCount
