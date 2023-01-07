@@ -15,6 +15,7 @@ import Stats from "./pages/Stats";
 import NewCampaign from "./pages/NewCampaign";
 import { Toaster } from "react-hot-toast";
 import ResultPage from "./pages/ResultPage";
+import NotFoundPage from "./pages/404Page";
 
 const router = createBrowserRouter([
   {
@@ -71,6 +72,10 @@ const router = createBrowserRouter([
       return await getVotingResults(params.campaignAddress, params.stage);
     },
   },
+  {
+    path: "*",
+    element: <NotFoundPage />
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
