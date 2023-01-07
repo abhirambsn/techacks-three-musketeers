@@ -1186,6 +1186,8 @@ html{
     flex-direction: column;
     flex-wrap: wrap;
     padding: 2% 0;
+    justify-content: center;
+    align-items: center;
 }
 
 .form-left .form-group label, .form-right .form-group label
