@@ -14,12 +14,12 @@ async function main() {
 
   console.log(`CFunding Contract Deployed at Address: ${cfunding.address}`);
 
-  const VotingFactory = await hre.ethers.getContractFactory("VotingFactory");
-  const votingFactory = await VotingFactory.deploy();
+  // const VotingFactory = await hre.ethers.getContractFactory("VotingFactory");
+  // const votingFactory = await VotingFactory.deploy();
 
-  await votingFactory.deployed();
+  // await votingFactory.deployed();
 
-  console.log(`Voting Factory Deployed at Address: ${votingFactory.address}`);
+  // console.log(`Voting Factory Deployed at Address: ${votingFactory.address}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

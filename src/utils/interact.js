@@ -197,7 +197,8 @@ export const createNewCampaign = async (
   totalAmt,
   stages,
   imgUrl,
-  investorOffering
+  investorOffering,
+  pptLink
 ) => {
   const stageSum = stages
     .map((s) => parseFloat(s))
@@ -233,7 +234,8 @@ export const createNewCampaign = async (
       ethers.utils.parseEther(totalAmt),
       stages.map((stage) => ethers.utils.parseEther(stage)),
       imgUrl,
-      investorOffering
+      investorOffering,
+      pptLink
     );
     await txn.wait(1);
     return true;

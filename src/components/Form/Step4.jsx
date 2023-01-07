@@ -19,41 +19,20 @@ const Step4 = ({
   };
   return (
     <div className="form-right">
-      <div key={1} className="form-group">
-        <label htmlFor={`stage-1`}>Fund needed for Stage 1</label>
-        <input
-          type="number"
-          value={
-            stageWiseAmt[0] > parseFloat(totalAmt) * 0.2
-              ? (parseFloat(totalAmt) * 0.2).toString()
-              : stageWiseAmt[0]
-          }
-          onChange={(e) =>
-            setStageWiseAmt({
-              ...stageWiseAmt,
-              0:
-                stageWiseAmt[0] > parseFloat(totalAmt) * 0.2
-                  ? (parseFloat(totalAmt) * 0.2).toString()
-                  : e.target.value,
-            })
-          }
-          name={`stage-1`}
-        />
-      </div>
-      {Array(calcNstages() - 1)
+      {Array(calcNstages())
         .fill(0)
         .map((_, i) => (
-          <div key={i + 1} className="form-group">
-            <label htmlFor={`stage-${i + 2}`}>
-              Fund needed for Stage {i + 2}
+          <div key={i} className="form-group">
+            <label htmlFor={`stage-${i + 1}`}>
+              Fund needed for Stage {i + 1}
             </label>
             <input
               type="number"
-              value={stageWiseAmt[i + 1]}
+              value={stageWiseAmt[i]}
               onChange={(e) =>
                 setStageWiseAmt({
                   ...stageWiseAmt,
-                  [i + 1]: e.target.value,
+                  [i]: e.target.value,
                 })
               }
               name={`stage-${i + 1}`}

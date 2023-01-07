@@ -18,6 +18,8 @@ contract Campaign {
     uint public projectDeadlineStartTime;
     string public coverImg;
     string public investorOffering;
+    string public pptUrl;
+    
 
     address payable _owner;
 
@@ -56,7 +58,8 @@ contract Campaign {
         uint _totalAmountNeeded,
         uint[] memory _stages,
         string memory _coverImg,
-        string memory _iOffering
+        string memory _iOffering,
+        string memory _pptUrl
     ) {
         name = _name;
         description = _description;
@@ -66,7 +69,7 @@ contract Campaign {
         totalAmountNeeded = _totalAmountNeeded;
         escrow = new Escrow(payable(_author));
         uint nStages = totalProjectTime / stagePeriod;
-        require(nStages > 0, "Invalid Period");
+        require(nStages > 0, "IP");
         // uint curTime = block.timestamp;
         for (uint i = 0; i < nStages; i++) {
             stages.push(Stage(_stages[i], stagePeriod, false));
@@ -74,6 +77,7 @@ contract Campaign {
         }
         coverImg = _coverImg;
         investorOffering = _iOffering;
+        pptUrl = _pptUrl;
         isValid = true;
         goalReached = false;
         investorCount = 0;
@@ -82,7 +86,7 @@ contract Campaign {
     }
 
     function registerInvestor(string memory _name) external {
-        require(!investors[msg.sender].isValid, "Already Registered");
+        require(!investors[msg.sender].isValid, "AR");
         investors[msg.sender].addr = msg.sender;
         investors[msg.sender].name = _name;
         investors[msg.sender].isValid = true;
@@ -92,8 +96,7 @@ contract Campaign {
 
     function pledgeFunds() external payable {
         require(
-            investors[msg.sender].isValid,
-            "Please Register as investor before pledging funds"
+            investors[msg.sender].isValid
         );
         escrow.deposit{value: msg.value}(investorLUT, msg.sender);
         if ((address(escrow).balance * 100) / totalAmountNeeded >= 100) {

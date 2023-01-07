@@ -38,6 +38,10 @@ const Step5 = ({
               alert("Please upload a cover image");
               return;
             }
+            if (pptUrl === "") {
+              alert("Please upload a PPT / Pitch deck");
+              return;
+            }
             document.addEventListener("click", disableClick);
             const notification = toast.loading(
               "Campaign creation in progress..."
@@ -50,7 +54,8 @@ const Step5 = ({
               totalAmt,
               Object.values(stageWiseAmt),
               imgUrl,
-              investorOffering
+              investorOffering,
+              pptUrl
             );
             if (!result) {
               toast.error("Failure", { id: notification });

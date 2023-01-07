@@ -39,6 +39,7 @@ const getCampaignDetail = async (provider, signer, campaignAddr) => {
 
   let cancelled = await campaignContract.cancelled();
   let investorOffering = await campaignContract.investorOffering();
+  let pptUrl = await campaignContract.pptUrl();
 
   return {
     author,
@@ -54,7 +55,8 @@ const getCampaignDetail = async (provider, signer, campaignAddr) => {
     projectDeadline,
     coverImg,
     cancelled,
-    investorOffering
+    investorOffering, 
+    pptUrl
   };
 };
 
