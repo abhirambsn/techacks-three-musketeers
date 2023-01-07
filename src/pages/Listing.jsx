@@ -34,6 +34,9 @@ const Listing = () => {
             </button>
           </a>
         </div>
+        <div className="grid-100 alert-campaign">
+          <span>No campaigns created yet! But you can always create your own ;)</span>
+        </div>
         {campaignData.map(
           (cD, i) =>
             !cD.cancelled && (
